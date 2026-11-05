@@ -408,7 +408,7 @@
 <!-- ======================= D 산소 ======================= -->
 <section class="lab" id="lab-D">
   <div class="labhead"><div class="ic" data-icon="D"></div><div><h2>산소가 두 배라면</h2><p class="lq"><span class="src">3차시 ①~⑰</span>대기 중 산소가 21%에서 42%가 되면 곤충과 사람은 어떻게 될까?</p></div></div>
-  <div class="howto"><div><b>이렇게 해 보세요 ①</b>산소 21%에서 곤충 몸을 키워요. 가운데가 빨개지면 산소가 못 간 거예요.</div><div><b>②</b>산소를 42%로 올리고 다시 키워 봐요. 더 큰 몸도 파랗게 차나요?</div><div><b>③</b>아래 100 m 달리기에서 21%와 42% 선수를 비교해요.</div></div>
+  <div class="howto"><div><b>곤충 ①</b>산소 21%에서 곤충 몸을 키워요. 가운데가 빨개지면 산소가 못 간 거예요.</div><div><b>곤충 ②</b>산소를 42%로 올리고 다시 키워 봐요. 더 큰 몸도 파랗게 차나요?</div><div><b>사람 ③</b>아래 100 m 달리기에서 산소 21%와 42% 선수를 비교해요.</div></div>
   <div class="step pred"><div class="sh"><span class="no">1</span><b>예측하기</b><span class="st"></span></div><div class="sb" data-pred="D"></div></div>
   <div class="step locked"><div class="sh"><span class="no">2</span><b>실험하기</b><span class="st"></span></div><div class="sb">
     <div class="sub3" style="margin-top:0"><span class="tag">실험 A</span>곤충 키우기 <span class="src">⑦~⑬</span></div>
@@ -438,11 +438,14 @@
         <div class="kv"><span>이 농도에서 가능한 최대 몸 크기</span><b id="D-max">-</b></div>
         <div class="verdict good" id="D-st"></div>
         <div class="verdict warn" id="D-eco" style="display:none"></div>
+        <ul class="missions" id="D-missA"></ul>
       </div>
     </div>
-    <div class="sub3"><span class="tag">실험 B</span>100 m 달리기 <span class="src">⑭~⑰</span></div>
+    <div class="sub3"><span class="tag">실험 B</span>사람: 100 m 달리기 <span class="src">⑭~⑰</span></div>
+    <p style="margin:-2px 0 10px;font-size:14.5px;color:var(--sub)">이번에는 곤충이 아니라 <b>사람</b>이에요. 산소가 두 배가 되면 운동선수는 지금보다 얼마나 빨리 달릴까요?</p>
     <div class="ctrl"><button class="btn go" id="D-run">출발!</button><span id="D-clock" style="font-family:var(--num);font-weight:800;font-size:20px;color:var(--navy)">0.00 s</span></div>
-    <svg class="view" id="D-track" viewBox="0 0 900 170" role="img" aria-label="100미터 달리기"></svg>
+    <svg class="view" id="D-track" viewBox="0 0 900 190" role="img" aria-label="사람 100미터 달리기"></svg>
+    <div class="verdict info" id="D-rv">‘출발!’을 눌러 산소 21%와 42% 선수를 비교해요.</div>
     <ul class="missions" id="D-miss"></ul>
     <p class="note">21% 선수 기록은 현재 100 m 세계 기록(9.58초)이에요. 42% 선수 기록, 산소가 닿는 깊이, 최대 크기는 교과서 설명을 보여 주는 가상 모형값이에요.</p>
   </div></div>
@@ -572,7 +575,7 @@ const CFG = {
   D:{
     pred:{q:"산소 농도가 두 배(42%)가 되면 곤충은?", opts:["더 작아진다","지금 크기 그대로다","더 커질 수 있다"], ans:2},
     cols:["산소 농도","몸 크기","산소가 닿는 깊이","결과"],
-    miss:[{id:"m1", t:"산소 21%에서 곤충을 ×2로 키워 보기"},{id:"m2", t:"산소 42%에서 곤충을 ×4로 키워 보기"},{id:"m3", t:"100 m 달리기 해 보기"}],
+    miss:[{id:"m1", t:"곤충: 산소 21%에서 몸을 ×2로 키워 보기", box:"D-missA"},{id:"m2", t:"곤충: 산소 42%에서 몸을 ×4로 키워 보기", box:"D-missA"},{id:"m3", t:"사람: 100 m 달리기 해 보기"}],
     en:[{src:"원문⑦", text:"Insects, such as bees and dragonflies, do not have lungs and instead take in air through external openings called [[spiracles|‘숨구멍’]]."},
         {src:"원문⑪", text:"However, if the concentration of oxygen were to double, insects could grow in size as oxygen would be more readily [[available|‘이용할 수 있는’, a로 시작]]."}],
     kr:{q:"지금 산소 농도(21%)에서 곤충이 더 커질 수 없는 까닭을 실험 결과를 넣어 쓰시오.",
@@ -635,7 +638,11 @@ function addRec(id, row){
   save(); drawRec(id); badges(id);
 }
 function mission(id, mid){ const s = L(id); if(!s.miss[mid]){ s.miss[mid] = 1; save(); } drawMiss(id); badges(id); }
-function drawMiss(id){ const s = L(id); $(id+"-miss").innerHTML = CFG[id].miss.map(m => `<li class="${s.miss[m.id]?"done":""}">${esc(m.t)}</li>`).join(""); }
+function drawMiss(id){
+  const s = L(id), boxes = {};
+  CFG[id].miss.forEach(m => { const b = m.box || id + "-miss"; (boxes[b] = boxes[b] || []).push(`<li class="${s.miss[m.id]?"done":""}">${esc(m.t)}</li>`); });
+  Object.entries(boxes).forEach(([b, items]) => { const e = $(b); if(e) e.innerHTML = items.join(""); });
+}
 function buildExp(id){
   const box = document.querySelector(`[data-exp="${id}"]`), c = CFG[id], s = L(id);
   let h = `<div style="font-weight:800;color:var(--navy)">(1) 실험 결과와 맞는 교과서 문장을 완성하세요.</div>`, k = 0;
@@ -1121,40 +1128,58 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
     const c = +so.value, s = +ss.value, reach = reachOf(c), ok = R0 * s - R0 * reach <= 0.5;
     addRec("D", [c + "%", "×" + s, "×" + reach.toFixed(1), ok ? "산소 충분" : "깊은 곳 산소 부족"]);
   };
-  const T = $("D-track");
-  el("rect", {width:900, height:170, rx:18, fill:"url(#gTrack)"}, T);
-  el("line", {x1:0, y1:85, x2:900, y2:85, stroke:"#fff", "stroke-width":2, opacity:.7}, T);
-  el("line", {x1:80, y1:8, x2:80, y2:162, stroke:"#fff", "stroke-width":3}, T);
-  for(let y = 8; y < 162; y += 12){ el("rect", {x:830, y, width:12, height:6, fill:"#fff"}, T); el("rect", {x:842, y:y + 6, width:12, height:6, fill:"#fff"}, T); }
-  for(let m = 10; m < 100; m += 10){ const x = 80 + m / 100 * 750; el("line", {x1:x, y1:8, x2:x, y2:14, stroke:"#fff", opacity:.6}, T); txt(T, x, 26, m + "m", {"font-size":10, "font-family":"Outfit", fill:"#fff", opacity:.8, "text-anchor":"middle"}); }
-  txt(T, 14, 52, "산소 21%", {"font-size":13, "font-weight":800, fill:"#fff"}); txt(T, 14, 137, "산소 42%", {"font-size":13, "font-weight":800, fill:"#fff"});
-  const fin1 = txt(T, 820, 76, "", {"font-size":14, "font-weight":800, fill:"#fff", "text-anchor":"end", "font-family":"Outfit"});
-  const fin2 = txt(T, 820, 161, "", {"font-size":14, "font-weight":800, fill:"#ffe066", "text-anchor":"end", "font-family":"Outfit"});
-  const runners = [el("g", {}, T), el("g", {}, T)];
-  function runner(g, x, y, ph, col){
-    g.innerHTML = ""; g.setAttribute("transform", `translate(${x},${y})`);
-    const L1 = Math.sin(ph) * 32, L2 = -L1, A1 = -L1 * .8, A2 = L1 * .8;
-    const limb = (ang, len, ox, oy) => [ox + Math.sin(ang * D2R) * len, oy + Math.cos(ang * D2R) * len];
-    const hip = [0, 0], sh = [5, -20];
-    const k1 = limb(L1, 13, ...hip), f1 = limb(L1 - 25, 13, ...k1), k2 = limb(L2, 13, ...hip), f2 = limb(L2 - 25, 13, ...k2);
-    const e1 = limb(A1 + 180, -10, ...sh), h1 = limb(A1 + 230, -9, ...e1), e2 = limb(A2 + 180, -10, ...sh), h2 = limb(A2 + 230, -9, ...e2);
-    const st = {stroke:col, "stroke-width":6, "stroke-linecap":"round", "stroke-linejoin":"round", fill:"none"};
-    el("polyline", Object.assign({points:`${hip} ${k2} ${f2}`, opacity:.55}, st), g);
-    el("polyline", Object.assign({points:`${sh} ${e2} ${h2}`, opacity:.55}, st), g);
-    el("line", Object.assign({x1:hip[0], y1:hip[1], x2:sh[0], y2:sh[1]}, st), g);
-    el("polyline", Object.assign({points:`${hip} ${k1} ${f1}`}, st), g);
-    el("polyline", Object.assign({points:`${sh} ${e1} ${h1}`}, st), g);
-    el("circle", {cx:8, cy:-29, r:6, fill:col}, g);
+  const T = $("D-track"), START = 150, FIN = 836;
+  const LANES = [{y:92, T:9.58, jersey:"#3a6fe0", o2:"산소 21%"}, {y:182, T:9.20, jersey:"#f0a623", o2:"산소 42%"}];
+  el("rect", {width:900, height:190, rx:18, fill:"url(#gTrack)"}, T);
+  el("rect", {width:138, height:190, rx:18, fill:"#0f1e36", opacity:.28}, T);
+  el("line", {x1:0, y1:97, x2:900, y2:97, stroke:"#fff", "stroke-width":2.4, opacity:.8}, T);
+  el("line", {x1:START, y1:8, x2:START, y2:184, stroke:"#fff", "stroke-width":3}, T);
+  for(let y = 6; y < 186; y += 12){ el("rect", {x:FIN, y, width:12, height:6, fill:"#fff"}, T); el("rect", {x:FIN + 12, y:y + 6, width:12, height:6, fill:"#fff"}, T); }
+  for(let m = 10; m < 100; m += 10){ const x = START + m / 100 * (FIN - START); el("line", {x1:x, y1:8, x2:x, y2:14, stroke:"#fff", opacity:.6}, T); txt(T, x, 26, m + "m", {"font-size":10, "font-family":"Outfit", fill:"#fff", opacity:.8, "text-anchor":"middle"}); }
+  const res = LANES.map((ln, i) => {
+    const top = i * 97;
+    txt(T, 14, top + 34, ln.o2, {"font-size":14, "font-weight":900, fill:"#fff"});
+    txt(T, 14, top + 52, "선수 (사람)", {"font-size":11.5, "font-weight":700, fill:"#ffe9d6"});
+    return txt(T, 14, top + 80, "", {"font-size":17, "font-weight":800, fill: i ? "#ffe066" : "#ffffff", "font-family":"Outfit"});
+  });
+  const runners = LANES.map(() => el("g", {}, T));
+  /* 사람 모양 선수: 머리, 유니폼, 반바지, 팔다리, 운동화 (오른쪽으로 달림) */
+  function runner(g, x, y, ph, jersey){
+    g.innerHTML = ""; g.setAttribute("transform", `translate(${x},${y}) scale(.95)`);
+    const skin = "#f1c39b", dark = "#c98d63";
+    const sw = Math.sin(ph), L1 = sw * 38, L2 = -L1;
+    const pt = (ang, len, o) => [o[0] + Math.sin(ang * D2R) * len, o[1] + Math.cos(ang * D2R) * len];
+    const hip = [0, -32], sh = [6, -56];
+    const knee1 = pt(L1, 15, hip), foot1 = pt(L1 - 40 + Math.max(0, -sw) * 30, 15, knee1);
+    const knee2 = pt(L2, 15, hip), foot2 = pt(L2 - 40 + Math.max(0, sw) * 30, 15, knee2);
+    const elb1 = pt(-L1 * .9, 11, sh), hand1 = pt(-L1 * .9 + 95, 10, elb1);
+    const elb2 = pt(-L2 * .9, 11, sh), hand2 = pt(-L2 * .9 + 95, 10, elb2);
+    const limb = (pts, col, w) => el("polyline", {points:pts.map(q => q.join(",")).join(" "), stroke:col, "stroke-width":w, "stroke-linecap":"round", "stroke-linejoin":"round", fill:"none"}, g);
+    limb([hip, knee2, foot2], dark, 6.5);
+    el("ellipse", {cx:foot2[0] + 3, cy:foot2[1] + 1, rx:5, ry:2.6, fill:"#2b3445"}, g);
+    limb([sh, elb2, hand2], dark, 5);
+    el("path", {d:`M${hip[0] - 6} ${hip[1] + 2} L${sh[0] - 6} ${sh[1]} L${sh[0] + 6} ${sh[1] + 1} L${hip[0] + 6} ${hip[1] + 2} Z`, fill:jersey, stroke:jersey, "stroke-width":3, "stroke-linejoin":"round"}, g);
+    el("rect", {x:hip[0] - 7, y:hip[1] - 1, width:14, height:9, rx:3, fill:"#1b2638"}, g);
+    limb([hip, knee1, foot1], skin, 7);
+    el("ellipse", {cx:foot1[0] + 3, cy:foot1[1] + 1, rx:5.5, ry:2.8, fill:"#ffffff", stroke:"#2b3445", "stroke-width":1}, g);
+    limb([sh, elb1, hand1], skin, 5.5);
+    el("line", {x1:sh[0] + 1, y1:sh[1], x2:sh[0] + 3, y2:sh[1] - 5, stroke:skin, "stroke-width":5, "stroke-linecap":"round"}, g);
+    el("circle", {cx:sh[0] + 5, cy:sh[1] - 12, r:7.5, fill:skin}, g);
+    el("path", {d:`M${sh[0] - 2.5} ${sh[1] - 13} A7.5 7.5 0 0 1 ${sh[0] + 12} ${sh[1] - 15} L${sh[0] + 6} ${sh[1] - 17} Z`, fill:"#2b2018"}, g);
+    el("circle", {cx:sh[0] + 9, cy:sh[1] - 12.5, r:1.1, fill:"#2b2018"}, g);
   }
   let race = null;
   function drawRace(t){
-    [[9.58, 0, 58, "#ffffff"], [9.20, 1, 143, "#ffe066"]].forEach(([Tm, i, y, col]) => {
-      const p = Math.min(1, t / Tm);
-      runner(runners[i], 80 + p * 750, y, p < 1 ? t * 14 : 0.3, col);
+    LANES.forEach((ln, i) => {
+      const p = Math.min(1, t / ln.T);
+      runner(runners[i], START + p * (FIN - START) - 12, ln.y - 6, p < 1 ? t * 13 : 0.25, ln.jersey);
     });
   }
   drawRace(0);
-  $("D-run").onclick = () => { race = {t:0}; fin1.textContent = ""; fin2.textContent = ""; $("D-run").disabled = true; };
+  $("D-run").onclick = () => {
+    race = {t:0}; res.forEach(r => r.textContent = ""); $("D-run").disabled = true;
+    $("D-rv").className = "verdict info"; $("D-rv").textContent = "달리는 중…";
+  };
   TICK.D = dt => {
     const c = +so.value, s = +ss.value, r = R0 * s, depth = Math.min(r * .95, R0 * reachOf(c));
     if(Math.random() < dt * 30 && tubes.length) parts.push({a:tubes[Math.floor(Math.random() * tubes.length)], d:0});
@@ -1164,9 +1189,14 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
     if(race){
       race.t += dt; drawRace(race.t);
       $("D-clock").textContent = Math.min(race.t, 9.58).toFixed(2) + " s";
-      if(race.t >= 9.20 && !fin2.textContent) fin2.textContent = "9.20 s · 새 기록!";
-      if(race.t >= 9.58 && !fin1.textContent) fin1.textContent = "9.58 s · 현재 세계 기록";
-      if(race.t >= 9.9){ race = null; $("D-run").disabled = false; addRec("D", ["21% vs 42%", "100 m", "-", "9.58초 vs 9.20초 (모형)"]); mission("D","m3"); }
+      if(race.t >= 9.20 && !res[1].textContent) res[1].textContent = "9.20 s 🏅";
+      if(race.t >= 9.58 && !res[0].textContent) res[0].textContent = "9.58 s";
+      if(race.t >= 9.9){
+        race = null; $("D-run").disabled = false;
+        $("D-rv").className = "verdict good";
+        $("D-rv").textContent = "산소 42% 선수가 먼저 들어왔어요! 산소가 많으면 근육이 에너지를 더 잘 써서 사람이 더 빨리 달리고, 새 세계 기록도 기대할 수 있어요 (⑮⑯⑰).";
+        addRec("D", ["21% vs 42%", "사람 100 m", "-", "9.58초 vs 9.20초 (모형)"]); mission("D","m3");
+      }
     }
   };
   upd();
