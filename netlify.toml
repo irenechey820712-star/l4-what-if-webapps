@@ -6,3 +6,13 @@
   for = "/*.html"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
+
+# 보안 헤더 (Netlify 주소에서만 적용, GitHub Pages에는 적용되지 않음)
+# X-Frame-Options=SAMEORIGIN: 다른 사이트 화면 안에 끼워 넣는 것을 막는다.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    X-Frame-Options = "SAMEORIGIN"

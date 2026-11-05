@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 .DS_Store
 Thumbs.db
+
+# dorms-check 점검 결과 (로컬 전용)
+.dorms-check/
