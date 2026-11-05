@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 4 What-If Science 빌드업 웹앱 학습지 (1·2차시 · 3·4차시)</title>
+<style>
+  :root{
+    --navy:#1F3A5F; --navy2:#2d5285; --ink:#1e2430; --gray:#555; --light:#777;
+    --box:#F4F6FA; --head:#E8EDF5; --line:#d5dbe5; --ok:#1b7f4b; --okbg:#e6f4ec;
+    --ng:#b83227; --ngbg:#fbeaea; --part:#a0670b; --partbg:#fdf3e1; --chip:#fff;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:#eef1f6;color:var(--ink);
+    font-family:Pretendard,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    font-size:16px;line-height:1.7;padding-bottom:96px}
+  .wrap{max-width:880px;margin:0 auto;padding:0 14px}
+  header.top{background:var(--navy);color:#fff;padding:22px 0 0}
+  header .kicker{font-size:13px;opacity:.8}
+  header h1{margin:4px 0 2px;font-size:26px;letter-spacing:-.3px}
+  header .sub{margin:0;font-size:14px;opacity:.85}
+  .who{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0 0}
+  .who label{font-size:14px;background:rgba(255,255,255,.12);border-radius:8px;padding:4px 10px}
+  .who input{width:70px;border:0;border-bottom:1px solid rgba(255,255,255,.6);background:transparent;color:#fff;
+    font:inherit;padding:0 4px;outline:none}
+  .who input#nm{width:110px}
+  nav.tabs{display:flex;gap:6px;margin-top:16px;flex-wrap:wrap}
+  nav.tabs button,nav.tabs a{font:inherit;font-size:15px;font-weight:700;border:0;cursor:pointer;
+    padding:10px 18px;border-radius:12px 12px 0 0;background:rgba(255,255,255,.16);color:#fff;text-decoration:none}
+  nav.tabs button[aria-selected="true"]{background:#eef1f6;color:var(--navy)}
+  nav.tabs a.lablink{margin-left:auto;background:#f2b134;color:#3a2600}
+  .card{background:#fff;border-radius:14px;box-shadow:0 1px 3px rgba(20,30,50,.08);padding:20px 22px;margin:16px 0}
+  .card h2{margin:0 0 4px;font-size:20px;color:var(--navy)}
+  .card h2 .en{font-weight:600;font-size:15px;color:var(--navy2);margin-left:6px}
+  .flow{font-size:14px;color:var(--gray);margin:0 0 12px}
+  .guide{background:var(--box);border-radius:10px;padding:12px 16px;font-size:14.5px}
+  .guide b{color:var(--navy)}
+  .steptitle{display:flex;align-items:center;gap:10px;margin:28px 0 0}
+  .steptitle .pill{background:var(--navy);color:#fff;border-radius:999px;padding:3px 14px;font-weight:800;font-size:14px}
+  .steptitle h3{margin:0;font-size:19px;color:var(--navy)}
+  .steptitle .pts{margin-left:auto;font-size:14px;color:var(--light)}
+  .sumbox{background:var(--box);border:1px solid var(--line);border-radius:12px;padding:6px 16px}
+  .ln{padding:9px 0;border-bottom:1px dashed var(--line)}
+  .ln:last-child{border-bottom:0}
+  .ln .lab{font-weight:800;color:var(--navy);margin-right:4px}
+  .ln.kr2{padding-left:14px}
+  .ln.en{padding-left:14px;border-left:4px solid #c6d3e6;background:#fff;border-radius:6px;margin:6px 0;border-bottom:0}
+  .ln.en .src{display:inline-block;font-size:12px;font-weight:800;color:#fff;background:var(--navy2);border-radius:5px;
+    padding:0 7px;margin-right:6px;vertical-align:2px}
+  .ln.en .entext{font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:16.5px}
+  .ln.en .hint{display:block;font-size:13.5px;color:var(--part);margin-top:2px}
+  .krbtn{font:inherit;font-size:12.5px;border:1px solid var(--line);background:#fff;border-radius:6px;padding:0 8px;
+    margin-left:6px;cursor:pointer;color:var(--gray)}
+  .krline{display:none;font-size:14px;color:var(--gray);background:#f8f9fb;border-radius:6px;padding:4px 10px;margin-top:4px}
+  .krline.show{display:block}
+  .blank{display:inline-flex;align-items:baseline;gap:2px;white-space:nowrap}
+  .blank .no{font-size:12px;font-weight:800;color:var(--navy2)}
+  .blank input,.s3 input{font:inherit;font-size:16px;font-family:"Segoe UI",Roboto,Arial,"Malgun Gothic",sans-serif;
+    border:0;border-bottom:2px solid #8aa0bf;background:#fff8d6;padding:0 6px;border-radius:4px 4px 0 0;
+    outline:none;min-width:3em;text-align:center;color:#13325c}
+  .blank input:focus,.s3 input:focus{border-bottom-color:var(--navy);background:#fff1a8}
+  .ok input{background:var(--okbg)!important;border-bottom-color:var(--ok)!important}
+  .ng input{background:var(--ngbg)!important;border-bottom-color:var(--ng)!important}
+  .part input{background:var(--partbg)!important;border-bottom-color:var(--part)!important}
+  .mark{font-size:13px;font-weight:800;margin-left:2px}
+  .ok .mark{color:var(--ok)} .ng .mark{color:var(--ng)} .part .mark{color:var(--part)}
+  .reveal{display:none;font-size:12.5px;color:var(--ng);font-weight:700;margin-left:3px}
+  .showans .ng .reveal,.showans .part .reveal{display:inline}
+  .bank{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0 2px}
+  .bank .bl{font-size:13px;font-weight:800;color:var(--gray);margin-right:4px}
+  .chip{font:inherit;font-size:14.5px;border:1px solid #b8c4d6;background:var(--chip);border-radius:999px;padding:2px 12px;
+    cursor:pointer;color:var(--navy)}
+  .chip:hover{background:var(--head)}
+  .chip.used{opacity:.4;text-decoration:line-through}
+  .bankhelp{font-size:12.5px;color:var(--light)}
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;align-items:center}
+  .btn{font:inherit;font-size:15px;font-weight:700;border:0;border-radius:10px;padding:9px 18px;cursor:pointer;
+    background:var(--navy);color:#fff}
+  .btn.sub{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+  .btn.ghost{background:transparent;color:var(--gray);border:1px solid var(--line)}
+  .btn:disabled{opacity:.4;cursor:default}
+  .result{font-weight:800;color:var(--navy)}
+  .q{border-top:1px solid var(--line);padding:16px 0 4px}
+  .q:first-of-type{border-top:0}
+  .q .qh{font-weight:800}
+  .q .qh .src{font-size:12.5px;font-weight:700;color:#fff;background:var(--navy2);border-radius:5px;padding:0 7px;margin:0 6px}
+  .q .kr{color:var(--ink)}
+  .q .link{font-size:12.5px;color:var(--part);font-weight:700}
+  .build{margin-top:8px;font-family:"Segoe UI",Roboto,Arial,sans-serif;font-size:16.5px}
+  .slot{display:inline-flex;flex-wrap:wrap;gap:6px;min-height:42px;min-width:60%;vertical-align:middle;
+    border-bottom:2px dashed #8aa0bf;padding:4px 4px;margin:0 4px;background:#fffdf0;border-radius:6px 6px 0 0}
+  .slot:empty::before{content:"아래 덩어리를 순서대로 누르세요";color:#aab;font-size:13.5px;font-family:Pretendard,"Malgun Gothic",sans-serif;align-self:center}
+  .tile{font:inherit;font-size:15.5px;border:1.5px solid #9fb2cc;background:#fff;border-radius:8px;padding:4px 10px;
+    cursor:pointer;color:#13325c;font-family:"Segoe UI",Roboto,Arial,sans-serif}
+  .tile:hover{background:var(--head)}
+  .slot .tile{background:#e9f0fb;border-color:#6f8fbf}
+  .pool{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0;padding:10px;background:var(--box);border-radius:10px;min-height:52px}
+  .fb{font-size:14px;font-weight:700;margin-left:4px}
+  .fb.ok{color:var(--ok)} .fb.ng{color:var(--ng)} .fb.part{color:var(--part)}
+  .slot.okb{background:var(--okbg);border-bottom-color:var(--ok)}
+  .s3 .text{font-family:"Segoe UI",Roboto,Arial,sans-serif;font-size:16.5px;line-height:2.2}
+  .s3 .hints{font-size:13.5px;color:var(--part);margin-top:2px}
+  .s3 .bk{display:inline-flex;align-items:baseline;gap:2px;white-space:nowrap}
+  .s3 .bk .no{font-size:13px;font-weight:800;color:var(--navy2)}
+  .scorebar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+    box-shadow:0 -2px 10px rgba(20,30,50,.08);z-index:20}
+  .scorebar .wrap{display:flex;align-items:center;gap:10px;padding:10px 14px;flex-wrap:wrap}
+  .scorebar .sc{font-size:14.5px;color:var(--gray)}
+  .scorebar .sc b{color:var(--navy)}
+  .scorebar .total{font-size:18px;font-weight:900;color:var(--navy);margin-left:4px}
+  .scorebar .sp{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+  .scorebar .btn{padding:7px 14px;font-size:14px}
+  .note{font-size:13px;color:var(--light);margin:18px 0}
+  @media (max-width:600px){
+    header h1{font-size:21px}
+    .card{padding:16px 14px}
+    .scorebar .sp{margin-left:0}
+  }
+  @media print{
+    body{background:#fff;padding:0;font-size:12.5px}
+    header.top{background:#fff;color:#000;border-bottom:2px solid var(--navy)}
+    header .kicker,header .sub{opacity:1}
+    .who label{background:none}
+    .who input{color:#000;border-bottom-color:#000}
+    nav.tabs,.scorebar,.btn,.krbtn,.row,.bankhelp{display:none!important}
+    .card{box-shadow:none;border:1px solid var(--line);break-inside:avoid-page}
+    .q{break-inside:avoid}
+    .blank input,.s3 input{background:#fff!important}
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="kicker">2026학년도 2학기 영어Ⅱ · Lesson 4 Fostering Curiosity and Creativity</div>
+    <h1>What-If Science 빌드업 학습지</h1>
+    <p class="sub">STEP 1 낱말 채우기 → STEP 2 문장 만들기 → STEP 3 한 줄 요약 · 차시 묶음마다 100점</p>
+    <div class="who">
+      <label>반 <input id="cls" autocomplete="off"></label>
+      <label>번호 <input id="num" autocomplete="off"></label>
+      <label>이름 <input id="nm" autocomplete="off"></label>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-set="s12" aria-selected="true">1·2차시</button>
+      <button role="tab" data-set="s34" aria-selected="false">3·4차시</button>
+      <a class="lablink" href="./" style="background:rgba(255,255,255,.16);color:#fff;margin-left:auto">🏠 모음</a><a class="lablink" style="margin-left:0" href="lab.html">🧪 사고 실험실 열기</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="app"></main>
+
+<div class="scorebar">
+  <div class="wrap">
+    <span class="sc">STEP 1 <b id="sc1">-</b>/60</span>
+    <span class="sc">STEP 2 <b id="sc2">-</b>/20</span>
+    <span class="sc">STEP 3 <b id="sc3">-</b>/20</span>
+    <span class="total" id="sct">합계 -/100</span>
+    <span class="sp">
+      <button class="btn" id="gradeAll">전체 채점</button>
+      <button class="btn sub" id="printBtn">인쇄 · PDF</button>
+      <button class="btn ghost" id="resetBtn">다시 풀기</button>
+    </span>
+  </div>
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   자료: 영어 문장은 지문 설계도(Lesson 4 1~4차시) 원문 그대로이고,
+   빈칸과 배열만 적용했다. STEP 3 요약문만 자체 요약이다.
+------------------------------------------------------------------- */
+const SETS = {
+  s12: {
+    title: "1·2차시 What-If Science",
+    pages: "1차시 PAGE 98~101 · 2차시 PAGE 102~103",
+    parts: [
+      {
+        head: "STEP 1 | 1차시 요약", en: "What if the size of a human body became enormous?",
+        flow: "흐름: 사고 실험 소개(Galileo) → 거인이 된다면? → 크기 효과 → 문제①: 체중과 발 면적 → 문제②: 열과 피부 면적",
+        lines: [
+          {t:"h", lab:"[도입]", text:"이탈리아 과학자 Galileo는 사고 실험으로 유명하다. 사고 실험이란 수학적 또는 과학적 가설[[1]]을 탐구하려고 설계된 상상의 실험이다."},
+          {t:"en", src:"원문④", text:"With only his thoughts, he demonstrated that objects with different [[2]] should fall at the same speed when dropped from the same height in the absence of air resistance.",
+            hint:"← mass를 알맞은 형태로", kr:"자신의 생각만으로, 그는 다른 질량을 지닌 물체가 공기 저항 없이 같은 높이에서 떨어졌을 때 같은 속도로 떨어진다는 것을 입증하였다."},
+          {t:"kr2", text:"창의성[[3]]과 상상력에 근거한 가설만 있으면 누구든지 위대한 과학자가 될 수 있다."},
+          {t:"h", lab:"[거인이 된다면]", text:"기록상 가장 큰 사람은 272cm였다. 사람이 ‘잭과 콩나무’의 거인처럼 엄청나게 커질 수 있을까? 안타깝게도 크기 효과[[4]] 때문에 불가능하다."},
+          {t:"en", src:"원문⑧", text:"When the length of an object [[5]], its area increases by a factor of four (2x2), and its volume by a factor of eight (2x2x2).",
+            hint:"← double을 알맞은 형태로", kr:"어떤 물체의 길이가 2배가 될 때, 그것의 면적은 4배로 증가하고, 그 용적은 8배로 증가한다."},
+          {t:"h", lab:"[문제① 체중과 발]", text:"첫째, 거인은 발을 아래로 누르는 무게 때문에 혼자 똑바로 서 있을 수 없다."},
+          {t:"en", src:"원문⑩", text:"One issue is that the giant would not be able to stand properly on his own [[6]] the weight pushing down on his feet.",
+            hint:"← because / because of 중 알맞은 것", kr:"한 가지 문제는 그 거인이 발을 아래로 누르는 무게 때문에 스스로 똑바로 서 있을 수 없다는 것이다."},
+          {t:"kr2", text:"키가 10배가 되면 몸무게는 부피에 비례해 [[7]]배가 되지만, 몸을 지탱하는 발의 면적[[8]]은 100배만 늘어난다."},
+          {t:"en", src:"원문⑬", text:"… his feet would be under [[9]] much pressure to support the increased weight …",
+            hint:"← ‘너무 ~해서 …할 수 없다’, 1단어", kr:"그의 발은 늘어난 무게를 지탱하느라 지나치게 많은 압력을 받을 것이다."},
+          {t:"h", lab:"[문제② 열과 피부]", text:"둘째, 열 배출 문제가 있다."},
+          {t:"en", src:"원문⑮", text:"Heat [[10]] in the human body, and it is constantly released from the surface of the skin to prevent heat from accumulating in the body.",
+            hint:"← generate를 수동태로, 2단어", kr:"열은 신체에서 생성되고 열이 신체에 축적되는 것을 방지하기 위해 피부 표면으로부터 끊임없이 배출된다."},
+          {t:"kr2", text:"키가 10배가 되면 생기는 열은 1,000배로 늘지만 피부 표면적은 100배만 늘어 열이 충분히 빠져나가지 못한다. 결국 우리는 거인의 모습으로는 살아남을 수 없다."}
+        ],
+        bank: ["hypothesis","creativity","scale effect","area","gravity","1,000","100","10"]
+      },
+      {
+        head: "STEP 1 | 2차시 요약", en: "What if there were no Moon?",
+        flow: "흐름: 문학 속 달 → 달의 두 가지 역할 → 역할①: 하루의 길이 → 역할②: 지축의 기울기와 기후 → 살 수 없는 지구",
+        lines: [
+          {t:"h", lab:"[도입]", text:"“O, swear not by the moon, the inconstant moon.”은 ‘로미오와 줄리엣’의 유명한 시구이다. 줄리엣은 달이 모양을 바꾸듯 사랑도 변할 수 있다며, 달에 사랑을 맹세하지 말라고 한다."},
+          {t:"en", src:"원문③", text:"Juliet warns Romeo [[11]] swear his love by the Moon as it may change just as the Moon changes its shape.",
+            hint:"← ‘~하지 말라고’, 2단어", kr:"Juliet은 Romeo에게 마치 달이 그 형태를 바꾸듯이 그의 사랑도 변할 수 있으니 달에 사랑을 맹세하지 말라고 강하게 충고한다."},
+          {t:"h", lab:"[달의 역할]", text:"달은 모양이 변해도 늘 밤하늘에 있으며, 지구의 계절과 기후뿐 아니라 하루의 길이[[12]]를 조절하는 중요한 역할을 한다."},
+          {t:"h", lab:"[역할① 하루의 길이]", text:"달이 없다면 하루는 더 이상 24시간이 아닐 것이다. 달의 중력[[13]]이 바닷물을 오르내리게 하고, 움직이는 바다와 회전하는 지구 사이에 마찰[[14]]이 생겨 지구의 자전 속도가 줄어든다."},
+          {t:"en", src:"원문⑩", text:"Without the Moon, however, the Earth’s rotation would not slow down, [[15]] in a change in the length of a day.",
+            hint:"← result를 알맞은 형태로", kr:"하지만 달이 없다면, 지구의 자전은 속도가 줄지 않을 것이고 하루의 길이에 변화를 가져올 것이다."},
+          {t:"kr2", text:"과학자들에 따르면 지구가 처음 생겼을 때는 달이 없었고 하루가 5시간밖에 되지 않았다."},
+          {t:"en", src:"원문⑫", text:"This indicates that without the Moon, we would see the Sun [[16]] every five hours.",
+            hint:"← rise를 알맞은 형태로 (see + 목적어 + ?)", kr:"이는 달이 없다면, 우리가 5시간마다 일출을 보게 된다는 것을 나타낸다."},
+          {t:"h", lab:"[역할② 기울기와 기후]", text:"우리가 계절을 겪는 것은 지구가 축에서 기울어져 있기 때문이다. 지구의 자전축은 [[17]]도 기울어져 있다."},
+          {t:"en", src:"원문⑮", text:"… and the Moon’s gravity holds the Earth in place by [[18]] the tilt.",
+            hint:"← stabilize를 알맞은 형태로", kr:"달의 중력은 그 기울기를 안정시킴으로써 지구를 제자리에 있도록 유지시킨다."},
+          {t:"kr2", text:"하지만 달이 없다면 기울기가 0도에서 [[19]]도 사이로 크게 달라질 수 있다. 60도로 기울면 태양을 향한 반구가 훨씬 많은 에너지를 받아 여름은 더 덥고 겨울은 더 추워질 수 있다."},
+          {t:"en", src:"원문⑳", text:"If this trend continued, the Earth would become [[20]].",
+            hint:"← ‘사람이 살 수 없는’, u로 시작", kr:"이런 추세가 계속되면 지구는 사람이 살 수 없는 곳이 될 것이다."}
+        ],
+        bank: ["length","gravity","friction","shape","23.5","24","60","85"]
+      }
+    ],
+    blanks: {
+      1:{a:["hypothesis"], p:[["hypotheses",2]], src:"1차시 ③"},
+      2:{a:["masses"], p:[["mass",1]], src:"1차시 ④"},
+      3:{a:["creativity"], src:"1차시 ⑤"},
+      4:{a:["scale effect","the scale effect"], p:[["scale",1]], src:"1차시 ⑦"},
+      5:{a:["doubles"], p:[["doubled",1],["double",1]], src:"1차시 ⑧"},
+      6:{a:["because of"], src:"1차시 ⑩"},
+      7:{a:["1,000","a thousand","thousand"], src:"1차시 ⑪"},
+      8:{a:["area"], src:"1차시 ⑫"},
+      9:{a:["too"], src:"1차시 ⑬"},
+      10:{a:["is generated"], p:[["generated",1],["was generated",1]], src:"1차시 ⑮"},
+      11:{a:["not to"], p:[["to not",1]], src:"2차시 ③"},
+      12:{a:["length"], src:"2차시 ④"},
+      13:{a:["gravity"], src:"2차시 ⑦"},
+      14:{a:["friction"], src:"2차시 ⑧"},
+      15:{a:["resulting"], p:[["resulted",1]], src:"2차시 ⑩"},
+      16:{a:["rise"], p:[["rising",2]], src:"2차시 ⑫"},
+      17:{a:["23.5"], src:"2차시 ⑮"},
+      18:{a:["stabilizing","stabilising"], src:"2차시 ⑮"},
+      19:{a:["85"], src:"2차시 ⑯"},
+      20:{a:["uninhabitable"], src:"2차시 ⑳"}
+    },
+    step2: [
+      {n:21, src:"1차시 ⑬", kr:"이것은 그의 발이 늘어난 무게를 지탱하기에는 너무 많은 압력을 받을 것이라는 뜻이다.",
+        pre:"This means that", chunks:["his feet","would be","under too much pressure","to support the increased weight"], post:"…", link:"STEP 1 9번"},
+      {n:22, src:"1차시 ⑱", kr:"이것은 우리가 거인만큼 크게 자라기를 바랄지라도, 그 형태로는 살아남을 수 없다는 것을 보여 준다.",
+        pre:"This shows that while we may wish to grow as tall as a giant,", chunks:["we","would not","be able to survive","in that form"], post:".", link:"[문제② 열과 피부]"},
+      {n:23, src:"2차시 ⑦", kr:"달의 중력은 지구의 바다가 오르내리게 한다.",
+        pre:"", chunks:["The Moon’s gravity","causes","the Earth’s ocean","to rise and fall"], post:".", link:"STEP 1 13번"},
+      {n:24, src:"2차시 ⑱", kr:"태양을 향한 지구의 반구는 다른 반구보다 태양으로부터 훨씬 더 많은 에너지를 받을 것이다.",
+        pre:"The hemisphere of the Earth facing the Sun", chunks:["would receive","much more energy","from the sun","than the other hemisphere"], post:".", link:"[역할② 기울기와 기후]"}
+    ],
+    step3: [
+      {n:25, lab:"1차시 요약",
+        text:"Because of the (ⓐ) effect, a giant’s weight and body heat would increase far (ⓑ) than the area of his feet and skin, so he would not be able to (ⓒ).",
+        bk:{"ⓐ":{a:["scale"], pts:4, hint:"‘크기’ (s로 시작)"},
+            "ⓑ":{a:["more"], pts:3, hint:"much의 비교급"},
+            "ⓒ":{a:["survive"], pts:3, hint:"‘생존하다’ (원문⑱)"}}},
+      {n:26, lab:"2차시 요약",
+        text:"Without the Moon, a day would be only five (ⓐ) long, and the Earth’s (ⓑ) could vary wildly, bringing extreme changes in (ⓒ) patterns.",
+        bk:{"ⓐ":{a:["hours"], p:[["hour",1]], pts:3, hint:"‘시간’ (복수형)"},
+            "ⓑ":{a:["tilt"], pts:4, hint:"‘기울기’ (원문⑯, t로 시작)"},
+            "ⓒ":{a:["weather"], pts:3, hint:"‘날씨·기후’ (원문⑬)"}}}
+    ]
+  },
+
+  s34: {
+    title: "3·4차시 What-If Science",
+    pages: "3차시 PAGE 104~105 · 4차시 PAGE 105, 115",
+    parts: [
+      {
+        head: "STEP 1 | 3차시 요약", en: "What if the oxygen concentration in the atmosphere doubled?",
+        flow: "흐름: 산소의 중요성 → 농도가 두 배라면? → 곤충(부정적 영향) → 인간(긍정적 영향)",
+        lines: [
+          {t:"h", lab:"[도입]", text:"산소는 생명에 꼭 필요한 기체로, 지구 대기의 [[1]]%를 차지한다. 호흡에 필수적이고, 나무나 석유 같은 연료를 태워 열과 빛을 낼 때도 필요하다. 그렇다면 산소가 더 많으면 더 좋을까?"},
+          {t:"en", src:"원문⑤", text:"What would happen if the oxygen concentration [[2]] double?",
+            hint:"← 가정, 2단어", kr:"산소 농도가 두 배가 된다면 무슨 일이 일어날까?"},
+          {t:"h", lab:"[곤충]", text:"산소가 많으면 좋아 보이지만, 특히 곤충[[3]]에게는 예상치 못한 결과가 생길 수 있다. 곤충은 폐가 없고 몸 바깥의 구멍인 숨구멍[[4]]으로 공기를 들이마시는데, 이 구멍은 폐만큼 효율적이지 않다. 그래서 지금의 산소 농도로는 곤충이 더 크게 진화할 수 없다."},
+          {t:"en", src:"원문⑩", text:"If they [[5]] bigger in size, oxygen would not be able to reach the deepest parts of their bodies.",
+            hint:"← be동사, 가정법 과거", kr:"만약 그들의 크기가 더 커지면 산소는 그들 몸의 가장 깊은 부위에 도달할 수 없을 것이다."},
+          {t:"h", lab:"[거대 곤충]", text:"산소 농도가 두 배가 되면 산소를 더 쉽게 쓸 수 있어 곤충이 커질 수 있다. 커진 곤충은 생태 환경에 큰 영향을 주어 먹이사슬[[6]]을 무너뜨릴 수 있고, 잠자리가 독수리[[7]]만큼 커져 포식자와 먹이의 균형이 바뀔 수도 있다."},
+          {t:"h", lab:"[인간]", text:"다행히 이런 일이 일어나도 거대 곤충이 쫓아올까 걱정할 필요는 없다. 오히려 사람은 지금보다 더 빨리 달릴 수 있다."},
+          {t:"en", src:"원문⑮", text:"… you would be able to run [[8]] than you can right now.",
+            hint:"← fast를 알맞은 형태로", kr:"여러분은 지금 당장 달릴 수 있는 것보다 더 빨리 달릴 수 있을 것이다."},
+          {t:"kr2", text:"산소는 근육이 에너지를 쓸 수 있도록 에너지를 분해하는 데 쓰이므로, 산소가 늘면 운동 능력이 좋아진다."},
+          {t:"en", src:"원문⑯", text:"… oxygen is used to break down energy [[9]] muscles can use it, …",
+            hint:"← ‘~하도록’, 2단어", kr:"산소가 근육이 에너지를 사용할 수 있도록 그것을 분해하는 데 사용된다."},
+          {t:"kr2", text:"그래서 운동선수들이 올림픽에서 새로운 세계 기록[[10]]을 세울 것이라고 기대하게 된다."}
+        ],
+        bank: ["insects","lungs","spiracles","food chain","eagles","world records","21","78"]
+      },
+      {
+        head: "STEP 1 | 4차시 요약", en: "The Limits of Thought Experiments · Once in a Blue Moon",
+        flow: "흐름: 사고 실험의 한계 → 사랑 표현 속 비유 → 과학적 배경이 있는 관용 표현 → 파란 달의 원리 → 표현의 유래",
+        lines: [
+          {t:"h", lab:"[결론, PAGE 105]", text:"세 가지 사고 실험(거대한 인간, 달이 없는 지구, 산소 농도 두 배)은 흥미로운 가능성을 보여 주지만, 상상에서 나온 것일 뿐 과학적으로 확인된 것은 아니다."},
+          {t:"en", src:"원문①", text:"… they are simply based on [[11]] and have not been [[12]] through scientific research.",
+            hint:"← (12) test를 알맞은 형태로", kr:"그것들은 단지 상상력에 근거한 것이며 과학적 연구를 통해 시험되지 않았다."},
+          {t:"h", lab:"[관용 표현, PAGE 115]", text:"“I love you to the moon and back”은 지구와 달 사이의 먼 거리를 비유[[13]]로 사용해 깊은 사랑을 전한다. 이 표현은 쉽게 이해되지만, 과학적 배경을 가진 관용 표현[[14]] 중에는 뜻이 잘 드러나지 않는 것도 있다. 그 예가 “once in a blue moon”이다."},
+          {t:"h", lab:"[파란 달]", text:"사람들은 밤하늘을 밝히는 보름달이나 깎은 손톱을 닮은 초승달[[15]]은 보았겠지만, 파란 달을 보았을 가능성은 매우 낮다. 그런데 놀랍게도 이 일은 실제로 일어난다."},
+          {t:"en", src:"원문⑦", text:"Surprisingly, this extraordinary event [[16]] occur.",
+            hint:"← ‘실제로’ 강조, do를 알맞은 형태로", kr:"놀랍게도, 이러한 특이한 사건은 실제로 일어난다."},
+          {t:"kr2", text:"보통 보름달은 한 달에 한 번이지만, [[17]]년마다 같은 달에 보름달이 두 번 뜰 수 있다."},
+          {t:"en", src:"원문⑩", text:"The second moon [[18]] a “blue moon,” …",
+            hint:"← call을 수동태로, 2단어", kr:"그 두 번째 달은 ‘파란 달’이라 불린다."},
+          {t:"kr2", text:"이런 일이 생기는 까닭은 달이 약 [[19]]일 만에 위상(모양 변화)의 주기를 완성하기 때문이다."},
+          {t:"h", lab:"[표현의 유래]", text:"이 드문 현상에서 표현이 생겨났고, 지금은 예외적으로 드물게 일어나는 일을 뜻한다."},
+          {t:"en", src:"원문⑪", text:"From this rare phenomenon of a blue moon [[20]] the use of the expression “once in a blue moon.”",
+            hint:"← emerge를 알맞은 형태로", kr:"이 파란 달이라는 드문 현상으로부터 ‘파란 달에 한 번’이라는 표현의 사용이 등장했다."}
+        ],
+        bank: ["imagination","research","metaphor","idioms","crescent","full moon","2.5","29.5","30"]
+      }
+    ],
+    blanks: {
+      1:{a:["21"], src:"3차시 ①"},
+      2:{a:["were to"], p:[["were",1]], src:"3차시 ⑤"},
+      3:{a:["insects"], p:[["insect",2]], src:"3차시 ⑥"},
+      4:{a:["spiracles"], p:[["spiracle",2]], src:"3차시 ⑦"},
+      5:{a:["were"], src:"3차시 ⑩"},
+      6:{a:["food chain"], p:[["chain",1]], src:"3차시 ⑫"},
+      7:{a:["eagles"], p:[["eagle",2]], src:"3차시 ⑬"},
+      8:{a:["faster"], src:"3차시 ⑮"},
+      9:{a:["so that"], p:[["that",1]], src:"3차시 ⑯"},
+      10:{a:["world records"], p:[["world record",2],["records",1]], src:"3차시 ⑰"},
+      11:{a:["imagination"], src:"4차시 ①"},
+      12:{a:["tested"], src:"4차시 ①"},
+      13:{a:["metaphor","a metaphor"], src:"4차시 ③"},
+      14:{a:["idioms"], p:[["idiom",2]], src:"4차시 ④"},
+      15:{a:["crescent","a crescent","a tiny crescent","tiny crescent"], src:"4차시 ⑥"},
+      16:{a:["does"], src:"4차시 ⑦"},
+      17:{a:["2.5","2년 반","2.5년"], src:"4차시 ⑨"},
+      18:{a:["is called"], p:[["was called",1]], src:"4차시 ⑩"},
+      19:{a:["29.5"], src:"4차시 ⑩"},
+      20:{a:["emerged"], src:"4차시 ⑪"}
+    },
+    step2: [
+      {n:21, src:"3차시 ⑧", kr:"숨구멍은 공기를 들이마시는 데 폐만큼 효율적이지 않다.",
+        pre:"Although insects can survive without lungs,", chunks:["their spiracles","are not","as efficient","as lungs","at taking in air"], post:".", link:"STEP 1 4번"},
+      {n:22, src:"3차시 ⑰", kr:"이것은 운동선수들이 올림픽에서 새로운 세계 기록을 세울 것이라고 기대하게 한다.",
+        pre:"This leads us to expect that", chunks:["athletes","would set","new world records","at the Olympics"], post:".", link:"STEP 1 10번"},
+      {n:23, src:"4차시 ⑨", kr:"하지만 2.5년마다 같은 달에 보름달이 두 번 뜰 수 있다.",
+        pre:"However, every 2.5 years,", chunks:["there","can be","two full moons","in the same month"], post:".", link:"STEP 1 17번"},
+      {n:24, src:"4차시 ⑫", kr:"그것(once in a blue moon)은 예외적으로 드물게 일어나는 일을 묘사한다.",
+        pre:"It describes", chunks:["something","that","happens","exceptionally rarely"], post:".", link:"[표현의 유래]"}
+    ],
+    step3: [
+      {n:25, lab:"3차시 요약",
+        text:"If oxygen concentration doubled, insects could grow much (ⓐ), upsetting the (ⓑ), while humans could run faster and set new (ⓒ).",
+        bk:{"ⓐ":{a:["larger"], p:[["bigger",2]], pts:4, hint:"large를 알맞은 형태로"},
+            "ⓑ":{a:["food chain"], p:[["chain",1]], pts:3, hint:"‘먹이사슬’ (2단어)"},
+            "ⓒ":{a:["records","world records"], p:[["record",1]], pts:3, hint:"‘기록’ (복수형)"}}},
+      {n:26, lab:"4차시 요약",
+        text:"What-if thought experiments have (ⓐ), and the (ⓑ) “once in a blue moon” comes from a real astronomical (ⓒ).",
+        bk:{"ⓐ":{a:["limits","limitations"], p:[["limit",2]], pts:4, hint:"‘한계’ (l로 시작, 복수형)"},
+            "ⓑ":{a:["idiom"], p:[["idioms",2]], pts:3, hint:"‘관용 표현’ (i로 시작, 단수)"},
+            "ⓒ":{a:["phenomenon"], pts:3, hint:"‘현상’ (원문⑪에 나온 단어)"}}}
+    ]
+  }
+};
+
+/* ------------------------------ 공통 ------------------------------ */
+const STORE = "l4_buildup_v1";
+const app = document.getElementById("app");
+let cur = "s12";
+let state = load();
+let lastKr = null;           // 최근에 누른 우리말 뒤 빈칸 (보기 칩 입력용)
+
+function load(){ try{ return JSON.parse(localStorage.getItem(STORE)) || {}; }catch(e){ return {}; } }
+function save(){ try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(e){} }
+function st(k){ state[k] = state[k] || {inp:{}, s2:{}, graded:{}}; return state[k]; }
+
+function norm(s){
+  return (s||"").toLowerCase()
+    .replace(/[’‘`´]/g,"'").replace(/[“”]/g,'"')
+    .replace(/(\d),(\d{3})/g,"$1$2")
+    .replace(/\s+/g," ").replace(/[.!?]+$/,"").trim();
+}
+function scoreOf(val, B, full){
+  const v = norm(val);
+  if(!v) return 0;
+  if(B.a.some(x => norm(x) === v)) return full;
+  for(const [x,p] of (B.p||[])) if(norm(x) === v) return p;
+  return 0;
+}
+function esc(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function width(B){ return Math.max(5, ...B.a.map(x => x.length + 2)); }
+function shuffleIdx(n, seed){
+  const a = [...Array(n).keys()];
+  let s = seed * 9301 + 49297;
+  const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+  for(let t = 0; t < 10; t++){
+    for(let i = n - 1; i > 0; i--){ const j = Math.floor(rnd() * (i + 1)); [a[i],a[j]] = [a[j],a[i]]; }
+    if(a.some((v,i) => v !== i)) break;
+  }
+  return a;
+}
+
+/* ------------------------------ 그리기 ------------------------------ */
+function blankHTML(key, n, isKr){
+  const B = SETS[key].blanks[n];
+  const v = st(key).inp["b"+n] || "";
+  return `<span class="blank" id="w-${key}-${n}"><span class="no">(${n})</span>`+
+    `<input id="${key}-b${n}" data-n="${n}" ${isKr?'data-kr="1"':''} size="${width(B)}" value="${esc(v)}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="${n}번 빈칸">`+
+    `<span class="mark"></span><span class="reveal">→ ${esc(B.a[0])}</span></span>`;
+}
+function lineHTML(key, L){
+  const isKr = L.t !== "en";
+  const body = esc(L.text).replace(/\[\[(\d+)\]\]/g, (_,n) => blankHTML(key, +n, isKr));
+  if(L.t === "en"){
+    return `<div class="ln en"><span class="src">${L.src}</span><span class="entext">${body}</span>`+
+      `<span class="hint">${esc(L.hint)} <button class="krbtn" type="button">해석 보기</button></span>`+
+      `<div class="krline">${esc(L.kr)}</div></div>`;
+  }
+  return `<div class="ln ${L.t}">${L.lab?`<span class="lab">${L.lab}</span>`:""}${body}</div>`;
+}
+
+function render(){
+  const S = SETS[cur], ST = st(cur);
+  let h = `<section class="card"><h2>${S.title}</h2><p class="flow">${S.pages} · 26문항 · 100점</p>`+
+    `<div class="guide"><b>구성</b> STEP 1 낱말 채우기(1~20, 각 3점) → STEP 2 문장 만들기(21~24, 각 5점) → STEP 3 한 줄 요약(25~26, 각 10점)<br>`+
+    `• 우리말 뒤 빈칸은 <b>&lt;보기&gt;</b>에서 고르세요(안 쓰는 말이 있어요). 칸을 누른 뒤 보기 단어를 누르면 바로 들어가요.<br>`+
+    `• 영어 원문 속 빈칸은 오른쪽 안내대로 쓰세요. 막히면 <b>해석 보기</b>를 누르세요. 영어 답은 철자까지 채점해요.</div></section>`;
+
+  // STEP 1
+  h += `<div class="steptitle"><span class="pill">STEP 1</span><h3>낱말 채우기</h3><span class="pts">1~20번 · 각 3점</span></div>`;
+  S.parts.forEach((P, pi) => {
+    h += `<section class="card" id="part-${pi}"><h2>${P.head.replace("STEP 1 | ","")}<span class="en">${P.en}</span></h2>`+
+      `<p class="flow">${P.flow}</p><div class="sumbox">${P.lines.map(L => lineHTML(cur, L)).join("")}</div>`+
+      `<div class="bank"><span class="bl">&lt;보기&gt;</span>${P.bank.map(w => `<button class="chip" type="button" data-w="${esc(w)}">${esc(w)}</button>`).join("")}</div>`+
+      `<div class="bankhelp">우리말 뒤 빈칸을 먼저 누르고 보기 단어를 누르세요.</div></section>`;
+  });
+  h += `<div class="row"><button class="btn" data-grade="1">STEP 1 채점</button>`+
+       `<button class="btn sub" data-show="1" disabled>틀린 칸 정답 보기</button><span class="result" id="r1"></span></div>`;
+
+  // STEP 2
+  h += `<div class="steptitle"><span class="pill">STEP 2</span><h3>문장 만들기</h3><span class="pts">21~24번 · 각 5점</span></div>`+
+    `<section class="card" id="s2card"><p class="flow">우리말 뜻에 맞게 덩어리를 순서대로 눌러 원문 문장을 완성하세요. 놓은 덩어리를 다시 누르면 빠져요.</p>`;
+  S.step2.forEach((Q, qi) => {
+    h += `<div class="q" data-q="${qi}"><div class="qh">${Q.n}.<span class="src">${Q.src}</span><span class="kr">${esc(Q.kr)}</span></div>`+
+      `<div class="link">↳ ${Q.link}의 낱말과 이어져요</div>`+
+      `<div class="build">${esc(Q.pre)} <span class="slot" id="slot-${qi}"></span>${esc(Q.post)}</div>`+
+      `<div class="pool" id="pool-${qi}"></div>`+
+      `<div class="row" style="margin-top:8px"><button class="btn sub" data-reset2="${qi}">다시 놓기</button><span class="fb" id="fb-${qi}"></span></div></div>`;
+  });
+  h += `</section><div class="row"><button class="btn" data-grade="2">STEP 2 채점</button>`+
+       `<button class="btn sub" data-show="2" disabled>정답 문장 보기</button><span class="result" id="r2"></span></div>`;
+
+  // STEP 3
+  h += `<div class="steptitle"><span class="pill">STEP 3</span><h3>한 줄 요약</h3><span class="pts">25~26번 · 각 10점</span></div>`+
+    `<section class="card s3"><p class="flow">차시 전체를 영어 한 문장으로 요약했어요. 빈칸에 알맞은 말을 쓰세요.</p>`;
+  S.step3.forEach((Q, qi) => {
+    const txt = esc(Q.text).replace(/\((ⓐ|ⓑ|ⓒ)\)/g, (_,k) => {
+      const B = Q.bk[k], v = ST.inp[`s${Q.n}${k}`] || "";
+      return `<span class="bk" id="w3-${Q.n}${k}"><span class="no">${k}</span><input id="${cur}-s${Q.n}${k}" data-s3="${Q.n}${k}" size="${width(B)+1}" value="${esc(v)}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="${Q.n}번 ${k}">`+
+        `<span class="mark"></span><span class="reveal">→ ${esc(B.a[0])}</span></span>`;
+    });
+    const hints = Object.entries(Q.bk).map(([k,B]) => `${k} ${B.hint} [${B.pts}점]`).join("   ");
+    h += `<div class="q"><div class="qh">${Q.n}.<span class="src">${Q.lab}</span></div><div class="text">${txt}</div><div class="hints">${hints}</div></div>`;
+  });
+  h += `</section><div class="row"><button class="btn" data-grade="3">STEP 3 채점</button>`+
+       `<button class="btn sub" data-show="3" disabled>틀린 칸 정답 보기</button><span class="result" id="r3"></span></div>`;
+  h += `<p class="note">영어 문장은 지문 설계도(Lesson 4)의 원문 그대로이고 빈칸·배열만 적용했어요. STEP 3 요약문은 지문 내용을 바탕으로 한 자체 요약이에요. 풀이 내용은 이 기기 브라우저에 자동 저장돼요.</p>`;
+
+  app.innerHTML = h;
+  S.step2.forEach((Q, qi) => drawStep2(qi));
+  markChips();
+  // 저장된 채점 상태 복원
+  [1,2,3].forEach(s => { if(ST.graded[s]) grade(s, true); });
+  updateBar();
+}
+
+/* ------------------------------ STEP 2 ------------------------------ */
+function drawStep2(qi){
+  const Q = SETS[cur].step2[qi], ST = st(cur);
+  const placed = ST.s2[qi] || [];
+  const order = shuffleIdx(Q.chunks.length, Q.n);
+  const slot = document.getElementById("slot-"+qi), pool = document.getElementById("pool-"+qi);
+  slot.innerHTML = placed.map(i => `<button class="tile" type="button" data-q="${qi}" data-i="${i}" data-in="1">${esc(Q.chunks[i])}</button>`).join("");
+  pool.innerHTML = order.filter(i => !placed.includes(i))
+    .map(i => `<button class="tile" type="button" data-q="${qi}" data-i="${i}">${esc(Q.chunks[i])}</button>`).join("");
+  slot.classList.remove("okb");
+  document.getElementById("fb-"+qi).textContent = "";
+  document.getElementById("fb-"+qi).className = "fb";
+}
+function score2(qi){
+  const Q = SETS[cur].step2[qi], placed = st(cur).s2[qi] || [];
+  if(placed.length < Q.chunks.length) return {pts:0, msg:"덩어리를 모두 놓아야 채점돼요", cls:"ng"};
+  const wrong = placed.filter((v,i) => v !== i).length;
+  if(wrong === 0) return {pts:5, msg:"✓ 정답 (5점)", cls:"ok"};
+  if(wrong <= 2) return {pts:2, msg:"△ 덩어리 하나만 자리가 달라요 (2점)", cls:"part"};
+  return {pts:0, msg:`✗ ${wrong}개 덩어리의 자리가 달라요 (0점)`, cls:"ng"};
+}
+
+/* ------------------------------ 채점 ------------------------------ */
+function setMark(wrap, got, full){
+  wrap.classList.remove("ok","ng","part");
+  const m = wrap.querySelector(".mark");
+  if(got === full){ wrap.classList.add("ok"); m.textContent = "✓"; }
+  else if(got > 0){ wrap.classList.add("part"); m.textContent = `△${got}`; }
+  else { wrap.classList.add("ng"); m.textContent = "✗"; }
+}
+function clearMarks(sel){
+  document.querySelectorAll(sel).forEach(w => { w.classList.remove("ok","ng","part"); const m = w.querySelector(".mark"); if(m) m.textContent = ""; });
+}
+function grade(step, silent){
+  const S = SETS[cur], ST = st(cur);
+  let tot = 0;
+  if(step === 1){
+    for(let n = 1; n <= 20; n++){
+      const got = scoreOf(ST.inp["b"+n], S.blanks[n], 3);
+      tot += got;
+      setMark(document.getElementById(`w-${cur}-${n}`), got, 3);
+    }
+    document.getElementById("r1").textContent = `STEP 1: ${tot} / 60점`;
+  }
+  if(step === 2){
+    S.step2.forEach((Q, qi) => {
+      const r = score2(qi);
+      tot += r.pts;
+      const fb = document.getElementById("fb-"+qi);
+      fb.textContent = r.msg; fb.className = "fb " + r.cls;
+      document.getElementById("slot-"+qi).classList.toggle("okb", r.cls === "ok");
+    });
+    document.getElementById("r2").textContent = `STEP 2: ${tot} / 20점`;
+  }
+  if(step === 3){
+    S.step3.forEach(Q => {
+      Object.entries(Q.bk).forEach(([k,B]) => {
+        const got = scoreOf(ST.inp[`s${Q.n}${k}`], B, B.pts);
+        tot += got;
+        setMark(document.getElementById(`w3-${Q.n}${k}`), got, B.pts);
+      });
+    });
+    document.getElementById("r3").textContent = `STEP 3: ${tot} / 20점`;
+  }
+  ST.graded[step] = tot;
+  const sb = document.querySelector(`[data-show="${step}"]`);
+  if(sb) sb.disabled = false;
+  if(!silent) save();
+  updateBar();
+  return tot;
+}
+function updateBar(){
+  const g = st(cur).graded;
+  const f = s => (g[s] === undefined ? "-" : g[s]);
+  document.getElementById("sc1").textContent = f(1);
+  document.getElementById("sc2").textContent = f(2);
+  document.getElementById("sc3").textContent = f(3);
+  const all = [1,2,3].every(s => g[s] !== undefined);
+  document.getElementById("sct").textContent = "합계 " + (all ? (g[1]+g[2]+g[3]) : "-") + "/100";
+}
+function ungrade(step){
+  const ST = st(cur);
+  if(ST.graded[step] === undefined) return;
+  delete ST.graded[step];
+  const r = document.getElementById("r"+step); if(r) r.textContent = "";
+  if(step === 1) clearMarks(".blank");
+  if(step === 3) clearMarks(".s3 .bk");
+  updateBar();
+}
+function markChips(){
+  document.querySelectorAll(".card[id^=part-]").forEach(card => {
+    const vals = [...card.querySelectorAll("input[data-kr]")].map(i => norm(i.value));
+    card.querySelectorAll(".chip").forEach(c => c.classList.toggle("used", vals.includes(norm(c.dataset.w))));
+  });
+}
+
+/* ------------------------------ 이벤트 ------------------------------ */
+app.addEventListener("input", e => {
+  const t = e.target, ST = st(cur);
+  if(t.dataset.n){ ST.inp["b"+t.dataset.n] = t.value; ungrade(1); markChips(); }
+  if(t.dataset.s3){ ST.inp["s"+t.dataset.s3] = t.value; ungrade(3); }
+  save();
+});
+app.addEventListener("focusin", e => { if(e.target.dataset && e.target.dataset.kr) lastKr = e.target; });
+app.addEventListener("click", e => {
+  const t = e.target.closest("button"); if(!t) return;
+  const ST = st(cur);
+  if(t.classList.contains("krbtn")){
+    const k = t.closest(".ln").querySelector(".krline");
+    k.classList.toggle("show"); t.textContent = k.classList.contains("show") ? "해석 닫기" : "해석 보기"; return;
+  }
+  if(t.classList.contains("chip")){
+    const card = t.closest(".card");
+    let target = (lastKr && card.contains(lastKr)) ? lastKr : [...card.querySelectorAll("input[data-kr]")].find(i => !i.value);
+    if(!target) return;
+    target.value = t.dataset.w;
+    target.dispatchEvent(new Event("input", {bubbles:true}));
+    const all = [...card.querySelectorAll("input[data-kr]")];
+    const next = all.slice(all.indexOf(target) + 1).find(i => !i.value);
+    if(next){ next.focus(); lastKr = next; }
+    return;
+  }
+  if(t.classList.contains("tile")){
+    const qi = +t.dataset.q, i = +t.dataset.i;
+    const arr = ST.s2[qi] = ST.s2[qi] || [];
+    if(t.dataset.in){ arr.splice(arr.indexOf(i), 1); } else { arr.push(i); }
+    ungrade(2); save(); drawStep2(qi); return;
+  }
+  if(t.dataset.reset2 !== undefined){ ST.s2[+t.dataset.reset2] = []; ungrade(2); save(); drawStep2(+t.dataset.reset2); return; }
+  if(t.dataset.grade){ grade(+t.dataset.grade); return; }
+  if(t.dataset.show){
+    const step = +t.dataset.show;
+    if(step === 2){
+      SETS[cur].step2.forEach((Q, qi) => {
+        const fb = document.getElementById("fb-"+qi);
+        if(!fb.classList.contains("ok")) fb.textContent += `  →  ${Q.pre} ${Q.chunks.join(" ")}${Q.post === "…" ? " …" : Q.post}`;
+      });
+      t.disabled = true;
+    } else {
+      document.body.classList.toggle("showans");
+      t.textContent = document.body.classList.contains("showans") ? "정답 숨기기" : "틀린 칸 정답 보기";
+    }
+  }
+});
+
+document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("nav.tabs button").forEach(x => x.setAttribute("aria-selected", x === b ? "true" : "false"));
+  cur = b.dataset.set; state.cur = cur; save();
+  document.body.classList.remove("showans"); lastKr = null;
+  render(); window.scrollTo({top:0});
+}));
+document.getElementById("gradeAll").addEventListener("click", () => { grade(1); grade(2); grade(3); });
+const FRAMED = (() => { try{ return window.self !== window.top; }catch(e){ return true; } })();
+if(location.protocol !== "file:") document.querySelectorAll("a[data-alt]").forEach(a => a.href = a.dataset.alt);
+if(FRAMED) document.getElementById("printBtn").style.display = "none";
+document.getElementById("printBtn").addEventListener("click", () => window.print());
+let resetArm = null;
+document.getElementById("resetBtn").addEventListener("click", e => {
+  const b = e.currentTarget;
+  if(!resetArm){ b.textContent = "한 번 더 누르면 지워져요"; resetArm = setTimeout(() => { resetArm = null; b.textContent = "다시 풀기"; }, 3000); return; }
+  clearTimeout(resetArm); resetArm = null; b.textContent = "다시 풀기";
+  state[cur] = {inp:{}, s2:{}, graded:{}}; save(); document.body.classList.remove("showans"); render();
+});
+["cls","num","nm"].forEach(id => {
+  const el = document.getElementById(id);
+  el.value = (state.who || {})[id] || "";
+  el.addEventListener("input", () => { state.who = state.who || {}; state.who[id] = el.value; save(); });
+});
+
+const hashSet = location.hash.slice(1);
+if(SETS[hashSet]) state.cur = hashSet;
+if(state.cur && SETS[state.cur]){
+  cur = state.cur;
+  document.querySelectorAll("nav.tabs button").forEach(x => x.setAttribute("aria-selected", x.dataset.set === cur ? "true" : "false"));
+}
+render();
+</script>
+</body>
+</html>

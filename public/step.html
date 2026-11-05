@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L4 What-If Science 한 걸음 학습지 (2-1반 · 2-4반)</title>
+<style>
+  :root{--navy:#1F3A5F;--navy2:#2d5285;--ink:#1e2430;--gray:#555;--light:#7a8494;--box:#F4F6FA;--head:#E8EDF5;
+    --line:#d5dbe5;--ok:#1b7f4b;--okbg:#e3f5ea;--ng:#b83227;--ngbg:#fdecea;--warm:#f2b134;--warmbg:#fff6df;
+    --subj:#2563c9;--verb:#c2412d;--key:#1f8a4c;--part:#7a3fb8;--etc:#5b6576}
+  *{box-sizing:border-box}
+  body{margin:0;background:#f1f4f9;color:var(--ink);font-family:Pretendard,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    font-size:16.5px;line-height:1.7}
+  .wrap{max-width:860px;margin:0 auto;padding:0 14px}
+  header{background:linear-gradient(135deg,#1F3A5F,#2d5285);color:#fff;padding:20px 0 0}
+  header .k{font-size:13px;opacity:.8}
+  header h1{margin:3px 0 2px;font-size:25px}
+  header p{margin:0;font-size:14.5px;opacity:.9}
+  .who{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .who label{font-size:14px;background:rgba(255,255,255,.14);border-radius:8px;padding:3px 10px}
+  .who input{width:64px;border:0;border-bottom:1px solid rgba(255,255,255,.6);background:transparent;color:#fff;font:inherit;outline:none}
+  .who input#nm{width:100px}
+  .tabs{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+  .tabs button{font:inherit;font-weight:800;border:0;border-radius:12px 12px 0 0;padding:9px 16px;cursor:pointer;background:rgba(255,255,255,.16);color:#fff}
+  .tabs button small{display:block;font-size:11.5px;font-weight:700;opacity:.85}
+  .tabs button[aria-selected="true"]{background:#f1f4f9;color:var(--navy)}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0 4px}
+  .steps button{font:inherit;border:2px solid var(--line);background:#fff;border-radius:14px;padding:10px 8px;cursor:pointer;text-align:left;color:var(--ink)}
+  .steps button b{display:block;color:var(--navy);font-size:15.5px}
+  .steps button span{font-size:12.5px;color:var(--light)}
+  .steps button[aria-selected="true"]{border-color:var(--navy);background:var(--head)}
+  .steps button .pg{float:right;font-size:12.5px;font-weight:800;color:var(--ok)}
+  .card{background:#fff;border-radius:16px;box-shadow:0 1px 3px rgba(20,30,50,.08);padding:18px 20px;margin:14px 0}
+  .card h2{margin:0 0 4px;font-size:19px;color:var(--navy)}
+  .lead{font-size:14.5px;color:var(--gray);margin:0 0 10px}
+  .tip{background:var(--warmbg);border:1px solid #f0d99a;border-radius:12px;padding:10px 14px;font-size:14.5px}
+  .tip b{color:#8a5a00}
+  .sw{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:700;color:var(--navy);cursor:pointer;user-select:none}
+  .sec{border:1px solid var(--line);border-radius:14px;margin-top:12px;overflow:hidden}
+  .sec .sh{background:var(--head);padding:8px 14px;font-weight:800;color:var(--navy);display:flex;gap:8px;align-items:center}
+  .sec .sh .ok{margin-left:auto;color:var(--ok);font-size:13.5px}
+  .sec .sb{padding:6px 14px 12px}
+  .sec.locked .sb{display:none}
+  .sec.locked .sh::after{content:"🔒 앞 문단 확인 문제를 풀면 열려요";margin-left:auto;font-size:13px;color:var(--light);font-weight:600}
+  .sent{padding:8px 0;border-bottom:1px dashed var(--line);transition:background .4s}
+  .sent:last-of-type{border-bottom:0}
+  .sent.glow{background:#fff3c4;border-radius:8px}
+  .sent .no{display:inline-block;min-width:24px;font-weight:900;color:var(--navy2)}
+  .en{font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;font-size:17px}
+  .ck{display:inline-block;vertical-align:top;margin:0 1px}
+  .ck .lb{display:none;font-family:Pretendard,"Malgun Gothic",sans-serif;font-size:10.5px;font-weight:800;line-height:1.2;text-align:center;border-radius:4px;padding:0 3px;color:#fff}
+  .struct .ck .lb{display:block}
+  .struct .ck{border-bottom:3px solid currentColor;padding:0 2px;margin:2px 2px}
+  .r-subj{color:var(--subj)} .r-verb{color:var(--verb)} .r-key{color:var(--key)} .r-part{color:var(--part)} .r-etc{color:var(--etc)}
+  .r-subj .lb{background:var(--subj)} .r-verb .lb{background:var(--verb)} .r-key .lb{background:var(--key)} .r-part .lb{background:var(--part)} .r-etc .lb{background:var(--etc)}
+  .ck .tx{color:var(--ink)}
+  .sl{color:#b6c0cf;margin:0 3px;font-weight:300}
+  .struct .sl{display:none}
+  .tools{display:inline-flex;gap:4px;margin-left:6px;vertical-align:2px}
+  .mini{font:inherit;font-size:12.5px;border:1px solid var(--line);background:#fff;border-radius:7px;padding:0 8px;cursor:pointer;color:var(--gray)}
+  .kr{display:none;font-size:14.5px;color:#3d4a5c;background:#f7f9fc;border-radius:8px;padding:4px 10px;margin-top:4px}
+  .kr.show{display:block}
+  .chk{background:#f8fafc;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px}
+  .chk .q{font-weight:800}
+  .opts{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+  .opts.row{flex-direction:row;flex-wrap:wrap}
+  .opt{font:inherit;text-align:left;border:1.5px solid #b8c4d6;background:#fff;border-radius:10px;padding:7px 12px;cursor:pointer;color:var(--ink)}
+  .opt:hover{background:var(--head)}
+  .opt.right{background:var(--okbg);border-color:var(--ok);color:var(--ok);font-weight:800}
+  .opt.wrong{background:var(--ngbg);border-color:var(--ng);color:var(--ng)}
+  .msg{font-size:14.5px;font-weight:700;margin-top:6px;min-height:1em}
+  .msg.ok{color:var(--ok)} .msg.ng{color:var(--ng)} .msg.info{color:#8a5a00}
+  .key{border:1px solid var(--line);border-radius:14px;margin-top:14px;overflow:hidden}
+  .key .kh{background:var(--head);padding:10px 14px}
+  .key .kh b{color:var(--navy)}
+  .key .kh .krt{display:block;font-size:15px;margin-top:2px}
+  .rung{padding:12px 14px;border-top:1px solid var(--line);position:relative}
+  .rung .rt{font-weight:800;color:var(--navy);font-size:14.5px;display:flex;gap:8px;align-items:center}
+  .rung .rt .lv{background:var(--navy);color:#fff;border-radius:999px;padding:0 9px;font-size:12.5px}
+  .rung .rt .st{margin-left:auto;font-size:13px}
+  .rung.locked{opacity:.38;pointer-events:none}
+  .rung.locked .rt .st::after{content:"🔒"}
+  .rung.done{background:#fbfefc}
+  .line{margin-top:6px}
+  .bl{display:inline-block;min-width:70px;border-bottom:2px solid #8aa0bf;background:#fff8d6;text-align:center;border-radius:4px 4px 0 0;padding:0 6px;color:#8a99ad}
+  input.w{font:inherit;font-family:"Segoe UI",Roboto,Arial,sans-serif;font-size:17px;border:0;border-bottom:2px solid #8aa0bf;background:#fff8d6;border-radius:4px 4px 0 0;
+    padding:1px 6px;outline:none;text-align:center;color:#13325c}
+  input.w:focus{background:#fff1a8;border-bottom-color:var(--navy)}
+  input.w.long{width:100%;text-align:left;margin:6px 0}
+  .btn{font:inherit;font-size:14.5px;font-weight:800;border:0;border-radius:10px;padding:7px 16px;cursor:pointer;background:var(--navy);color:#fff}
+  .btn.sub{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+  .btn.ghost{background:#fff;color:var(--gray);border:1px solid var(--line)}
+  .acts{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px}
+  .slot{display:flex;flex-wrap:wrap;gap:6px;min-height:44px;border-bottom:2px dashed #8aa0bf;padding:5px;background:#fffdf0;border-radius:8px 8px 0 0;margin-top:6px}
+  .slot:empty::before{content:"아래 덩어리를 순서대로 누르세요";color:#aab;font-size:13.5px;align-self:center}
+  .pool{display:flex;flex-wrap:wrap;gap:6px;padding:8px;background:var(--box);border-radius:10px;margin-top:6px;min-height:48px}
+  .tile{font:inherit;font-family:"Segoe UI",Roboto,Arial,sans-serif;font-size:16px;border:1.5px solid #9fb2cc;background:#fff;border-radius:8px;padding:4px 10px;cursor:pointer;color:#13325c}
+  .slot .tile{background:#e9f0fb;border-color:#6f8fbf}
+  .diff span{display:inline-block;margin:0 2px;padding:0 3px;border-radius:4px}
+  .diff .g{background:var(--okbg);color:var(--ok)} .diff .r{background:var(--ngbg);color:var(--ng);text-decoration:underline wavy}
+  .passage{background:#fbfcfe;border:1.5px solid var(--line);border-radius:12px;padding:10px 14px}
+  .passage .sent{border-bottom:0;padding:3px 0}
+  .q3{border:1px solid var(--line);border-radius:14px;margin-top:12px;overflow:hidden}
+  .q3 .qh{background:var(--head);padding:8px 14px;font-weight:800;color:var(--navy)}
+  .q3 .qb{padding:10px 14px}
+  .phase{font-size:13.5px;font-weight:800;color:#8a5a00;margin-top:6px}
+  .nos{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .nos button{font:inherit;font-weight:900;font-size:16px;border:1.5px solid #b8c4d6;background:#fff;border-radius:10px;width:44px;height:40px;cursor:pointer;color:var(--navy2)}
+  .nos button.right{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+  .nos button.wrong{background:var(--ngbg);border-color:var(--ng);color:var(--ng)}
+  .hide{display:none!important}
+  .cheer{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(120px);background:var(--ok);color:#fff;font-weight:800;border-radius:999px;
+    padding:10px 20px;box-shadow:0 6px 18px rgba(0,0,0,.18);transition:transform .35s;z-index:30}
+  .cheer.show{transform:translateX(-50%) translateY(0)}
+  .bar{height:10px;background:#dfe5ee;border-radius:999px;overflow:hidden;margin-top:6px}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,#3bb273,#1b7f4b);border-radius:999px;transition:width .4s}
+  .note{font-size:12.5px;color:var(--light);margin:16px 0 30px}
+  @media (max-width:600px){ .steps{grid-template-columns:1fr} header h1{font-size:21px} .card{padding:14px 12px} .en{font-size:16px} }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="k">2026학년도 2학기 영어Ⅱ · Lesson 4 What-If Science · 2-1반 · 2-4반</div>
+    <h1>👣 한 걸음 학습지</h1><a href="./" style="color:#ffd37a;font-size:14px;font-weight:700;text-decoration:none">🏠 웹앱 모음</a>
+    <p>긴 지문은 덩어리로 끊어 읽고, 영어 문장은 사다리처럼 한 칸씩 올라가며 써요. 복합 문제는 쪼개서 풀어요.</p>
+    <div class="who">
+      <label>반 <input id="cls" autocomplete="off"></label>
+      <label>번호 <input id="num" autocomplete="off"></label>
+      <label>이름 <input id="nm" autocomplete="off"></label>
+    </div>
+    <nav class="tabs" id="tabs"></nav>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<div class="cheer" id="cheer"></div>
+
+<script>
+/* 지문: 지문 설계도(Lesson 4 1~4차시)의 영어 원문·의미 덩어리·문장 성분·해석을 그대로 옮겼다. */
+const P = {"1": [{"no": "①", "tk": [{"t": "Have you ever wondered", "l": "서술어(현재완료 의문)", "r": "verb"}, {"p": ","}, {"p": "“"}, {"t": "What if", "l": "의문(가정)", "r": "etc"}, {"t": "I", "l": "주어", "r": "subj"}, {"t": "could run", "l": "서술어(가정)", "r": "verb"}, {"t": "so fast", "l": "정도", "r": "key"}, {"t": "that", "l": "결과절 접속사", "r": "part"}, {"t": "nobody", "l": "주어", "r": "subj"}, {"t": "could see", "l": "서술어", "r": "verb"}, {"t": "me", "l": "목적어", "r": "etc"}, {"p": "?”"}], "kr": "여러분은 “만일 내가 아주 빨리 달려서 아무도 날 볼 수 없다면 어떨까?”라고 궁금하게 여긴 적이 있는가?"}, {"no": "②", "tk": [{"t": "If you have asked this kind of question", "l": "조건 부사절", "r": "part"}, {"p": ","}, {"t": "you", "l": "주어", "r": "subj"}, {"t": "may be", "l": "서술어(추측)", "r": "verb"}, {"t": "ready to become the next Galileo", "l": "보어", "r": "key"}, {"p": "."}], "kr": "만일 여러분이 이런 종류의 질문을 한 적이 있다면, 여러분은 차기 Galileo가 될 준비가 돼 있을 수 있다."}, {"no": "③", "tk": [{"t": "The Italian scientist Galileo Galilei", "l": "주어", "r": "subj"}, {"t": "is", "l": "서술어", "r": "verb"}, {"t": "famous for a thought experiment", "l": "보어", "r": "key"}, {"p": ","}, {"t": "which", "l": "계속적 관계사", "r": "part"}, {"t": "is", "l": "서술어", "r": "verb"}, {"t": "an imaginary experiment", "l": "정의(보어)", "r": "re"}, {"t": "designed to explore a mathematical or scientific hypothesis", "l": "과거분사 후치 수식", "r": "part"}, {"p": "."}], "kr": "이탈리아 과학자인 Galileo Galilei는 사고 실험으로 유명한데, 사고 실험이란 수학적 또는 과학적 가설을 탐구하려고 설계된 상상의 실험이다."}, {"no": "④", "tk": [{"t": "With only his thoughts", "l": "전치사구(수단)", "r": "etc"}, {"p": ","}, {"t": "he", "l": "주어", "r": "subj"}, {"t": "demonstrated", "l": "서술어", "r": "verb"}, {"t": "that", "l": "명사절 접속사", "r": "part"}, {"t": "objects with different masses", "l": "주어(명사절)", "r": "subj"}, {"t": "should fall", "l": "서술어", "r": "verb"}, {"t": "at the same speed", "l": "부사구", "r": "etc"}, {"t": "when dropped from the same height", "l": "분사구(수동)", "r": "part"}, {"t": "in the absence of air resistance", "l": "전치사구", "r": "etc"}, {"p": "."}], "kr": "자신의 생각만으로, 그는 다른 질량을 지닌 물체가 공기 저항 없이 같은 높이에서 떨어졌을 때 같은 속도로 떨어진다는 것을 입증하였다."}, {"no": "⑤", "tk": [{"t": "With a hypothesis", "l": "전치사구(수단)", "r": "etc"}, {"t": "based on creativity and imagination", "l": "과거분사 후치 수식", "r": "part"}, {"p": ","}, {"t": "anyone", "l": "주어", "r": "subj"}, {"t": "can become", "l": "서술어", "r": "verb"}, {"t": "a great scientist", "l": "보어", "r": "key"}, {"p": "."}], "kr": "창의성과 상상력에 근거한 가설로 누구든지 위대한 과학자가 될 수 있다."}, {"no": "⑥", "tk": [{"t": "The tallest man in recorded history", "l": "주어", "r": "subj"}, {"t": "was", "l": "서술어", "r": "verb"}, {"t": "272 cm tall", "l": "보어", "r": "key"}, {"p": ","}, {"t": "but", "l": "접속사(역접)", "r": "etc"}, {"t": "have you ever wondered", "l": "서술어(현재완료 의문)", "r": "verb"}, {"t": "what would happen", "l": "간접의문문", "r": "part"}, {"t": "if humans could grow to enormous sizes", "l": "가정 조건절", "r": "part"}, {"t": "like the giant in Jack and the Beanstalk", "l": "전치사구(비교)", "r": "etc"}, {"p": "?"}], "kr": "기록된 역사에서 가장 큰 사람은 272cm였지만 여러분은 만일 사람이 ‘잭과 콩나무’에 나오는 거인처럼 엄청난 크기로 자랄 수 있다면 무슨 일이 일어날지 궁금하게 여긴 적이 있는가?"}, {"no": "⑦", "tk": [{"t": "Unfortunately", "l": "문장부사", "r": "etc"}, {"p": ","}, {"t": "the answer to this hypothetical question", "l": "주어", "r": "subj"}, {"t": "is", "l": "서술어", "r": "verb"}, {"t": "that", "l": "보어절 접속사", "r": "part"}, {"t": "it", "l": "주어", "r": "subj"}, {"t": "is", "l": "서술어", "r": "verb"}, {"t": "impossible", "l": "보어", "r": "key"}, {"t": "due to the scale effect", "l": "이유(due to + 명사)", "r": "etc"}, {"p": "."}], "kr": "불행히도, 이 가상적인 질문에 대한 답은 그것이 크기 효과 때문에 불가능하다는 것이다."}, {"no": "⑧", "tk": [{"t": "When the length of an object doubles", "l": "시간 부사절", "r": "part"}, {"p": ","}, {"t": "its area", "l": "주어", "r": "subj"}, {"t": "increases", "l": "서술어", "r": "verb"}, {"t": "by a factor of four (2x2)", "l": "배수 표현", "r": "etc"}, {"p": ","}, {"t": "and", "l": "접속사", "r": "etc"}, {"t": "its volume", "l": "주어", "r": "subj"}, {"t": "by a factor of eight (2x2x2)", "l": "생략(increases)", "r": "re"}, {"p": "."}], "kr": "어떤 물체의 길이가 2배가 될 때, 그것의 면적은 4배로 증가하고, 그 용적은 8배로 증가한다."}, {"no": "⑨", "tk": [{"t": "These changes", "l": "주어", "r": "subj"}, {"t": "can create", "l": "서술어", "r": "verb"}, {"t": "many problems", "l": "목적어", "r": "key"}, {"t": "that", "l": "주격 관계사", "r": "part"}, {"t": "would put", "l": "서술어", "r": "verb"}, {"t": "the giant’s life", "l": "목적어", "r": "etc"}, {"t": "in danger", "l": "전치사구", "r": "etc"}, {"p": "."}], "kr": "이러한 변화는 거인의 생명을 위험에 빠뜨릴 많은 문제를 만들 수 있다."}, {"no": "⑩", "tk": [{"t": "One issue", "l": "주어", "r": "subj"}, {"t": "is", "l": "서술어", "r": "verb"}, {"t": "that", "l": "보어절 접속사", "r": "part"}, {"t": "the giant", "l": "주어", "r": "subj"}, {"t": "would not be able to stand", "l": "서술어", "r": "verb"}, {"t": "properly", "l": "부사", "r": "etc"}, {"t": "on his own", "l": "전치사구", "r": "etc"}, {"t": "because of the weight", "l": "이유(because of + 명사)", "r": "etc"}, {"t": "pushing down on his feet", "l": "현재분사 후치 수식", "r": "part"}, {"p": "."}], "kr": "한 가지 문제는 그 거인이 발을 아래로 누르는 무게 때문에 스스로 똑바로 서 있을 수 없다는 것이다."}, {"no": "⑪", "tk": [{"t": "If a person’s height increased ten times", "l": "조건절(가정법 과거)", "r": "part"}, {"p": ","}, {"t": "his weight", "l": "주어", "r": "subj"}, {"t": "would increase", "l": "서술어", "r": "verb"}, {"t": "by a factor of 1,000 (10x10x10)", "l": "배수 표현", "r": "etc"}, {"t": "because weight changes in proportion to volume", "l": "이유 부사절", "r": "part"}, {"p": "."}], "kr": "만일 어떤 사람의 키가 10배 증가하면, 무게가 용적에 비례하여 변하기 때문에 그의 몸무게는 1,000배 증가할 것이다."}, {"no": "⑫", "tk": [{"t": "However", "l": "접속부사(대조)", "r": "etc"}, {"p": ","}, {"t": "the area of the feet", "l": "주어", "r": "subj"}, {"t": "supporting his body", "l": "현재분사 후치 수식", "r": "part"}, {"t": "would only increase", "l": "서술어", "r": "verb"}, {"t": "by a factor of 100 (10x10)", "l": "배수 표현", "r": "etc"}, {"p": "."}], "kr": "하지만 그의 몸을 지탱하는 발의 면적은 단지 100배 증가할 것이다."}, {"no": "⑬", "tk": [{"t": "This", "l": "주어", "r": "subj"}, {"t": "means", "l": "서술어", "r": "verb"}, {"t": "that", "l": "목적절 접속사", "r": "part"}, {"t": "his feet", "l": "주어", "r": "subj"}, {"t": "would be", "l": "서술어", "r": "verb"}, {"t": "under too much pressure", "l": "전치사구", "r": "etc"}, {"t": "to support the increased weight", "l": "too ~ to V", "r": "part"}, {"t": "because the mass would have increased far more than the area of his feet", "l": "이유 부사절", "r": "part"}, {"p": "."}], "kr": "이것은 질량이 그의 발의 면적보다 훨씬 더 증가했을 것이기 때문에 그의 발은 늘어난 무게를 지탱하느라 지나치게 많은 압력을 받을 것이라는 의미이다."}, {"no": "⑭", "tk": [{"t": "In addition", "l": "연결(추가)", "r": "etc"}, {"p": ","}, {"t": "there", "l": "유도부사", "r": "etc"}, {"t": "is", "l": "서술어", "r": "verb"}, {"t": "an issue of heat emission", "l": "후치 주어", "r": "subj"}, {"p": "."}], "kr": "게다가, 열 배출의 문제가 있다."}, {"no": "⑮", "tk": [{"t": "Heat", "l": "주어", "r": "subj"}, {"t": "is generated", "l": "서술어(수동)", "r": "verb"}, {"t": "in the human body", "l": "장소", "r": "etc"}, {"p": ","}, {"t": "and", "l": "접속사", "r": "etc"}, {"t": "it", "l": "주어", "r": "subj"}, {"t": "is constantly released", "l": "서술어(수동)", "r": "verb"}, {"t": "from the surface of the skin", "l": "전치사구", "r": "etc"}, {"t": "to prevent heat from accumulating in the body", "l": "to부정사(목적)", "r": "part"}, {"p": "."}], "kr": "열은 신체에서 생성되고 열이 신체에 축적되는 것을 방지하기 위해 피부 표면으로부터 끊임없이 배출된다."}, {"no": "⑯", "tk": [{"t": "If a person’s height were to increase ten times", "l": "조건절(were to)", "r": "part"}, {"p": ","}, {"t": "the amount of heat", "l": "주어", "r": "subj"}, {"t": "generated", "l": "과거분사 후치 수식", "r": "part"}, {"t": "would increase", "l": "서술어", "r": "verb"}, {"t": "a thousand times", "l": "배수 표현", "r": "etc"}, {"t": "in proportion to the body’s volume", "l": "전치사구", "r": "etc"}, {"p": "."}], "kr": "만일 어떤 사람의 키가 10배 증가한다면, 생성되는 열의 양은 신체의 체적에 비례하여 1,000배 증가할 것이다."}, {"no": "⑰", "tk": [{"t": "However", "l": "접속부사(대조)", "r": "etc"}, {"p": ","}, {"t": "the surface area of the person’s skin", "l": "주어", "r": "subj"}, {"t": "would only increase", "l": "서술어", "r": "verb"}, {"t": "a hundred times", "l": "배수 표현", "r": "etc"}, {"p": ","}, {"t": "and", "l": "접속사", "r": "etc"}, {"t": "as a result", "l": "결과 연결", "r": "etc"}, {"p": ","}, {"t": "not enough heat", "l": "주어", "r": "subj"}, {"t": "would be released", "l": "서술어(수동)", "r": "verb"}, {"t": "from the body", "l": "전치사구", "r": "etc"}, {"t": "through the skin", "l": "전치사구", "r": "etc"}, {"p": "."}], "kr": "하지만 그 사람의 피부 표면적은 단지 100배 증가할 것이고 결과적으로, 충분한 열이 피부를 통하여 신체로부터 배출되지 않을 것이다."}, {"no": "⑱", "tk": [{"t": "This", "l": "주어", "r": "subj"}, {"t": "shows", "l": "서술어", "r": "verb"}, {"t": "that", "l": "목적절 접속사", "r": "part"}, {"t": "while we may wish to grow as tall as a giant", "l": "양보 부사절(while)", "r": "part"}, {"p": ","}, {"t": "we", "l": "주어", "r": "subj"}, {"t": "would not be able to survive", "l": "서술어", "r": "verb"}, {"t": "in that form", "l": "전치사구", "r": "etc"}, {"p": "."}], "kr": "이것은 우리가 거인만큼 크게 자라기를 바라지만 우리는 그 형태로는 생존할 수 없을 거라는 걸 보여준다."}], "2": [{"no": "①", "tk": [{"p": "“"}, {"t": "O", "l": "감탄사", "r": "etc"}, {"p": ","}, {"t": "swear not", "l": "명령문(부정)", "r": "verb"}, {"t": "by the moon", "l": "전치사구", "r": "etc"}, {"p": ","}, {"t": "the inconstant moon", "l": "동격", "r": "re"}, {"p": ".”"}], "kr": "“오, 달에, 변덕스러운 달에 맹세하지 마세요.”"}, {"no": "②", "tk": [{"t": "This", "l": "주어", "r": "subj"}, {"t": "is", "l": "서술어", "r": "verb"}, {"t": "a famous line", "l": "보어", "r": "key"}, {"t": "from Romeo and Juliet", "l": "출처", "r": "etc"}, {"p": "."}], "kr": "이것은 ‘로미오와 줄리엣’에 나오는 유명한 시구이다."}, {"no": "③", "tk": [{"t": "Juliet", "l": "주어", "r": "subj"}, {"t": "warns", "l": "서술어(5형식)", "r": "verb"}, {"t": "Romeo", "l": "목적어", "r": "etc"}, {"t": "not to swear his love by the Moon", "l": "목적격보어(부정 to V)", "r": "part"}, {"t": "as it may change", "l": "이유 접속사", "r": "part"}, {"t": "just as the Moon changes its shape", "l": "양태 접속사", "r": "part"}, {"p": "."}], "kr": "Juliet은 Romeo에게 마치 달이 그 형태를 바꾸듯이 그의 사랑도 변할 수 있으니 달에 사랑을 맹세하지 말라고 강하게 충고한다."}, {"no": "④", "tk": [{"t": "Although its appearance changes", "l": "양보 부사절", "r": "part"}, {"p": ","}, {"t": "the Moon", "l": "주어", "r": "subj"}, {"t": "is always present", "l": "서술어1", "r": "verb"}, {"t": "in the night sky", "l": "장소", "r": "etc"}, {"t": "and", "l": "접속사", "r": "etc"}, {"t": "plays", "l": "서술어2(병렬)", "r": "verb"}, {"t": "a crucial role", "l": "목적어", "r": "key"}, {"t": "in regulating", "l": "in + -ing", "r": "part"}, {"t": "the length of the day on Earth", "l": "목적어", "r": "key"}, {"t": "as well as", "l": "상관 표현", "r": "etc"}, {"t": "the Earth’s seasons and weather patterns", "l": "추가 대상", "r": "etc"}, {"p": "."}], "kr": "비록 그 모습이 변하지만, 달은 항상 밤하늘에 존재하고 지구의 계절과 기후 패턴뿐만 아니라 지구의 하루 길이를 조절하는 데 있어 중요한 역할을 한다."}, {"no": "⑤", "tk": [{"t": "Then", "l": "연결", "r": "etc"}, {"p": ","}, {"t": "what", "l": "의문사", "r": "part"}, {"t": "would happen", "l": "서술어", "r": "verb"}, {"t": "if there were no Moon", "l": "가정 조건절", "r": "part"}, {"p": "?"}], "kr": "그렇다면, 달이 없다면 무슨 일이 일어날까?"}, {"no": "⑥", "tk": [{"t": "Without the Moon", "l": "가정 대용", "r": "etc"}, {"p": ","}, {"t": "our day", "l": "주어", "r": "subj"}, {"t": "would no longer be", "l": "서술어", "r": "verb"}, {"t": "24 hours", "l": "보어", "r": "key"}, {"p": "."}], "kr": "달이 없다면 우리의 하루는 더 이상 24시간이 아닐 것이다."}, {"no": "⑦", "tk": [{"t": "The Moon’s gravity", "l": "주어", "r": "subj"}, {"t": "causes", "l": "서술어(5형식)", "r": "verb"}, {"t": "the Earth’s ocean", "l": "목적어", "r": "etc"}, {"t": "to rise and fall", "l": "목적격보어(to V)", "r": "part"}, {"p": "."}], "kr": "달의 중력으로 인해 지구의 대양이 오르내린다."}, {"no": "⑧", "tk": [{"t": "Since the ocean is moving and the Earth is also spinning", "l": "이유 부사절", "r": "part"}, {"p": ","}, {"t": "friction", "l": "주어", "r": "subj"}, {"t": "occurs", "l": "서술어", "r": "verb"}, {"t": "between them", "l": "전치사구", "r": "etc"}, {"p": "."}], "kr": "대양이 움직이고 지구 또한 회전하고 있기 때문에 그것들 사이에 마찰이 일어난다."}, {"no": "⑨", "tk": [{"t": "This friction", "l": "주어", "r": "subj"}, {"t": "leads to", "l": "서술어", "r": "verb"}, {"t": "a decrease in the rotation rate of the planet", "l": "목적어", "r": "key"}, {"p": "."}], "kr": "이 마찰로 인해 행성(지구)의 자전율이 감소하게 된다."}, {"no": "⑩", "tk": [{"t": "Without the Moon", "l": "가정 대용", "r": "etc"}, {"p": ","}, {"t": "however", "l": "삽입 접속부사", "r": "etc"}, {"p": ","}, {"t": "the Earth’s rotation", "l": "주어", "r": "subj"}, {"t": "would not slow down", "l": "서술어", "r": "verb"}, {"p": ","}, {"t": "resulting in a change in the length of a day", "l": "결과 분사구문", "r": "part"}, {"p": "."}], "kr": "하지만 달이 없다면, 지구의 자전은 속도가 줄지 않을 것이고 하루의 길이에 변화를 가져올 것이다."}, {"no": "⑪", "tk": [{"t": "According to some scientists", "l": "전치사구", "r": "etc"}, {"p": ","}, {"t": "when the Earth first formed", "l": "시간 부사절", "r": "part"}, {"p": ","}, {"t": "there", "l": "유도부사", "r": "etc"}, {"t": "was", "l": "서술어", "r": "verb"}, {"t": "no Moon", "l": "후치 주어", "r": "subj"}, {"t": "and", "l": "접속사", "r": "etc"}, {"t": "a day", "l": "주어", "r": "subj"}, {"t": "was", "l": "서술어", "r": "verb"}, {"t": "only five hours long", "l": "보어", "r": "key"}, {"p": "."}], "kr": "몇몇 과학자들에 따르면, 지구가 처음 형성되었을 때, 달은 없었고 하루는 단지 5시간이었다."}, {"no": "⑫", "tk": [{"t": "This", "l": "주어", "r": "subj"}, {"t": "indicates", "l": "서술어", "r": "verb"}, {"t": "that", "l": "목적절 접속사", "r": "part"}, {"t": "without the Moon", "l": "가정 대용", "r": "etc"}, {"p": ","}, {"t": "we", "l": "주어", "r": "subj"}, {"t": "would see", "l": "서술어", "r": "verb"}, {"t": "the Sun", "l": "목적어", "r": "key"}, {"t": "rise", "l": "원형부정사(지각동사)", "r": "part"}, {"t": "every five hours", "l": "빈도", "r": "etc"}, {"p": "."}], "kr": "이는 달이 없다면, 우리가 5시간마다 일출을 보게 된다는 것을 나타낸다."}, {"no": "⑬", "tk": [{"t": "Additionally", "l": "연결(추가)", "r": "etc"}, {"p": ","}, {"t": "the absence of the Moon", "l": "주어", "r": "subj"}, {"t": "would completely change", "l": "서술어", "r": "verb"}, {"t": "weather patterns on Earth", "l": "목적어", "r": "key"}, {"p": "."}], "kr": "게다가, 달의 부재는 지구의 기후 패턴을 완전히 바꿔 놓을 것이다."}, {"no": "⑭", "tk": [{"t": "We", "l": "주어", "r": "subj"}, {"t": "experience", "l": "서술어", "r": "verb"}, {"t": "the beauty of different seasons", "l": "목적어", "r": "key"}, {"t": "because the Earth is tilted on its axis", "l": "이유 부사절", "r": "part"}, {"p": "."}], "kr": "우리는 지구가 축에서 기울어져 있기 때문에 다른 계절의 아름다움을 경험한다."}, {"no": "⑮", "tk": [{"t": "The axis of rotation of the Earth", "l": "주어", "r": "subj"}, {"t": "is tilted", "l": "서술어", "r": "verb"}, {"t": "at an angle of 23.5 degrees", "l": "전치사구", "r": "etc"}, {"p": ","}, {"t": "and", "l": "접속사", "r": "etc"}, {"t": "the Moon’s gravity", "l": "주어", "r": "subj"}, {"t": "holds", "l": "서술어", "r": "verb"}, {"t": "the Earth", "l": "목적어", "r": "etc"}, {"t": "in place", "l": "전치사구", "r": "etc"}, {"t": "by stabilizing the tilt", "l": "수단(by + -ing)", "r": "etc"}, {"p": "."}], "kr": "지구의 자전축은 23.5도의 각도로 기울어져 있고 달의 중력은 그 기울기를 안정시킴으로써 지구를 제자리에 있도록 유지시킨다."}, {"no": "⑯", "tk": [{"t": "However", "l": "대조", "r": "etc"}, {"p": ","}, {"t": "if there were no Moon", "l": "가정 조건절", "r": "part"}, {"p": ","}, {"t": "the tilt", "l": "주어", "r": "subj"}, {"t": "could vary", "l": "서술어", "r": "verb"}, {"t": "wildly", "l": "부사", "r": "etc"}, {"t": "between 0 and 85 degrees", "l": "전치사구", "r": "etc"}, {"p": "."}], "kr": "그러나 만약 달이 없다면 그 기울기는 0도와 85도 사이에서 크게 달라질 것이다."}, {"no": "⑰", "tk": [{"t": "Suppose", "l": "명령문(가정)", "r": "verb"}, {"t": "the Earth were tilted at an angle of 60 degrees", "l": "목적절(that 생략)", "r": "part"}, {"p": "."}], "kr": "지구가 60도의 각도로 기울어져 있다고 가정해보라."}, {"no": "⑱", "tk": [{"t": "The hemisphere of the Earth", "l": "주어", "r": "subj"}, {"t": "facing the Sun", "l": "현재분사 후치 수식", "r": "part"}, {"t": "would receive", "l": "서술어", "r": "verb"}, {"t": "much more energy", "l": "목적어", "r": "key"}, {"t": "from the sun", "l": "전치사구", "r": "etc"}, {"t": "than the other hemisphere", "l": "비교 대상", "r": "part"}, {"p": "."}], "kr": "태양을 접하고 있는 지구의 반구는 다른 반구보다 태양으로부터 훨씬 더 많은 에너지를 받게 될 것이다."}, {"no": "⑲", "tk": [{"t": "This", "l": "주어", "r": "subj"}, {"t": "could bring about", "l": "서술어", "r": "verb"}, {"t": "extreme shifts in weather patterns", "l": "목적어", "r": "key"}, {"p": ","}, {"t": "potentially making summers hotter and winters colder", "l": "결과 분사구문", "r": "part"}, {"p": "."}], "kr": "이것은 기후 패턴에 있어 극단적인 변화를 가져 와서 여름은 더 덥고 겨울은 더 춥게 될 가능성이 있다."}, {"no": "⑳", "tk": [{"t": "If this trend continued", "l": "가정 조건절", "r": "part"}, {"p": ","}, {"t": "the Earth", "l": "주어", "r": "subj"}, {"t": "would become", "l": "서술어", "r": "verb"}, {"t": "uninhabitable", "l": "보어", "r": "key"}, {"p": "."}], "kr": "이런 추세가 계속되면 지구는 사람이 살 수 없는 곳이 될 것이다."}], "3": [{"no": "①", "tk": [{"t": "Oxygen", "l": "주어", "r": "subj"}, {"t": "is", "l": "서술어", "r": "verb"}, {"t": "a vital gas for life", "l": "보어", "r": "key"}, {"p": ","}, {"t": "making up 21 percent of the Earth’s atmosphere", "l": "분사구문", "r": "part"}, {"p": "."}], "kr": "산소는 생명에 필수적인 기체로 지구 대기의 21%를 차지하고 있다."}, {"no": "②", "tk": [{"t": "It", "l": "주어", "r": "subj"}, {"t": "is essential", "l": "서술어1", "r": "verb"}, {"t": "for breathing", "l": "전치사구", "r": "etc"}, {"t": "and", "l": "접속사", "r": "etc"}, {"t": "is also necessary", "l": "서술어2(병렬)", "r": "verb"}, {"t": "to burn common fuels like wood and oil", "l": "진주어 성격 to V", "r": "key"}, {"t": "to generate heat and light", "l": "목적 to V", "r": "part"}, {"p": "."}], "kr": "그것은 호흡에 필수적이며 열과 빛을 내기 위해 나무와 석유 같은 일반 연료를 연소시킬 때도 필요하다."}, {"no": "③", "tk": [{"t": "Undoubtedly", "l": "문장부사", "r": "etc"}, {"p": ","}, {"t": "it", "l": "주어", "r": "subj"}, {"t": "is", "l": "서술어", "r": "verb"}, {"t": "an indispensable element", "l": "보어", "r": "key"}, {"t": "for organisms on Earth", "l": "전치사구", "r": "etc"}, {"p": "."}], "kr": "의심할 여지없이, 그것은 지구상의 유기체에 없어서는 안 될 요소이다."}, {"no": "④", "tk": [{"t": "Then", "l": "연결", "r": "etc"}, {"p": ","}, {"t": "would", "l": "조동사", "r": "verb"}, {"t": "it", "l": "가주어", "r": "subj"}, {"t": "be", "l": "서술어", "r": "verb"}, {"t": "better", "l": "보어", "r": "key"}, {"t": "to have a higher concentration of oxygen in the atmosphere", "l": "진주어", "r": "subj"}, {"p": "?"}], "kr": "그렇다면, 대기 중에 더 높은 농도의 산소가 있는 것이 더 좋을까?"}, {"no": "⑤", "tk": [{"t": "What", "l": "의문사", "r": "part"}, {"t": "would happen", "l": "서술어", "r": "verb"}, {"t": "if the oxygen concentration were to double", "l": "가정 조건절(were to)", "r": "part"}, {"p": "?"}], "kr": "산소 농도가 두 배가 된다면 무슨 일이 일어날까?"}, {"no": "⑥", "tk": [{"t": "While more oxygen may seem beneficial", "l": "양보 부사절", "r": "part"}, {"p": ","}, {"t": "it", "l": "주어", "r": "subj"}, {"t": "could have", "l": "서술어", "r": "verb"}, {"t": "unexpected consequences", "l": "목적어", "r": "key"}, {"p": ","}, {"t": "especially for insects", "l": "강조", "r": "etc"}, {"p": "."}], "kr": "더 많은 산소가 유익해 보일지 모르지만, 그것은 특히 곤충에게, 예상치 못한 결과를 가져올 수 있다."}, {"no": "⑦", "tk": [{"t": "Insects", "l": "주어", "r": "subj"}, {"p": ","}, {"t": "such as bees and dragonflies", "l": "예시", "r": "re"}, {"p": ","}, {"t": "do not have", "l": "서술어1", "r": "verb"}, {"t": "lungs", "l": "목적어", "r": "key"}, {"t": "and", "l": "접속사", "r": "etc"}, {"t": "instead", "l": "부사", "r": "etc"}, {"t": "take in", "l": "서술어2(병렬)", "r": "verb"}, {"t": "air", "l": "목적어", "r": "key"}, {"t": "through external openings", "l": "전치사구", "r": "etc"}, {"t": "called spiracles", "l": "과거분사 후치 수식", "r": "part"}, {"p": "."}], "kr": "꿀벌과 잠자리 같은 곤충은 폐가 없는 대신 숨구멍이라 불리는 외부 구멍을 통해서 공기를 흡입한다."}, {"no": "⑧", "tk": [{"t": "Although insects can survive without lungs", "l": "양보 부사절", "r": "part"}, {"p": ","}, {"t": "their spiracles", "l": "주어", "r": "subj"}, {"t": "are not", "l": "서술어", "r": "verb"}, {"t": "as efficient as lungs", "l": "보어", "r": "key"}, {"t": "at taking in air", "l": "전치사구", "r": "etc"}, {"p": "."}], "kr": "비록 곤충들이 폐 없이 생존할 수 있을지라도 그들의 숨구멍은 공기를 흡입하는 데 있어 폐만큼 효율적이지 않다."}, {"no": "⑨", "tk": [{"t": "Therefore", "l": "결과 연결", "r": "etc"}, {"p": ","}, {"t": "with the current oxygen concentration", "l": "전치사구", "r": "etc"}, {"p": ","}, {"t": "insects", "l": "주어", "r": "subj"}, {"t": "cannot evolve", "l": "서술어", "r": "verb"}, {"t": "to be larger than their current size", "l": "to V", "r": "part"}, {"p": "."}], "kr": "그러므로 현재 산소 농도에서 곤충들은 현재 크기보다 더 크게 진화할 수 없다."}, {"no": "⑩", "tk": [{"t": "If they were bigger in size", "l": "가정 조건절", "r": "part"}, {"p": ","}, {"t": "oxygen", "l": "주어", "r": "subj"}, {"t": "would not be able to reach", "l": "서술어", "r": "verb"}, {"t": "the deepest parts of their bodies", "l": "목적어", "r": "key"}, {"p": "."}], "kr": "만약 그들의 크기가 더 커지면 산소는 그들 몸의 가장 깊은 부위에 도달할 수 없을 것이다."}, {"no": "⑪", "tk": [{"t": "However", "l": "대조", "r": "etc"}, {"p": ","}, {"t": "if the concentration of oxygen were to double", "l": "가정 조건절(were to)", "r": "part"}, {"p": ","}, {"t": "insects", "l": "주어", "r": "subj"}, {"t": "could grow", "l": "서술어", "r": "verb"}, {"t": "in size", "l": "전치사구", "r": "etc"}, {"t": "as oxygen would be more readily available", "l": "이유 부사절", "r": "part"}, {"p": "."}], "kr": "그러나 만일 산소 농도가 두 배가 되면 곤충들은 산소가 더 쉽게 이용될 수 있기 때문에 크기가 커질 수 있다."}, {"no": "⑫", "tk": [{"t": "This increase in insect size", "l": "주어", "r": "subj"}, {"t": "could have", "l": "서술어", "r": "verb"}, {"t": "a significant influence on the ecological environment", "l": "목적어", "r": "key"}, {"p": ","}, {"t": "potentially disrupting the food chain", "l": "결과 분사구문", "r": "part"}, {"p": "."}], "kr": "곤충 크기의 증가는 생태 환경에 커다란 영향을 끼칠 수 있고 먹이사슬을 분열시킬 가능성이 있다."}, {"no": "⑬", "tk": [{"t": "Dragonflies", "l": "주어", "r": "subj"}, {"p": ","}, {"t": "for example", "l": "삽입 예시", "r": "etc"}, {"p": ","}, {"t": "may become", "l": "서술어", "r": "verb"}, {"t": "as large as eagles", "l": "보어", "r": "key"}, {"p": ","}, {"t": "altering the balance of predators and prey in the ecosystem", "l": "결과 분사구문", "r": "part"}, {"p": "."}], "kr": "예를 들면, 잠자리는 독수리만큼 커질 수 있으며, 이것은 생태계에서 포식자와 먹이의 균형을 변화시킨다."}, {"no": "⑭", "tk": [{"t": "Fortunately", "l": "문장부사", "r": "etc"}, {"p": ","}, {"t": "you", "l": "주어", "r": "subj"}, {"t": "wouldn’t need to worry", "l": "서술어", "r": "verb"}, {"t": "about giant insects", "l": "전치사구", "r": "etc"}, {"t": "chasing after you", "l": "현재분사 후치 수식", "r": "part"}, {"t": "if this were to occur", "l": "가정 조건절", "r": "part"}, {"p": "."}], "kr": "다행히도, 여러분은 이런 일이 일어난다 해도 거대 곤충이 여러분을 쫓아다니는 것에 대해 걱정할 필요가 없을 것이다."}, {"no": "⑮", "tk": [{"t": "If the oxygen concentration were to double", "l": "가정 조건절(were to)", "r": "part"}, {"p": ","}, {"t": "you", "l": "주어", "r": "subj"}, {"t": "would be able to run", "l": "서술어", "r": "verb"}, {"t": "faster than you can right now", "l": "비교", "r": "key"}, {"p": "."}], "kr": "만일 산소 농도가 두 배가 된다면 여러분은 지금 당장 달릴 수 있는 것보다 더 빨리 달릴 수 있을 것이다."}, {"no": "⑯", "tk": [{"t": "Considering that oxygen is used to break down energy", "l": "분사구문(~을 고려하면)", "r": "part"}, {"t": "so that muscles can use it", "l": "목적 so that", "r": "part"}, {"p": ","}, {"t": "the increase in oxygen", "l": "주어", "r": "subj"}, {"t": "would help", "l": "서술어", "r": "verb"}, {"t": "to use energy more efficiently", "l": "목적어", "r": "key"}, {"t": "and", "l": "접속사", "r": "etc"}, {"t": "improve our capability for physical exercise", "l": "병렬", "r": "key"}, {"p": "."}], "kr": "산소가 근육이 에너지를 사용할 수 있도록 그것을 분해하는 데 사용된다는 점을 고려할 때, 산소의 증가는 에너지를 더 효율적으로 사용하고 육체적 운동에 대한 우리의 능력을 향상시키는 데 도움이 될 것이다."}, {"no": "⑰", "tk": [{"t": "This", "l": "주어", "r": "subj"}, {"t": "leads", "l": "서술어(5형식)", "r": "verb"}, {"t": "us", "l": "목적어", "r": "etc"}, {"t": "to expect", "l": "목적격보어(to V)", "r": "part"}, {"t": "that", "l": "목적절 접속사", "r": "part"}, {"t": "athletes", "l": "주어", "r": "subj"}, {"t": "would set", "l": "서술어", "r": "verb"}, {"t": "new world records", "l": "목적어", "r": "key"}, {"t": "at the Olympics", "l": "전치사구", "r": "etc"}, {"p": "."}], "kr": "이것은 우리에게 운동선수들이 올림픽 경기에서 새로운 세계 기록을 수립하는 것을 기대하게 한다."}], "4": [{"no": "①", "tk": [{"t": "While these three thought experiments offer interesting possibilities", "l": "양보 부사절", "r": "part"}, {"p": ","}, {"t": "it", "l": "가주어", "r": "subj"}, {"t": "is", "l": "서술어", "r": "verb"}, {"t": "important", "l": "보어", "r": "key"}, {"t": "to consider that they are simply based on imagination and have not been tested through scientific research", "l": "진주어(that절)", "r": "subj"}, {"p": "."}], "kr": "이들 세 가지 사고 실험이 흥미로운 가능성을 제공해 주지만 그것들은 단지 상상력에 근거한 것이며 과학적 연구를 통해 시험되지 않았다는 것을 고려하는 것이 중요해."}, {"no": "②", "tk": [{"t": "Have you ever heard", "l": "서술어(현재완료 의문)", "r": "verb"}, {"t": "the expression", "l": "목적어", "r": "key"}, {"t": "“I love you to the moon and back”", "l": "동격(인용)", "r": "re"}, {"p": "?"}], "kr": "여러분은 “나는 당신을 달을 왕복할 만큼 사랑한다.”는 표현을 들어본 적이 있는가?"}, {"no": "③", "tk": [{"t": "This expression", "l": "주어", "r": "subj"}, {"t": "conveys", "l": "서술어1", "r": "verb"}, {"t": "a deep extent of love", "l": "목적어", "r": "key"}, {"p": ","}, {"t": "and", "l": "접속사", "r": "etc"}, {"t": "uses", "l": "서술어2(병렬)", "r": "verb"}, {"t": "the great distance between the Earth and the Moon", "l": "목적어", "r": "key"}, {"t": "as a metaphor", "l": "전치사구(as)", "r": "etc"}, {"p": "."}], "kr": "이 표현은 깊은 사랑의 정도를 전달하고 비유로써 지구와 달 사이의 먼 거리를 사용한다."}, {"no": "④", "tk": [{"t": "While this expression is easily understood", "l": "양보 부사절", "r": "part"}, {"p": ","}, {"t": "there", "l": "유도부사", "r": "etc"}, {"t": "are", "l": "서술어", "r": "verb"}, {"t": "idioms with a scientific background", "l": "후치 주어", "r": "subj"}, {"t": "that may not be so obvious", "l": "주격 관계사", "r": "part"}, {"p": "."}], "kr": "이 표현은 쉽게 이해되지만 그렇게 명확해 보이지 않는 과학적 배경을 지닌 관용 표현도 있다."}, {"no": "⑤", "tk": [{"t": "One example", "l": "주어", "r": "subj"}, {"t": "is", "l": "서술어", "r": "verb"}, {"t": "the phrase", "l": "보어", "r": "key"}, {"t": "“once in a blue moon.”", "l": "동격(관용 표현)", "r": "re"}], "kr": "한 가지 예는 ‘파란 달에 한 번’이라는 구절이다."}, {"no": "⑥", "tk": [{"t": "Although people may have seen", "l": "양보 부사절", "r": "part"}, {"t": "a magnificent full moon", "l": "목적어1", "r": "key"}, {"t": "brightening the night sky", "l": "현재분사 후치 수식", "r": "part"}, {"t": "or", "l": "접속사", "r": "etc"}, {"t": "a tiny crescent", "l": "목적어2", "r": "key"}, {"t": "resembling a clipped fingernail", "l": "현재분사 후치 수식", "r": "part"}, {"p": ","}, {"t": "it", "l": "가주어", "r": "subj"}, {"t": "is", "l": "서술어", "r": "verb"}, {"t": "highly unlikely", "l": "보어", "r": "key"}, {"t": "that they have seen a blue moon", "l": "진주어(that절)", "r": "subj"}, {"p": "."}], "kr": "사람들이 밤하늘을 밝히는 참으로 아름다운 보름달이나 깎은 손톱을 닮은 작은 초승달을 보았을지라도 그들이 파란 달을 보는 일은 정말 있을법하지 않다."}, {"no": "⑦", "tk": [{"t": "Surprisingly", "l": "문장부사", "r": "etc"}, {"p": ","}, {"t": "this extraordinary event", "l": "주어", "r": "subj"}, {"t": "does occur", "l": "서술어(강조 do)", "r": "verb"}, {"p": "."}], "kr": "놀랍게도, 이러한 특이한 사건은 실제로 일어난다."}, {"no": "⑧", "tk": [{"t": "Normally", "l": "빈도", "r": "etc"}, {"p": ","}, {"t": "there", "l": "유도부사", "r": "etc"}, {"t": "is", "l": "서술어", "r": "verb"}, {"t": "only one full moon", "l": "후치 주어", "r": "subj"}, {"t": "in a month", "l": "전치사구", "r": "etc"}, {"p": "."}], "kr": "보통 한 달에 오직 한 번 보름달이 있다."}, {"no": "⑨", "tk": [{"t": "However", "l": "대조", "r": "etc"}, {"p": ","}, {"t": "every 2.5 years", "l": "빈도", "r": "etc"}, {"p": ","}, {"t": "there", "l": "유도부사", "r": "etc"}, {"t": "can be", "l": "서술어", "r": "verb"}, {"t": "two full moons", "l": "후치 주어", "r": "subj"}, {"t": "in the same month", "l": "전치사구", "r": "etc"}, {"p": "."}], "kr": "하지만 2.5년마다 같은 달에 두 개의 보름달이 있을 수 있다."}, {"no": "⑩", "tk": [{"t": "The second moon", "l": "주어", "r": "subj"}, {"t": "is called", "l": "서술어(수동)", "r": "verb"}, {"t": "a “blue moon,”", "l": "보어", "r": "key"}, {"t": "and", "l": "접속사", "r": "etc"}, {"t": "it", "l": "주어", "r": "subj"}, {"t": "occurs", "l": "서술어", "r": "verb"}, {"t": "because the Moon completes its cycle of phases in only about 29.5 days", "l": "이유 부사절", "r": "part"}, {"p": "."}], "kr": "그 두 번째 달은 ‘파란 달’이라 불리고, 그것은 달이 약 29.5일 만에 달의 상(모습) 주기를 완성하기 때문에 발생한다."}, {"no": "⑪", "tk": [{"t": "From this rare phenomenon of a blue moon", "l": "기원 부사구(문두)", "r": "etc"}, {"t": "emerged", "l": "서술어(도치)", "r": "verb"}, {"t": "the use of the expression “once in a blue moon.”", "l": "후치 주어", "r": "subj"}], "kr": "이 파란 달이라는 드문 현상으로부터 ‘파란 달에 한 번’이라는 표현의 사용이 등장했다."}, {"no": "⑫", "tk": [{"t": "It", "l": "주어", "r": "subj"}, {"t": "describes", "l": "서술어", "r": "verb"}, {"t": "something", "l": "목적어", "r": "key"}, {"t": "that happens exceptionally rarely", "l": "주격 관계사", "r": "part"}, {"p": "."}], "kr": "그것은 예외적으로 드물게 일어나는 것을 묘사한다."}]};
+
+/* ------------------------------------------------------------------
+   차시별 활동 자료
+   STEP 1 끊어 읽기: 문단(secs)마다 확인 문제 1개
+   STEP 2 쓰기 사다리: 핵심 문장 2개 × 4칸(고르기 → 단어 쓰기 → 덩어리 배열 → 핵심 부분 통째로 쓰기)
+   STEP 3 복합 문제 쪼개기: 근거 문장 찾기 → 답하기
+------------------------------------------------------------------- */
+const LES = {
+  1:{tab:"1차시", sub:"거인이 된다면", title:"What if the size of a human body became enormous?", pages:"PAGE 98~101",
+    secs:[
+      {a:"①", b:"⑤", t:"사고 실험이란?", q:"사고 실험(thought experiment)은 무엇인가요?", o:["실험실에서 하는 위험한 실험","가설을 탐구하려고 머릿속으로 하는 상상의 실험","컴퓨터로 하는 계산 실험"], ans:1, ev:"③"},
+      {a:"⑥", b:"⑨", t:"사람이 거인이 된다면?", q:"사람이 거인처럼 커질 수 없는 까닭은?", o:["크기 효과(scale effect) 때문에","음식이 부족해서","중력이 없어서"], ans:0, ev:"⑦"},
+      {a:"⑩", b:"⑬", t:"문제 ①: 몸무게와 발", q:"키가 10배가 되면 몸무게와 발 면적은 각각 몇 배가 되나요?", o:["둘 다 10배","몸무게 1,000배, 발 면적 100배","몸무게 100배, 발 면적 1,000배"], ans:1, ev:"⑪"},
+      {a:"⑭", b:"⑱", t:"문제 ②: 열과 피부", q:"거인의 두 번째 문제는 무엇인가요?", o:["몸의 열이 충분히 빠져나가지 못한다","피부가 너무 넓어서 춥다","키가 커서 숨쉬기 어렵다"], ans:0, ev:"⑰"}
+    ],
+    keys:[
+      {no:"⑩", kr:"한 가지 문제는 그 거인이 발을 아래로 누르는 무게 때문에 스스로 똑바로 서 있을 수 없다는 것이다.",
+        full:"One issue is that the giant would not be able to stand properly on his own because of the weight pushing down on his feet.",
+        r1:{w:"because of", o:["because","because of"], why:"뒤에 the weight …(명사 덩어리)가 오니까 because of예요. because 뒤에는 ‘주어 + 동사’가 와요."},
+        r2:{w:"properly", mean:"똑바로, 제대로"},
+        r3:["One issue is that","the giant","would not be able to stand","properly on his own","because of the weight","pushing down on his feet."],
+        r4:{pre:"One issue is that", t:"the giant would not be able to stand properly", post:"on his own because of the weight pushing down on his feet.", kr:"그 거인은 똑바로 서 있을 수 없을 것이다"}},
+      {no:"⑱", kr:"이것은 우리가 거인만큼 크게 자라기를 바라지만 우리는 그 형태로는 생존할 수 없을 거라는 걸 보여준다.",
+        full:"This shows that while we may wish to grow as tall as a giant, we would not be able to survive in that form.",
+        r1:{w:"while", o:["while","during"], why:"뒤에 ‘we may wish’(주어 + 동사)가 오니까 접속사 while(~이긴 하지만)이에요. during 뒤에는 명사만 와요."},
+        r2:{w:"survive", mean:"생존하다, 살아남다"},
+        r3:["This shows that","while we may wish","to grow as tall as a giant,","we would not be able","to survive","in that form."],
+        r4:{pre:"This shows that while we may wish to grow as tall as a giant,", t:"we would not be able to survive in that form", post:".", kr:"우리는 그 형태로는 생존할 수 없을 것이다"}}
+    ],
+    cx:{nos:["⑩","⑪","⑫","⑬"],
+      alt:[["⑩","because of","[ because / because of ]"],["⑪","volume.","(A) __________."]],
+      qs:[
+        {k:"mcq", q:"윗글의 요지로 가장 알맞은 것은?", o:["거인은 몸무게가 발 면적보다 훨씬 많이 늘어 똑바로 설 수 없다","거인은 발이 커서 빨리 달릴 수 있다","키가 커지면 몸무게는 오히려 줄어든다"], ans:0, ev:"⑬",
+          find:"요지는 보통 결론을 말하는 문장에 있어요. ‘This means that …’으로 시작하는 문장을 찾아보세요."},
+        {k:"mcq", q:"⑩의 [ ] 안에서 어법상 알맞은 것은?", o:["because","because of"], ans:1, ev:"⑩", find:"[ ]가 들어 있는 문장이 근거예요.",
+          why:"뒤에 the weight …(명사 덩어리)가 오니까 전치사 because of예요."},
+        {k:"write", q:"(A)에 들어갈 말을 영어 1단어로 쓰시오. (‘부피’)", a:["volume"], ev:"⑪", find:"(A)가 들어 있는 문장이 근거예요.", hint:"v로 시작하는 6글자: v _ _ _ _ e"}
+      ]}
+  },
+  2:{tab:"2차시", sub:"달이 없다면", title:"What if there were no Moon?", pages:"PAGE 102~103",
+    secs:[
+      {a:"①", b:"⑤", t:"문학 속 달과 달의 역할", q:"줄리엣이 로미오에게 달에 사랑을 맹세하지 말라고 한 까닭은?", o:["달이 모양을 바꾸듯 사랑도 변할 수 있어서","달이 너무 멀리 있어서","달은 밤에만 떠서"], ans:0, ev:"③"},
+      {a:"⑥", b:"⑫", t:"역할 ①: 하루의 길이", q:"달이 없다면 하루는 어떻게 되나요?", o:["24시간 그대로다","약 5시간으로 짧아진다","48시간으로 길어진다"], ans:1, ev:"⑫"},
+      {a:"⑬", b:"⑳", t:"역할 ②: 기울기와 기후", q:"달은 지구의 자전축 기울기에 어떤 역할을 하나요?", o:["기울기를 계속 바꾼다","기울기를 23.5도로 안정시킨다","기울기를 0도로 만든다"], ans:1, ev:"⑮"}
+    ],
+    keys:[
+      {no:"⑦", kr:"달의 중력으로 인해 지구의 대양이 오르내린다.",
+        full:"The Moon’s gravity causes the Earth’s ocean to rise and fall.",
+        r1:{w:"to rise", o:["rise","to rise"], why:"cause + 목적어 + to 동사원형: ‘~가 …하게 하다’예요."},
+        r2:{w:"gravity", mean:"중력"},
+        r3:["The Moon’s gravity","causes","the Earth’s ocean","to rise and fall."],
+        r4:{pre:"", t:"The Moon’s gravity causes the Earth’s ocean to rise and fall", post:".", kr:"달의 중력은 지구의 바다가 오르내리게 한다"}},
+      {no:"⑫", kr:"이는 달이 없다면, 우리가 5시간마다 일출을 보게 된다는 것을 나타낸다.",
+        full:"This indicates that without the Moon, we would see the Sun rise every five hours.",
+        r1:{w:"rise", o:["rise","to rise"], why:"see(보다) + 목적어 + 동사원형이에요. see 뒤에는 to를 쓰지 않아요."},
+        r2:{w:"without", mean:"~이 없다면"},
+        r3:["This indicates that","without the Moon,","we would see","the Sun rise","every five hours."],
+        r4:{pre:"This indicates that without the Moon,", t:"we would see the Sun rise every five hours", alt:["we would see the Sun rise every 5 hours"], post:".", kr:"우리는 5시간마다 해가 뜨는 것을 보게 될 것이다"}}
+    ],
+    cx:{nos:["⑦","⑧","⑨","⑩","⑪","⑫"],
+      alt:[["⑦","to rise and fall","[ to rise / rise ] and fall"],["⑧","friction occurs","(A) __________ occurs"]],
+      qs:[
+        {k:"mcq", q:"윗글의 요지로 가장 알맞은 것은?", o:["달이 없으면 지구 자전이 느려지지 않아 하루가 짧아진다","달이 없으면 바닷물이 더 높이 오른다","달은 지구의 자전을 더 빠르게 만든다"], ans:0, ev:"⑩",
+          find:"‘Without the Moon, however, …’로 시작하는 문장이 글의 핵심이에요."},
+        {k:"mcq", q:"⑦의 [ ] 안에서 어법상 알맞은 것은?", o:["to rise","rise"], ans:0, ev:"⑦", find:"[ ]가 들어 있는 문장이 근거예요.",
+          why:"cause + 목적어 + to 동사원형이니까 to rise예요."},
+        {k:"write", q:"(A)에 들어갈 말을 본문에서 찾아 영어 1단어로 쓰시오. (‘마찰’)", a:["friction"], ev:"⑨", find:"(A) 바로 다음 문장에 ‘This ○○○’로 같은 낱말이 다시 나와요.", hint:"f로 시작하는 8글자: f _ _ _ _ _ _ n"}
+      ]}
+  },
+  3:{tab:"3차시", sub:"산소가 두 배라면", title:"What if the oxygen concentration in the atmosphere doubled?", pages:"PAGE 104~105",
+    secs:[
+      {a:"①", b:"⑤", t:"산소의 중요성", q:"산소는 지구 대기의 몇 %를 차지하나요?", o:["21%","42%","78%"], ans:0, ev:"①"},
+      {a:"⑥", b:"⑪", t:"곤충의 숨구멍", q:"지금 산소 농도에서 곤충이 더 커질 수 없는 까닭은?", o:["숨구멍이 폐만큼 효율적이지 않아 몸 깊은 곳까지 산소가 닿지 않아서","먹이가 부족해서","날개가 약해서"], ans:0, ev:"⑩"},
+      {a:"⑫", b:"⑰", t:"거대 곤충과 사람", q:"산소가 두 배가 되면 사람에게는 어떤 일이 생기나요?", o:["지금보다 더 빨리 달릴 수 있다","숨쉬기가 어려워진다","거대 곤충에게 쫓기게 된다"], ans:0, ev:"⑮"}
+    ],
+    keys:[
+      {no:"⑦", kr:"꿀벌과 잠자리 같은 곤충은 폐가 없는 대신 숨구멍이라 불리는 외부 구멍을 통해서 공기를 흡입한다.",
+        full:"Insects, such as bees and dragonflies, do not have lungs and instead take in air through external openings called spiracles.",
+        r1:{w:"called", o:["calling","called"], why:"구멍이 ‘숨구멍이라고 불리는’ 것이니까 과거분사 called예요."},
+        r2:{w:"lungs", mean:"폐 (복수형)"},
+        r3:["Insects,","such as bees and dragonflies,","do not have lungs","and instead take in air","through external openings","called spiracles."],
+        r4:{pre:"Insects, such as bees and dragonflies,", t:"do not have lungs and instead take in air", alt:["don't have lungs and instead take in air"], post:"through external openings called spiracles.", kr:"폐가 없는 대신 공기를 흡입한다"}},
+      {no:"⑮", kr:"만일 산소 농도가 두 배가 된다면 여러분은 지금 당장 달릴 수 있는 것보다 더 빨리 달릴 수 있을 것이다.",
+        full:"If the oxygen concentration were to double, you would be able to run faster than you can right now.",
+        r1:{w:"were to", o:["were to","will"], why:"‘만약 ~한다면’ 하고 상상하는 가정이니까 were to예요. if 절에는 will을 쓰지 않아요."},
+        r2:{w:"faster", mean:"더 빨리 (fast의 비교급)"},
+        r3:["If the oxygen concentration","were to double,","you would be able to","run faster","than you can right now."],
+        r4:{pre:"If the oxygen concentration were to double,", t:"you would be able to run faster than you can right now", post:".", kr:"여러분은 지금보다 더 빨리 달릴 수 있을 것이다"}}
+    ],
+    cx:{nos:["⑥","⑦","⑧","⑨","⑩","⑪"],
+      alt:[["⑦","called spiracles","[ calling / called ] spiracles"],["⑪","available.","(A) __________."]],
+      qs:[
+        {k:"mcq", q:"윗글의 요지로 가장 알맞은 것은?", o:["산소 농도가 두 배가 되면 곤충이 더 커질 수 있다","곤충은 폐로 숨을 쉰다","산소가 많아지면 곤충이 모두 사라진다"], ans:0, ev:"⑪",
+          find:"‘However, if …’로 시작하는 마지막 문장이 결론이에요."},
+        {k:"mcq", q:"⑦의 [ ] 안에서 어법상 알맞은 것은?", o:["calling","called"], ans:1, ev:"⑦", find:"[ ]가 들어 있는 문장이 근거예요.",
+          why:"구멍이 ‘불리는’ 것(수동)이니까 과거분사 called예요."},
+        {k:"write", q:"(A)에 들어갈 말을 영어 1단어로 쓰시오. (‘이용할 수 있는’)", a:["available"], ev:"⑪", find:"(A)가 들어 있는 문장이 근거예요.", hint:"a로 시작하는 9글자: a _ _ _ _ _ _ _ e"}
+      ]}
+  },
+  4:{tab:"4차시", sub:"파란 달", title:"The Limits of Thought Experiments · Once in a Blue Moon", pages:"PAGE 105, 115",
+    secs:[
+      {a:"①", b:"①", t:"사고 실험의 한계", q:"세 가지 사고 실험의 한계는 무엇인가요?", o:["상상에 근거했고 과학적 연구로 시험되지 않았다","실험 비용이 너무 비싸다","결과가 이미 모두 증명되었다"], ans:0, ev:"①"},
+      {a:"②", b:"⑥", t:"관용 표현 속 비유", q:"‘I love you to the moon and back’에서 비유로 쓰인 것은?", o:["달의 색깔","지구와 달 사이의 먼 거리","보름달의 밝기"], ans:1, ev:"③"},
+      {a:"⑦", b:"⑫", t:"파란 달의 비밀", q:"파란 달(blue moon)은 무엇인가요?", o:["파란색으로 보이는 달","한 달에 두 번째로 뜨는 보름달","손톱을 닮은 초승달"], ans:1, ev:"⑩"}
+    ],
+    keys:[
+      {no:"③", kr:"이 표현은 깊은 사랑의 정도를 전달하고 비유로써 지구와 달 사이의 먼 거리를 사용한다.",
+        full:"This expression conveys a deep extent of love, and uses the great distance between the Earth and the Moon as a metaphor.",
+        r1:{w:"as", o:["as","like"], why:"‘비유로서, 비유로’라는 자격을 나타내니까 as예요."},
+        r2:{w:"metaphor", mean:"비유, 은유"},
+        r3:["This expression","conveys a deep extent of love,","and uses","the great distance","between the Earth and the Moon","as a metaphor."],
+        r4:{pre:"This expression conveys a deep extent of love, and", t:"uses the great distance between the Earth and the Moon as a metaphor", post:".", kr:"지구와 달 사이의 먼 거리를 비유로 사용한다"}},
+      {no:"⑨", kr:"하지만 2.5년마다 같은 달에 두 개의 보름달이 있을 수 있다.",
+        full:"However, every 2.5 years, there can be two full moons in the same month.",
+        r1:{w:"moons", o:["moon","moons"], why:"two(둘) 뒤니까 복수형 moons예요."},
+        r2:{w:"month", mean:"(달력의) 달, 월"},
+        r3:["However,","every 2.5 years,","there can be","two full moons","in the same month."],
+        r4:{pre:"However, every 2.5 years,", t:"there can be two full moons in the same month", post:".", kr:"같은 달에 보름달이 두 번 있을 수 있다"}}
+    ],
+    cx:{nos:["⑥","⑦","⑧","⑨","⑩","⑪","⑫"],
+      alt:[["⑩","is called","[ calls / is called ]"],["⑫","rarely.","(A) __________."]],
+      qs:[
+        {k:"mcq", q:"윗글의 요지로 가장 알맞은 것은?", o:["‘once in a blue moon’은 실제로 드물게 일어나는 파란 달 현상에서 나온 표현이다","파란 달은 매달 뜬다","초승달은 깎은 손톱을 닮았다"], ans:0, ev:"⑪",
+          find:"표현이 ‘어디에서 생겨났는지(emerged)’ 말하는 문장을 찾아보세요."},
+        {k:"mcq", q:"⑩의 [ ] 안에서 어법상 알맞은 것은?", o:["calls","is called"], ans:1, ev:"⑩", find:"[ ]가 들어 있는 문장이 근거예요.",
+          why:"두 번째 달이 ‘파란 달이라고 불리는’ 것(수동)이니까 is called예요."},
+        {k:"write", q:"(A)에 들어갈 말을 영어 1단어로 쓰시오. (‘드물게’)", a:["rarely"], ev:"⑪", find:"바로 앞 문장의 ‘this rare phenomenon’에서 rare(드문)를 찾아보세요.", hint:"rare의 부사형, 6글자: r _ _ _ _ y"}
+      ]}
+  }
+};
+
+/* ------------------------------ 상태 ------------------------------ */
+const KEY = "l4_step_2124_v1";
+let S = (()=>{ try{ return JSON.parse(localStorage.getItem(KEY)) || {}; }catch(e){ return {}; } })();
+const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} };
+const st = k => (S[k] = S[k] || {sec:{}, rung:{}, tries:{}, inp:{}, tiles:{}, q3:{}, struct:false, step:1});
+const hashLes = location.hash.slice(1);
+let cur = LES[hashLes] ? hashLes : (S.cur && LES[S.cur] ? S.cur : "1");
+const app = document.getElementById("app");
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const NUMS = "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳";
+const sentMap = k => Object.fromEntries(P[k].map(s => [s.no, s]));
+function plain(tk){
+  let en = "";
+  for(const x of tk){
+    if(x.p !== undefined){ const t = x.p; en += (t === "“" || t === "(") ? ((en && !en.endsWith(" ")) ? " " : "") + t : t; }
+    else { if(en && !/[“( ]$/.test(en)) en += " "; en += x.t; }
+  }
+  return en;
+}
+const norm = s => (s||"").toLowerCase().replace(/[’‘`´]/g,"'").replace(/[“”]/g,'"').replace(/\s+([,.!?])/g,"$1").replace(/\s+/g," ").replace(/[.!?]+$/,"").trim();
+const toks = s => norm(s).replace(/[,.;:!?"]/g,"").split(" ").filter(Boolean);
+function cheer(t){ const c = document.getElementById("cheer"); c.textContent = t; c.classList.add("show"); clearTimeout(cheer.h); cheer.h = setTimeout(() => c.classList.remove("show"), 1800); }
+const GOOD = ["좋아요! 한 걸음 올라갔어요 👣","정확해요! 👍","잘했어요! 이대로 쭉 가요 🚀","맞았어요! 실력이 늘고 있어요 🌱","훌륭해요! ⭐"];
+const good = () => cheer(GOOD[Math.floor(Math.random() * GOOD.length)]);
+function speak(t){ try{ if(!("speechSynthesis" in window)) return; speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "en-US"; u.rate = .82; speechSynthesis.speak(u); }catch(e){} }
+function shuffled(n, seed){
+  const a = [...Array(n).keys()]; let s = seed;
+  const r = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+  for(let t = 0; t < 10; t++){ for(let i = n - 1; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [a[i],a[j]] = [a[j],a[i]]; } if(a.some((v,i) => v !== i)) break; }
+  return a;
+}
+
+/* ------------------------------ 진행률 ------------------------------ */
+function progress(k){
+  const L = LES[k], s = st(k);
+  const p1 = L.secs.filter((_,i) => s.sec[i]).length;
+  const p2 = Object.values(s.rung).filter(v => v === "ok" || v === "seen").length;
+  const p3 = L.cx.qs.filter((_,i) => (s.q3[i]||{}).done).length;
+  return {p1, t1:L.secs.length, p2, t2:L.keys.length * 4, p3, t3:L.cx.qs.length};
+}
+function drawTabs(){
+  document.getElementById("tabs").innerHTML = Object.entries(LES).map(([k,L]) => {
+    const g = progress(k), done = g.p1 + g.p2 + g.p3, all = g.t1 + g.t2 + g.t3;
+    return `<button role="tab" data-k="${k}" aria-selected="${k===cur}">${L.tab}<small>${L.sub} · ⭐ ${done}/${all}</small></button>`;
+  }).join("");
+}
+
+/* ------------------------------ 그리기: 문장 ------------------------------ */
+function sentHTML(s, opt = {}){
+  let body = "", first = true;
+  s.tk.forEach(x => {
+    if(x.p !== undefined){ body += `<span class="tx">${esc(x.p)}</span>`; return; }
+    body += `${first ? "" : `<span class="sl">/</span>`}<span class="ck r-${x.r}"><span class="lb">${esc(x.l)}</span><span class="tx">${esc(x.t)}</span></span> `;
+    first = false;
+  });
+  return `<div class="sent" id="s-${cur}-${s.no}"><span class="no">${s.no}</span><span class="en">${body}</span>`+
+    `<span class="tools"><button class="mini" data-say="${esc(plain(s.tk))}">🔊 듣기</button><button class="mini" data-kr>해석</button></span>`+
+    `<div class="kr">${esc(s.kr)}</div></div>`;
+}
+function glow(no){
+  const el = document.getElementById(`s-${cur}-${no}`) || document.getElementById(`p-${cur}-${no}`);
+  if(!el) return;
+  el.scrollIntoView({behavior:"smooth", block:"center"});
+  el.classList.add("glow"); setTimeout(() => el.classList.remove("glow"), 2600);
+}
+
+/* ------------------------------ STEP 1 끊어 읽기 ------------------------------ */
+function step1(){
+  const L = LES[cur], s = st(cur), M = sentMap(cur);
+  let h = `<section class="card"><h2>STEP 1 · 끊어 읽기</h2>`+
+    `<p class="lead">긴 지문을 문단별로 나눴어요. <b>/</b> 표시마다 끊어 읽고, 막히면 🔊 듣기와 해석을 눌러요. 문단 끝 확인 문제를 맞히면 다음 문단이 열려요.</p>`+
+    `<label class="sw"><input type="checkbox" id="structSw" ${s.struct?"checked":""}> 문장 구조 보기 (주어·동사 색깔 표시)</label>`;
+  L.secs.forEach((sec, i) => {
+    const open = i === 0 || s.sec[i-1];
+    const a = NUMS.indexOf(sec.a), b = NUMS.indexOf(sec.b);
+    const ss = P[cur].filter(x => { const n = NUMS.indexOf(x.no); return n >= a && n <= b; });
+    const solved = s.sec[i];
+    h += `<div class="sec ${open?"":"locked"}"><div class="sh">문단 ${i+1} · ${sec.t} <span style="font-weight:600;color:var(--light);font-size:13px">${sec.a}${sec.a!==sec.b?"~"+sec.b:""}</span>${solved?'<span class="ok">✓ 통과</span>':""}</div><div class="sb ${s.struct?"struct":""}">`+
+      ss.map(x => sentHTML(x)).join("")+
+      `<div class="chk"><div class="q">확인 문제 · ${esc(sec.q)}</div><div class="opts">`+
+      sec.o.map((o,j) => `<button class="opt ${solved && j===sec.ans?"right":""}" data-sec="${i}" data-j="${j}">${"①②③④"[j]} ${esc(o)}</button>`).join("")+
+      `</div><div class="msg ${solved?"ok":""}" id="m1-${i}">${solved?"✓ 맞았어요! 근거: "+sec.ev+"번 문장":""}</div></div></div></div>`;
+  });
+  h += `</section>`;
+  return h;
+}
+
+/* ------------------------------ STEP 2 쓰기 사다리 ------------------------------ */
+const RN = ["고르기","단어 쓰기","덩어리 배열","핵심 부분 쓰기"];
+function blankOut(full, w, rep){ const re = new RegExp("\\b" + w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&") + "\\b"); return full.replace(re, rep); }
+function rungState(ki, r){ return st(cur).rung[`${ki}-${r}`]; }
+function step2(){
+  const L = LES[cur], s = st(cur);
+  let h = `<section class="card"><h2>STEP 2 · 쓰기 사다리</h2>`+
+    `<p class="lead">핵심 문장 2개를 사다리처럼 한 칸씩 올라가며 써요. <b>고르기 → 단어 쓰기 → 덩어리 배열 → 핵심 부분 통째로 쓰기</b>. 두 번 틀리면 정답 보기가 열려요.</p>`;
+  L.keys.forEach((K, ki) => {
+    h += `<div class="key"><div class="kh"><b>핵심 문장 ${ki+1}</b> <span style="color:var(--light);font-size:13.5px">원문 ${K.no}</span>`+
+      `<button class="mini" data-say="${esc(K.full)}" style="margin-left:6px">🔊 듣기</button><span class="krt">${esc(K.kr)}</span></div>`;
+    for(let r = 0; r < 4; r++){
+      const stt = rungState(ki, r), prevOk = r === 0 || rungState(ki, r-1);
+      const tries = s.tries[`${ki}-${r}`] || 0;
+      const lock = !prevOk && !stt;
+      h += `<div class="rung ${lock?"locked":""} ${stt?"done":""}" data-k="${ki}" data-r="${r}"><div class="rt"><span class="lv">${r+1}칸</span>${RN[r]}`+
+        `<span class="st">${stt==="ok"?"⭐ 성공":stt==="seen"?"👀 정답 확인":""}</span></div>`;
+      if(r === 0){
+        h += `<div class="line en">${esc(blankOut(K.full, K.r1.w, "\u0000")).replace("\u0000", `<span class="bl">?</span>`)}</div>`+
+          `<div class="opts row">${K.r1.o.map(o => `<button class="opt ${stt && o===K.r1.w?"right":""}" data-r1="${esc(o)}">${esc(o)}</button>`).join("")}</div>`+
+          `<div class="msg ${stt?"ok":""}">${stt?"✓ "+esc(K.r1.why):""}</div>`;
+      }
+      if(r === 1){
+        const w = K.r2.w, ph = w[0] + " " + "_ ".repeat(w.length - 2) + w[w.length-1];
+        const v = s.inp[`${ki}-1`] || (stt==="seen" ? w : "");
+        h += `<div class="line en">${esc(blankOut(K.full, w, "\u0000")).replace("\u0000", `<input class="w" data-in="${ki}-1" size="${w.length+3}" placeholder="${ph}" value="${esc(v)}" autocomplete="off" autocapitalize="off" spellcheck="false">`)}</div>`+
+          `<div class="acts"><span style="font-size:14px;color:#8a5a00">뜻: ${esc(K.r2.mean)} · ${w.length}글자</span><button class="btn sub" data-chk="${ki}-1">확인</button>${tries>=2&&!stt?`<button class="btn ghost" data-see="${ki}-1">정답 보기</button>`:""}</div>`+
+          `<div class="msg ${stt?"ok":""}" id="msg-${ki}-1">${stt?"✓ "+esc(w):""}</div>`;
+      }
+      if(r === 2){
+        h += `<div class="slot" id="slot-${ki}"></div><div class="pool" id="pool-${ki}"></div>`+
+          `<div class="acts"><button class="btn sub" data-chk="${ki}-2">확인</button><button class="btn ghost" data-clear="${ki}">다시 놓기</button>${tries>=2&&!stt?`<button class="btn ghost" data-see="${ki}-2">정답 보기</button>`:""}</div>`+
+          `<div class="msg ${stt?"ok":""}" id="msg-${ki}-2">${stt?"✓ "+esc(K.full):""}</div>`;
+      }
+      if(r === 3){
+        const v = s.inp[`${ki}-3`] || "";
+        h += `<div style="font-size:14.5px;margin-top:4px">우리말 <b>‘${esc(K.r4.kr)}’</b>를 영어로 쓰세요. 앞뒤는 주어져 있어요.</div>`+
+          `<div class="line en">${esc(K.r4.pre)} <span class="bl">?</span> ${esc(K.r4.post)}</div>`+
+          `<input class="w long" data-in="${ki}-3" value="${esc(v)}" placeholder="여기에 영어로 쓰세요" autocomplete="off" autocapitalize="off" spellcheck="false">`+
+          `<div class="acts"><button class="btn sub" data-chk="${ki}-3">확인</button><button class="btn ghost" data-first="${ki}">첫 낱말 힌트</button><button class="btn ghost" data-chunk="${ki}">낱말 카드 힌트</button>${tries>=2&&!stt?`<button class="btn ghost" data-see="${ki}-3">정답 보기</button>`:""}</div>`+
+          `<div class="msg ${stt?"ok":""}" id="msg-${ki}-3">${stt?"✓ "+esc(K.r4.t):""}</div><div class="diff" id="diff-${ki}"></div>`;
+      }
+      h += `</div>`;
+    }
+    h += `</div>`;
+  });
+  h += `</section>`;
+  return h;
+}
+function drawTiles(ki){
+  const K = LES[cur].keys[ki], s = st(cur), placed = s.tiles[ki] || [];
+  const slot = document.getElementById("slot-"+ki), pool = document.getElementById("pool-"+ki);
+  if(!slot) return;
+  slot.innerHTML = placed.map(i => `<button class="tile" data-tile="${ki}" data-i="${i}" data-in-slot="1">${esc(K.r3[i])}</button>`).join("");
+  pool.innerHTML = shuffled(K.r3.length, 7 + ki * 13 + (+cur) * 31).filter(i => !placed.includes(i)).map(i => `<button class="tile" data-tile="${ki}" data-i="${i}">${esc(K.r3[i])}</button>`).join("");
+}
+function addSee(btn, attr){
+  const acts = btn.closest(".acts");
+  if(acts && !acts.querySelector("[data-see],[data-q3see]")) acts.insertAdjacentHTML("beforeend", `<button class="btn ghost" ${attr}>정답 보기</button>`);
+}
+function lcsMark(a, b){
+  const n = a.length, m = b.length, d = Array.from({length:n+1}, () => Array(m+1).fill(0));
+  for(let i = n-1; i >= 0; i--) for(let j = m-1; j >= 0; j--) d[i][j] = a[i] === b[j] ? d[i+1][j+1] + 1 : Math.max(d[i+1][j], d[i][j+1]);
+  const hit = Array(n).fill(false); let i = 0, j = 0;
+  while(i < n && j < m){ if(a[i] === b[j]){ hit[i] = true; i++; j++; } else if(d[i+1][j] >= d[i][j+1]) i++; else j++; }
+  return {hit, common:d[0][0]};
+}
+
+/* ------------------------------ STEP 3 복합 문제 쪼개기 ------------------------------ */
+function step3(){
+  const L = LES[cur], s = st(cur), M = sentMap(cur), C = L.cx;
+  let h = `<section class="card"><h2>STEP 3 · 복합 문제 쪼개기</h2>`+
+    `<div class="tip"><b>복합 문제 푸는 3단계</b><br>① 지문보다 <b>문제를 먼저</b> 읽어요. → ② 답이 숨은 <b>근거 문장 번호</b>를 찾아요. → ③ 그 문장만 보고 답해요.</div>`+
+    `<p class="lead" style="margin-top:10px">다음 글을 읽고 물음에 답하시오. <span style="color:var(--light)">(${L.pages} 원문)</span></p><div class="passage en">`;
+  C.nos.forEach(no => {
+    let t = plain(M[no].tk);
+    C.alt.filter(a => a[0] === no).forEach(a => { t = t.replace(a[1], a[2]); });
+    h += `<div class="sent" id="p-${cur}-${no}"><span class="no">${no}</span>${esc(t)}</div>`;
+  });
+  h += `</div>`;
+  C.qs.forEach((Q, qi) => {
+    const q = s.q3[qi] || {};
+    h += `<div class="q3"><div class="qh">문제 ${qi+1}. ${esc(Q.q)}</div><div class="qb">`+
+      `<div class="phase">1단계 · 이 문제의 근거 문장은 몇 번일까요?</div>`+
+      `<div class="nos">${C.nos.map(no => `<button data-ev="${qi}" data-no="${no}" class="${q.found && no===Q.ev?"right":""}">${no}</button>`).join("")}</div>`+
+      `<div class="msg ${q.found?"ok":""}" id="ev-${qi}">${q.found?"✓ 근거 문장을 찾았어요!":""}</div>`+
+      `<div class="${q.found?"":"hide"}" id="ans-${qi}"><div class="phase">2단계 · 근거 문장을 보고 답하세요.</div>`;
+    if(Q.k === "mcq"){
+      h += `<div class="opts ${Q.o.length<=2?"row":""}">${Q.o.map((o,j) => `<button class="opt ${q.done && j===Q.ans?"right":""}" data-q3="${qi}" data-j="${j}">${"①②③④"[j]} ${esc(o)}</button>`).join("")}</div>`;
+    } else {
+      h += `<div class="acts"><input class="w" data-q3in="${qi}" size="14" value="${esc(q.v||"")}" autocomplete="off" autocapitalize="off" spellcheck="false">`+
+        `<button class="btn sub" data-q3chk="${qi}">확인</button><button class="btn ghost" data-q3hint="${qi}">힌트</button>${(q.tries||0)>=2&&!q.done?`<button class="btn ghost" data-q3see="${qi}">정답 보기</button>`:""}</div>`;
+    }
+    h += `<div class="msg ${q.done?"ok":""}" id="q3m-${qi}">${q.done?"✓ 정답! "+esc(Q.why||""):""}</div></div></div></div>`;
+  });
+  const g = progress(cur);
+  h += `<div class="card" style="background:var(--box);box-shadow:none;margin-top:16px"><b>오늘의 걸음</b> ⭐ ${g.p1+g.p2+g.p3} / ${g.t1+g.t2+g.t3}`+
+    `<div class="bar"><i style="width:${(g.p1+g.p2+g.p3)/(g.t1+g.t2+g.t3)*100}%"></i></div>`+
+    `<div style="font-size:14px;margin-top:6px;color:var(--gray)">끊어 읽기 ${g.p1}/${g.t1} · 쓰기 사다리 ${g.p2}/${g.t2} · 복합 문제 ${g.p3}/${g.t3}</div></div>`;
+  h += `</section>`;
+  return h;
+}
+
+/* ------------------------------ 전체 그리기 ------------------------------ */
+function render(keepScroll){
+  const L = LES[cur], s = st(cur), g = progress(cur), y = window.scrollY;
+  let h = `<div class="steps">`+
+    [["끊어 읽기", `문단 ${g.t1}개 · 확인 문제`, `${g.p1}/${g.t1}`],["쓰기 사다리","핵심 문장 2개 · 4칸씩",`${g.p2}/${g.t2}`],["복합 문제 쪼개기","근거 찾기 → 답하기",`${g.p3}/${g.t3}`]]
+      .map((x,i) => `<button data-step="${i+1}" aria-selected="${s.step===i+1}"><span class="pg">${x[2]}</span><b>STEP ${i+1} · ${x[0]}</b><span>${x[1]}</span></button>`).join("")+
+    `</div><div style="font-size:14.5px;color:var(--gray);margin:2px 0 0"><b style="color:var(--navy)">${L.tab}</b> ${esc(L.title)} <span style="color:var(--light)">(${L.pages})</span></div>`;
+  h += s.step === 1 ? step1() : s.step === 2 ? step2() : step3();
+  h += `<p class="note">영어 문장은 지문 설계도(Lesson 4)의 원문 그대로이고, 덩어리 나누기와 문장 성분 표시도 지문 설계도를 따랐어요. 풀이는 이 기기 브라우저에 자동 저장돼요.</p>`;
+  app.innerHTML = h;
+  if(s.step === 2) LES[cur].keys.forEach((_,ki) => drawTiles(ki));
+  drawTabs();
+  if(keepScroll) window.scrollTo(0, y);
+}
+
+/* ------------------------------ 이벤트 ------------------------------ */
+document.getElementById("tabs").addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b) return;
+  cur = b.dataset.k; S.cur = cur; save(); render(); window.scrollTo({top:0});
+});
+app.addEventListener("change", e => {
+  if(e.target.id === "structSw"){ st(cur).struct = e.target.checked; save(); document.querySelectorAll(".sec .sb").forEach(x => x.classList.toggle("struct", e.target.checked)); }
+});
+app.addEventListener("input", e => {
+  const t = e.target, s = st(cur);
+  if(t.dataset.in){ s.inp[t.dataset.in] = t.value; save(); }
+  if(t.dataset.q3in !== undefined){ (s.q3[t.dataset.q3in] = s.q3[t.dataset.q3in] || {}).v = t.value; save(); }
+});
+app.addEventListener("keydown", e => {
+  if(e.key !== "Enter") return;
+  const t = e.target;
+  if(t.dataset.in) document.querySelector(`[data-chk="${t.dataset.in}"]`)?.click();
+  if(t.dataset.q3in !== undefined) document.querySelector(`[data-q3chk="${t.dataset.q3in}"]`)?.click();
+});
+app.addEventListener("click", e => {
+  const b = e.target.closest("button"); if(!b) return;
+  const L = LES[cur], s = st(cur), d = b.dataset;
+  if(d.step){ s.step = +d.step; save(); render(); window.scrollTo({top:0}); return; }
+  if(d.say !== undefined){ speak(d.say); return; }
+  if(d.kr !== undefined){ const k = b.closest(".sent").querySelector(".kr"); k.classList.toggle("show"); return; }
+
+  // STEP 1 확인 문제
+  if(d.sec !== undefined){
+    const i = +d.sec, sec = L.secs[i], m = document.getElementById("m1-"+i);
+    if(s.sec[i]) return;
+    if(+d.j === sec.ans){
+      s.sec[i] = 1; save(); good();
+      b.classList.add("right"); m.className = "msg ok"; m.textContent = `✓ 맞았어요! 근거: ${sec.ev}번 문장` + (i < L.secs.length - 1 ? " · 다음 문단이 열렸어요 👇" : " · STEP 2로 가 볼까요?");
+      setTimeout(() => render(true), 900);
+    } else {
+      b.classList.add("wrong"); m.className = "msg ng"; m.textContent = `다시 한번! ${sec.ev}번 문장을 다시 읽어 보세요 (노랗게 표시했어요).`;
+      glow(sec.ev);
+    }
+    return;
+  }
+
+  // STEP 2
+  if(d.r1 !== undefined){
+    const rung = b.closest(".rung"), ki = +rung.dataset.k, K = L.keys[ki], m = rung.querySelector(".msg");
+    if(rungState(ki, 0)) return;
+    if(d.r1 === K.r1.w){ s.rung[`${ki}-0`] = "ok"; save(); good(); render(true); }
+    else { b.classList.add("wrong"); m.className = "msg ng"; m.textContent = "✗ 아쉬워요. 빈칸 바로 뒤에 오는 말을 잘 보고 다시 골라요."; }
+    return;
+  }
+  if(d.tile !== undefined){
+    const ki = +d.tile, i = +d.i, arr = s.tiles[ki] = s.tiles[ki] || [];
+    if(rungState(ki, 2)) return;
+    if(d.inSlot) arr.splice(arr.indexOf(i), 1); else arr.push(i);
+    save(); drawTiles(ki); return;
+  }
+  if(d.clear !== undefined){ s.tiles[+d.clear] = []; save(); drawTiles(+d.clear); return; }
+  if(d.first !== undefined){
+    const K = L.keys[+d.first], m = document.getElementById(`msg-${d.first}-3`);
+    m.className = "msg info"; m.textContent = `첫 낱말: ${K.r4.t.split(" ")[0]} … (모두 ${K.r4.t.split(" ").length}낱말)`; return;
+  }
+  if(d.chunk !== undefined){
+    const K = L.keys[+d.chunk], m = document.getElementById(`msg-${d.chunk}-3`);
+    const words = K.r4.t.split(" "), order = shuffled(words.length, 11 + (+d.chunk) * 5 + (+cur) * 17);
+    m.className = "msg info"; m.textContent = `낱말 카드(순서 섞임): ` + order.map(i => words[i]).join("  /  ");
+    return;
+  }
+  if(d.chk){
+    const [ki, r] = d.chk.split("-").map(Number), K = L.keys[ki], m = document.getElementById(`msg-${ki}-${r}`);
+    const key = `${ki}-${r}`;
+    let ok = false;
+    if(r === 1) ok = norm(s.inp[key]) === norm(K.r2.w);
+    if(r === 2){
+      const arr = s.tiles[ki] || [];
+      if(arr.length < K.r3.length){ m.className = "msg ng"; m.textContent = "덩어리를 모두 놓아야 확인할 수 있어요."; return; }
+      ok = arr.every((v,i) => v === i);
+      if(!ok){ const wrong = arr.filter((v,i) => v !== i).length; m.className = "msg ng"; m.textContent = `✗ ${wrong}개 덩어리의 자리가 달라요. 우리말 순서가 아니라 영어 순서(주어 → 동사 → …)를 떠올려요.`; }
+    }
+    if(r === 3){
+      const v = s.inp[key] || "", targets = [K.r4.t, ...(K.r4.alt || [])];
+      ok = targets.some(t => norm(t) === norm(v));
+      if(!ok){
+        const a = toks(v), bT = toks(K.r4.t), {hit, common} = lcsMark(a, bT);
+        document.getElementById("diff-"+ki).innerHTML = a.length ? `내가 쓴 문장: ` + a.map((w,i) => `<span class="${hit[i]?"g":"r"}">${esc(w)}</span>`).join("") : "";
+        const miss = bT.length - common;
+        m.className = "msg ng"; m.textContent = !a.length ? "먼저 영어로 써 보세요." : `초록 낱말은 맞아요. 빨간 낱말을 고치고` + (miss > 0 ? `, 빠진 낱말 ${miss}개를 채워요.` : ` 순서를 확인해요.`);
+      }
+    }
+    if(ok){ s.rung[key] = "ok"; save(); good(); render(true); return; }
+    s.tries[key] = (s.tries[key] || 0) + 1; save();
+    if(r === 1){ m.className = "msg ng"; m.textContent = `✗ 다시 써 보세요. 첫 글자 ${K.r2.w[0]}, 끝 글자 ${K.r2.w.slice(-1)}, ${K.r2.w.length}글자예요.`; }
+    if(s.tries[key] >= 2) addSee(b, `data-see="${key}"`);
+    return;
+  }
+  if(d.see){
+    const [ki, r] = d.see.split("-").map(Number), K = L.keys[ki];
+    s.rung[d.see] = "seen";
+    if(r === 1) s.inp[d.see] = K.r2.w;
+    if(r === 2) s.tiles[ki] = K.r3.map((_,i) => i);
+    if(r === 3) s.inp[d.see] = K.r4.t;
+    save(); render(true); return;
+  }
+
+  // STEP 3
+  if(d.ev !== undefined){
+    const qi = +d.ev, Q = L.cx.qs[qi], q = s.q3[qi] = s.q3[qi] || {}, m = document.getElementById("ev-"+qi);
+    if(q.found) return;
+    if(d.no === Q.ev){
+      q.found = 1; save(); b.classList.add("right"); m.className = "msg ok"; m.textContent = "✓ 근거 문장을 찾았어요! 이제 그 문장만 보고 답해요.";
+      glow(Q.ev); document.getElementById("ans-"+qi).classList.remove("hide");
+    } else { b.classList.add("wrong"); m.className = "msg ng"; m.textContent = "힌트: " + Q.find; }
+    return;
+  }
+  if(d.q3 !== undefined){
+    const qi = +d.q3, Q = L.cx.qs[qi], q = s.q3[qi], m = document.getElementById("q3m-"+qi);
+    if(q.done) return;
+    if(+d.j === Q.ans){ q.done = 1; save(); good(); b.classList.add("right"); m.className = "msg ok"; m.textContent = "✓ 정답! " + (Q.why || ""); drawTabs(); setTimeout(() => render(true), 1200); }
+    else { b.classList.add("wrong"); m.className = "msg ng"; m.textContent = "다시! 근거 문장 " + Q.ev + "을(를) 한 번 더 읽어 보세요."; glow(Q.ev); }
+    return;
+  }
+  if(d.q3chk !== undefined){
+    const qi = +d.q3chk, Q = L.cx.qs[qi], q = s.q3[qi], m = document.getElementById("q3m-"+qi);
+    if(Q.a.some(a => norm(a) === norm(q.v))){ q.done = 1; save(); good(); render(true); return; }
+    q.tries = (q.tries || 0) + 1; save();
+    m.className = "msg ng"; m.textContent = "✗ 철자를 확인해요. 힌트 버튼을 눌러 보세요.";
+    if(q.tries >= 2) addSee(b, `data-q3see="${qi}"`);
+    return;
+  }
+  if(d.q3hint !== undefined){ const Q = L.cx.qs[+d.q3hint], m = document.getElementById("q3m-"+d.q3hint); m.className = "msg info"; m.textContent = "힌트: " + Q.hint; return; }
+  if(d.q3see !== undefined){ const qi = +d.q3see, Q = L.cx.qs[qi], q = s.q3[qi]; q.v = Q.a[0]; q.done = 1; save(); render(true); return; }
+});
+["cls","num","nm"].forEach(id => {
+  const el = document.getElementById(id); el.value = (S.who || {})[id] || "";
+  el.addEventListener("input", () => { S.who = S.who || {}; S.who[id] = el.value; save(); });
+});
+
+/* 자료 점검: 핵심 문장·덩어리가 원문과 같은지 확인 */
+Object.entries(LES).forEach(([k,L]) => {
+  const M = sentMap(k);
+  L.keys.forEach(K => {
+    const src = plain(M[K.no].tk);
+    if(src !== K.full) console.warn("원문 불일치", k, K.no);
+    if(K.r3.join(" ") !== K.full) console.warn("덩어리 불일치", k, K.no);
+    const r4 = (K.r4.pre ? K.r4.pre + " " : "") + K.r4.t + (/^[.,]/.test(K.r4.post) ? "" : " ") + K.r4.post;
+    if(r4 !== K.full) console.warn("4칸 불일치", k, K.no);
+  });
+  L.cx.alt.forEach(a => { if(!plain(M[a[0]].tk).includes(a[1])) console.warn("복합 문제 치환 실패", k, a); });
+});
+render();
+</script>
+</body>
+</html>
