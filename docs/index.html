@@ -5,80 +5,351 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lesson 4 What-If Science 웹앱 모음</title>
 <meta name="description" content="영어Ⅱ Lesson 4 What-If Science 빌드업 학습지, 사고 실험실, 한 걸음 학습지">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231b3358'/%3E%3Cpath d='M12 6h8M14 6v7l-6 11a2 2 0 0 0 1.8 3h12.4a2 2 0 0 0 1.8-3l-6-11V6' fill='none' stroke='%239fd0ff' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M10.5 21h11l1.6 3.2H8.9z' fill='%235ee0a0'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%235b46d6'/%3E%3Cpath d='M12 6h8M14 6v7l-6 11a2 2 0 0 0 1.8 3h12.4a2 2 0 0 0 1.8-3l-6-11V6' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M10.5 21h11l1.6 3.2H8.9z' fill='%23c9b8ff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Poppins:ital,wght@1,800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{--navy:#1b3358;--sub:#5a6577;--mute:#8a94a6;--line:#e3e8f0;--soft:#f5f7fb}
+  :root{
+    --ink:#1d2340; --sub:#4a5270;
+    --blue:#2f55d4; --blue2:#4d7cff; --purple:#7b4ff0; --purple2:#a17bff; --green:#1f9d55; --green2:#3fc27a;
+  }
   *{box-sizing:border-box}
-  body{margin:0;min-height:100vh;color:#18212f;font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;line-height:1.6;
-    background:radial-gradient(1200px 600px at 10% -10%,#1c3561 0%,transparent 60%),radial-gradient(900px 500px at 100% 0%,#2a1f5c 0%,transparent 55%),#0a1424}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
-  header.wrap{color:#fff;padding:44px 18px 26px}
-  .eyebrow{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:#9fb4d8;font-weight:700}
-  h1{margin:6px 0 8px;font-size:clamp(28px,4vw,40px);font-weight:900;letter-spacing:-.6px}
-  header p{margin:0;color:#c8d4ea;font-size:16px;max-width:640px}
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;padding-bottom:30px}
-  .card{background:#fff;border-radius:24px;padding:22px;display:flex;flex-direction:column;box-shadow:0 18px 50px rgba(0,0,0,.35);transition:transform .18s}
-  .card:hover{transform:translateY(-4px)}
-  .ic{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;margin-bottom:14px}
-  .ic svg{width:36px;height:36px}
-  .card h2{margin:0;font-size:21px;font-weight:900;color:var(--navy);letter-spacing:-.3px}
-  .card .tag{font-family:"Outfit",sans-serif;font-size:12px;font-weight:700;color:var(--mute);margin-top:2px}
-  .card p{margin:10px 0 14px;color:var(--sub);font-size:14.5px;flex:1}
-  .feat{list-style:none;padding:0;margin:0 0 16px;display:flex;flex-wrap:wrap;gap:6px}
-  .feat li{font-size:12.5px;font-weight:700;background:var(--soft);color:#3c4a60;border-radius:999px;padding:3px 10px}
-  .open{display:flex;justify-content:center;align-items:center;gap:6px;text-decoration:none;font-weight:800;font-size:15px;border-radius:14px;padding:12px;color:#fff;background:var(--navy)}
-  .open:hover{filter:brightness(1.12)}
-  .jump{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-  .jump a{flex:1 1 auto;text-align:center;text-decoration:none;font-size:13px;font-weight:700;color:var(--navy);border:1.5px solid #d5ddeb;border-radius:10px;padding:6px 8px;white-space:nowrap}
-  .jump a:hover{border-color:var(--navy);background:var(--soft)}
-  footer.wrap{color:#8fa3c4;font-size:12.5px;padding:8px 18px 40px}
-  @media (max-width:900px){ .grid{grid-template-columns:1fr} }
+  html,body{margin:0}
+  body{min-height:100vh;color:var(--ink);font-family:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;line-height:1.6;overflow-x:hidden;
+    background:
+      radial-gradient(900px 520px at 78% 8%, rgba(160,130,255,.55), transparent 60%),
+      radial-gradient(800px 600px at 8% 0%, rgba(80,120,255,.55), transparent 60%),
+      radial-gradient(1200px 500px at 50% 110%, rgba(140,110,255,.55), transparent 60%),
+      linear-gradient(160deg,#28349a 0%,#3b3fb8 38%,#5546c8 70%,#3a4bc0 100%);}
+  .sky{position:fixed;inset:0;pointer-events:none;z-index:0}
+  .wrap{position:relative;z-index:1;max-width:1420px;margin:0 auto;padding:0 28px}
+
+  /* ---------- 머리말 ---------- */
+  header.top{position:relative;padding:40px 28px 30px;color:#fff;min-height:240px}
+  .eyebrow{display:flex;align-items:center;gap:12px;font-family:"Outfit","Noto Sans KR",sans-serif;font-size:15px;letter-spacing:.14em;font-weight:600;color:#e6e9ff}
+  .eyebrow::before{content:"";width:4px;height:20px;border-radius:2px;background:#fff}
+  h1{position:relative;margin:12px 0 10px;font-size:clamp(32px,4.4vw,66px);line-height:1.08;font-weight:900;letter-spacing:-1px;display:inline-block}
+  h1 .en{font-family:"Poppins","Outfit",sans-serif;font-style:italic;font-weight:800;letter-spacing:-1.5px}
+  h1 .ko{background:linear-gradient(180deg,#ffffff 10%,#d7ccff 95%);-webkit-background-clip:text;background-clip:text;color:transparent;margin-left:.18em}
+  h1 .orbit{position:absolute;left:44%;top:-16%;width:68%;height:150%;pointer-events:none}
+  header.top p{margin:0;font-size:clamp(15px,1.5vw,20px);color:#eef0ff;font-weight:500;max-width:900px;word-break:keep-all}
+  .shelf{position:absolute;right:10px;top:0;width:min(470px,31vw);pointer-events:none;filter:drop-shadow(0 18px 30px rgba(20,10,80,.35))}
+
+  /* ---------- 카드 ---------- */
+  .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding:6px 28px 26px}
+  .card{position:relative;min-width:0;border-radius:30px;padding:26px 24px 22px;display:flex;flex-direction:column;overflow:hidden;isolation:isolate;
+    border:1.5px solid rgba(255,255,255,.75);box-shadow:0 24px 60px rgba(18,16,90,.35), inset 0 1px 0 rgba(255,255,255,.9);
+    transition:transform .2s ease, box-shadow .2s ease}
+  .card:hover{transform:translateY(-6px);box-shadow:0 30px 70px rgba(18,16,90,.45), inset 0 1px 0 rgba(255,255,255,.9)}
+  .card::after{content:"";position:absolute;left:8%;right:8%;bottom:-24px;height:48px;border-radius:50%;filter:blur(18px);z-index:-1;opacity:.75}
+  .c1{background:linear-gradient(170deg,rgba(255,255,255,.97) 0%,rgba(236,242,255,.95) 55%,rgba(222,232,255,.93) 100%)}
+  .c2{background:linear-gradient(170deg,rgba(255,255,255,.97) 0%,rgba(243,237,255,.95) 55%,rgba(232,222,255,.93) 100%)}
+  .c3{background:linear-gradient(170deg,rgba(255,255,255,.97) 0%,rgba(236,250,243,.95) 55%,rgba(220,244,232,.93) 100%)}
+  .c1::after{background:#5b86ff} .c2::after{background:#a07bff} .c3::after{background:#46d48c}
+  .art{position:absolute;right:-6px;top:4px;width:56%;max-width:250px;pointer-events:none}
+  .tile{width:74px;height:74px;border-radius:22px;display:grid;place-items:center;box-shadow:0 8px 18px rgba(40,50,120,.12), inset 0 1px 0 #fff}
+  .tile svg{width:44px;height:44px}
+  .c1 .tile{background:linear-gradient(160deg,#eef3ff,#dbe6ff)} .c2 .tile{background:linear-gradient(160deg,#f3eeff,#e3d8ff)} .c3 .tile{background:linear-gradient(160deg,#eafaf1,#d4f2e2)}
+  .card h2{position:relative;margin:58px 0 0;font-size:clamp(28px,2.6vw,36px);font-weight:900;letter-spacing:-1px;line-height:1.2;width:max-content;max-width:100%}
+  .card h2 svg.swoosh{position:absolute;left:-4px;bottom:-10px;width:100%;height:16px}
+  .tag{margin-top:14px;font-weight:800;font-size:17px}
+  .c1 .tag{color:var(--blue)} .c2 .tag{color:var(--purple)} .c3 .tag{color:var(--green)}
+  .desc{margin:14px 0 18px;color:var(--sub);font-size:16px;flex:1;word-break:keep-all}
+  .pills{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px;padding:0;list-style:none;min-height:38px}
+  .pills li{display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;color:#2b3150;border-radius:999px;padding:7px 13px 7px 11px;background:rgba(255,255,255,.75);box-shadow:inset 0 0 0 1px rgba(120,130,190,.14)}
+  .pills svg{width:17px;height:17px;flex:none}
+  .c1 .pills svg{color:var(--blue2)} .c2 .pills svg{color:var(--purple)} .c3 .pills svg{color:var(--green)}
+  .open{display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;color:#fff;font-weight:900;font-size:19px;padding:15px 18px;border-radius:999px;
+    box-shadow:0 10px 22px rgba(30,40,120,.28), inset 0 1px 0 rgba(255,255,255,.35);transition:filter .15s, transform .15s}
+  .open:hover{filter:brightness(1.08);transform:translateY(-1px)}
+  .open:focus-visible,.jump a:focus-visible{outline:3px solid #ffd54a;outline-offset:3px}
+  .open svg{width:24px;height:24px}
+  .c1 .open{background:linear-gradient(180deg,#3d6cf0,#2340b8)}
+  .c2 .open{background:linear-gradient(180deg,#9566ff,#6a3fe0)}
+  .c3 .open{background:linear-gradient(180deg,#2fbf6e,#168a47)}
+  .jump{display:flex;gap:8px;margin-top:14px}
+  .jump a{flex:1 1 0;min-width:0;display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;font-weight:700;font-size:15px;color:#2b3150;
+    background:rgba(255,255,255,.85);border:1.5px solid rgba(140,150,200,.28);border-radius:14px;padding:10px 6px;white-space:nowrap;transition:border-color .15s, background .15s}
+  .jump a:hover{background:#fff}
+  .c1 .jump a:hover{border-color:var(--blue2)} .c2 .jump a:hover{border-color:var(--purple2)} .c3 .jump a:hover{border-color:var(--green2)}
+  .jump svg{width:17px;height:17px;flex:none}
+  .c1 .jump svg{color:var(--blue2)} .c2 .jump svg{color:var(--purple)} .c3 .jump svg{color:var(--green)}
+  .c2 .jump{gap:5px} .c2 .jump a{font-size:13px;padding:10px 3px;gap:3px;letter-spacing:-.3px} .c2 .jump svg{width:15px;height:15px}
+  footer{position:relative;z-index:1;color:#d9ddff;font-size:13px;text-align:center;padding:6px 20px 34px;word-break:keep-all}
+
+  @media (max-width:1080px){
+    .grid{grid-template-columns:minmax(0,1fr);max-width:680px;margin:0 auto}
+    .shelf{display:none}
+    header.top{min-height:0}
+    .art{width:46%}
+  }
+  @media (max-width:520px){
+    .card{padding:22px 18px 18px}
+    .tile{width:62px;height:62px} .tile svg{width:36px;height:36px}
+    .card h2{margin-top:44px}
+    .jump{flex-wrap:wrap} .jump a{flex:1 1 40%}
+    h1 .orbit{display:none}
+    .wrap,header.top,.grid{padding-left:16px;padding-right:16px}
+    .eyebrow{font-size:12px;letter-spacing:.08em}
+  }
+  @media (prefers-reduced-motion:reduce){ .card,.open{transition:none} }
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <radialGradient id="gO" cx="38%" cy="35%" r="70%"><stop offset="0" stop-color="#5fb2ff"/><stop offset=".6" stop-color="#2468c8"/><stop offset="1" stop-color="#123a7a"/></radialGradient>
-  <radialGradient id="gM" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#cfd3da"/><stop offset="1" stop-color="#8e949e"/></radialGradient>
-</defs></svg>
 
-<header class="wrap">
-  <div class="eyebrow">2026 영어Ⅱ · Lesson 4 Fostering Curiosity and Creativity</div>
-  <h1>What-If Science 웹앱 모음</h1>
+<!-- 공용 그래픽 정의 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="gGlass" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".5" stop-color="#e9e4ff" stop-opacity=".55"/><stop offset="1" stop-color="#c9bcff" stop-opacity=".75"/></linearGradient>
+    <linearGradient id="gLiquid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c7a6ff"/><stop offset="1" stop-color="#7a3ff0"/></linearGradient>
+    <radialGradient id="gNucleus" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#f1e6ff"/><stop offset=".5" stop-color="#a57bff"/><stop offset="1" stop-color="#5b2fd0"/></radialGradient>
+    <linearGradient id="gOrbitA" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#b9a4ff"/></linearGradient>
+    <radialGradient id="gMoon" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#d9d8f3"/><stop offset="1" stop-color="#9c97c8"/></radialGradient>
+    <linearGradient id="gBookBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f6ed8"/><stop offset="1" stop-color="#2b3f9a"/></linearGradient>
+    <linearGradient id="gBookWhite" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dfe3f5"/></linearGradient>
+    <linearGradient id="gShelf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9e6ff" stop-opacity=".95"/><stop offset="1" stop-color="#9d92ec" stop-opacity=".75"/></linearGradient>
+    <linearGradient id="gPot" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d8dcef"/></linearGradient>
+    <linearGradient id="gLeaf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9be26b"/><stop offset="1" stop-color="#2f9a4a"/></linearGradient>
+    <linearGradient id="gPaper" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eef1fb"/></linearGradient>
+    <linearGradient id="gPenBlue" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7d9cff"/><stop offset=".5" stop-color="#3a5fe0"/><stop offset="1" stop-color="#1f3aa6"/></linearGradient>
+    <linearGradient id="gPencilGreen" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8fe3a8"/><stop offset=".5" stop-color="#2fb565"/><stop offset="1" stop-color="#16824a"/></linearGradient>
+    <linearGradient id="gBarG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6be39a"/><stop offset="1" stop-color="#1c9a55"/></linearGradient>
+    <linearGradient id="gBarGS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3fbf74"/><stop offset="1" stop-color="#127840"/></linearGradient>
+    <linearGradient id="gGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff2b8"/><stop offset="1" stop-color="#f3b23a"/></linearGradient>
+    <linearGradient id="gSwB" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4d7cff" stop-opacity=".9"/><stop offset="1" stop-color="#9ab6ff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="gSwP" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8d5cff" stop-opacity=".9"/><stop offset="1" stop-color="#c7b1ff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="gSwG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2fbf6e" stop-opacity=".9"/><stop offset="1" stop-color="#9be6bd" stop-opacity="0"/></linearGradient>
+    <filter id="fSh" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#2a2a7a" flood-opacity=".22"/></filter>
+    <filter id="fGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+    <symbol id="spark" viewBox="-10 -10 20 20"><path d="M0 -10 C1.2 -2 2 -1.2 10 0 C2 1.2 1.2 2 0 10 C-1.2 2 -2 1.2 -10 0 C-2 -1.2 -1.2 -2 0 -10Z" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<!-- 배경 반짝이 -->
+<svg class="sky" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <g fill="#ffffff">
+    <circle cx="120" cy="120" r="1.6" opacity=".7"/><circle cx="420" cy="60" r="1.2" opacity=".6"/><circle cx="760" cy="240" r="1.4" opacity=".5"/>
+    <circle cx="1020" cy="80" r="1.8" opacity=".7"/><circle cx="1480" cy="200" r="1.4" opacity=".6"/><circle cx="1320" cy="520" r="1.2" opacity=".5"/>
+    <circle cx="60" cy="620" r="1.4" opacity=".5"/><circle cx="1560" cy="760" r="1.6" opacity=".6"/><circle cx="880" cy="960" r="1.3" opacity=".5"/>
+  </g>
+  <g color="#ffffff"><use href="#spark" x="1560" y="40" width="26" height="26" opacity=".9"/><use href="#spark" x="1080" y="150" width="20" height="20" opacity=".8"/>
+    <use href="#spark" x="30" y="420" width="16" height="16" opacity=".6"/><use href="#spark" x="1540" y="560" width="18" height="18" opacity=".7"/></g>
+</svg>
+
+<header class="wrap top">
+  <div class="eyebrow">2026 영어Ⅱ · LESSON 4 FOSTERING CURIOSITY AND CREATIVITY</div>
+  <h1><span class="en">What-If Science</span><span class="ko">웹앱 모음</span>
+    <svg class="orbit" viewBox="0 0 400 140" aria-hidden="true"><path d="M20 112 C120 150 330 120 382 64 C410 30 360 8 300 12" fill="none" stroke="#c9b8ff" stroke-width="2.4" stroke-linecap="round" opacity=".85"/><use href="#spark" x="276" y="-2" width="28" height="28" color="#ffe9a8"/></svg>
+  </h1>
   <p>교과서 지문으로 읽고, 쓰고, 직접 실험해 봐요. 아래에서 오늘 할 활동을 골라 바로 들어가세요.</p>
+
+  <!-- 오른쪽 위: 과학 소품 선반 -->
+  <svg class="shelf" viewBox="0 0 520 250" aria-hidden="true">
+    <!-- 선반 -->
+    <path d="M40 206 L470 206 L500 224 L72 224 Z" fill="url(#gShelf)"/>
+    <path d="M72 224 L500 224 L500 236 L72 236 Z" fill="#7d6fe0" opacity=".85"/>
+    <path d="M40 206 L72 224 L72 236 L40 218 Z" fill="#9488ee" opacity=".8"/>
+    <!-- 화분과 덩굴 -->
+    <g transform="translate(70,120)">
+      <path d="M0 40 L62 40 L54 86 Q31 92 8 86 Z" fill="url(#gPot)" filter="url(#fSh)"/>
+      <ellipse cx="31" cy="40" rx="31" ry="7" fill="#eef0fa"/><ellipse cx="31" cy="40" rx="25" ry="4.5" fill="#6b4a32"/>
+      <path d="M18 38 C0 10 -14 30 -20 60 C-24 84 -14 100 -8 120" fill="none" stroke="#3a8f45" stroke-width="2.4"/>
+      <path d="M40 36 C60 0 78 -6 96 4" fill="none" stroke="#3a8f45" stroke-width="2.4"/>
+      <path d="M30 36 C30 10 22 -8 12 -18" fill="none" stroke="#3a8f45" stroke-width="2.4"/>
+      <g fill="url(#gLeaf)">
+        <ellipse cx="-4" cy="16" rx="11" ry="7" transform="rotate(-30 -4 16)"/><ellipse cx="-18" cy="44" rx="11" ry="7" transform="rotate(40 -18 44)"/>
+        <ellipse cx="-20" cy="76" rx="10" ry="6.5" transform="rotate(-50 -20 76)"/><ellipse cx="-10" cy="104" rx="9" ry="6" transform="rotate(30 -10 104)"/>
+        <ellipse cx="56" cy="8" rx="11" ry="7" transform="rotate(-20 56 8)"/><ellipse cx="80" cy="-4" rx="11" ry="7" transform="rotate(15 80 -4)"/>
+        <ellipse cx="98" cy="10" rx="9" ry="6" transform="rotate(50 98 10)"/><ellipse cx="14" cy="-14" rx="10" ry="6.5" transform="rotate(-60 14 -14)"/>
+        <ellipse cx="30" cy="4" rx="10" ry="6.5" transform="rotate(70 30 4)"/>
+      </g>
+    </g>
+    <!-- 원자 모형 -->
+    <g transform="translate(232,78)">
+      <rect x="-3" y="34" width="6" height="58" rx="3" fill="#b9b2e8"/>
+      <ellipse cx="0" cy="96" rx="20" ry="6" fill="#a99fe4"/>
+      <ellipse cx="0" cy="0" rx="66" ry="22" fill="none" stroke="url(#gOrbitA)" stroke-width="3"/>
+      <ellipse cx="0" cy="0" rx="66" ry="22" fill="none" stroke="url(#gOrbitA)" stroke-width="3" transform="rotate(60)"/>
+      <ellipse cx="0" cy="0" rx="66" ry="22" fill="none" stroke="url(#gOrbitA)" stroke-width="3" transform="rotate(-60)"/>
+      <circle r="17" fill="url(#gNucleus)"/>
+      <circle cx="58" cy="-12" r="6" fill="url(#gNucleus)"/><circle cx="-38" cy="-50" r="5" fill="url(#gNucleus)"/><circle cx="-24" cy="56" r="5" fill="url(#gNucleus)"/>
+    </g>
+    <!-- 책 -->
+    <g filter="url(#fSh)">
+      <rect x="200" y="176" width="190" height="30" rx="5" fill="url(#gBookWhite)"/>
+      <rect x="200" y="176" width="190" height="30" rx="5" fill="none" stroke="#c3c8e6"/>
+      <rect x="196" y="150" width="182" height="30" rx="6" fill="url(#gBookBlue)"/>
+      <rect x="196" y="150" width="14" height="30" rx="4" fill="#22337f"/>
+      <rect x="252" y="157" width="88" height="16" rx="3" fill="none" stroke="#b9c6ff" stroke-width="1.2"/>
+      <text x="296" y="169.5" font-family="Outfit,Arial" font-size="12" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="1">SCIENCE</text>
+      <path d="M388 182 L388 204" stroke="#e6e8f6" stroke-width="2"/>
+    </g>
+    <!-- 달 지구본 -->
+    <g transform="translate(398,58)">
+      <path d="M-30 6 A40 40 0 0 0 30 66" fill="none" stroke="#c7c0ef" stroke-width="5" stroke-linecap="round"/>
+      <rect x="-4" y="74" width="8" height="40" rx="3" fill="#b9b2e8"/>
+      <ellipse cx="0" cy="118" rx="26" ry="8" fill="#a99fe4"/>
+      <circle cx="0" cy="36" r="38" fill="url(#gMoon)" filter="url(#fSh)"/>
+      <circle cx="-12" cy="22" r="7" fill="#b8b4dc" opacity=".7"/><circle cx="14" cy="44" r="9" fill="#b8b4dc" opacity=".6"/><circle cx="10" cy="16" r="4" fill="#b8b4dc" opacity=".7"/><circle cx="-16" cy="52" r="5" fill="#b8b4dc" opacity=".6"/>
+    </g>
+    <!-- 삼각 플라스크 -->
+    <g transform="translate(458,110)" filter="url(#fSh)">
+      <path d="M-8 0 L8 0 L8 30 L34 84 Q38 96 26 96 L-26 96 Q-38 96 -34 84 L-8 30 Z" fill="url(#gGlass)" stroke="#ffffff" stroke-width="1.6"/>
+      <path d="M-22 62 L22 62 L33 86 Q36 93 27 93 L-27 93 Q-36 93 -33 86 Z" fill="url(#gLiquid)" opacity=".9"/>
+      <circle cx="-8" cy="78" r="3" fill="#fff" opacity=".7"/><circle cx="6" cy="72" r="2" fill="#fff" opacity=".7"/><circle cx="12" cy="84" r="2.5" fill="#fff" opacity=".6"/>
+      <rect x="-11" y="-4" width="22" height="7" rx="3" fill="#ffffff"/>
+      <path d="M-4 34 L-22 74" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+    </g>
+    <g color="#ffffff"><use href="#spark" x="14" y="150" width="20" height="20"/><use href="#spark" x="486" y="20" width="18" height="18"/><use href="#spark" x="360" y="226" width="12" height="12" opacity=".7"/></g>
+  </svg>
 </header>
 
 <main class="wrap grid">
-  <article class="card">
-    <div class="ic" style="background:#e9f1ff"><svg viewBox="0 0 32 32"><rect x="6" y="4" width="20" height="24" rx="4" fill="#3a6fe0"/><rect x="10" y="10" width="12" height="2.4" rx="1.2" fill="#fff"/><rect x="10" y="15" width="9" height="2.4" rx="1.2" fill="#bcd0ff"/><rect x="10" y="20" width="11" height="2.4" rx="1.2" fill="#bcd0ff"/><circle cx="24" cy="24" r="5.5" fill="#5ee0a0"/><path d="M21.6 24l1.6 1.6 3-3" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg></div>
-    <h2>빌드업 학습지</h2><div class="tag">1·2차시 · 3·4차시 · 100점</div>
-    <p>요약문 낱말 채우기에서 시작해 원문 문장 만들기, 차시 한 줄 요약까지 단계별로 올라가요.</p>
-    <ul class="feat"><li>자동 채점</li><li>부분 점수</li><li>해석 보기</li></ul>
-    <a class="open" href="buildup.html">학습지 열기 →</a>
-    <div class="jump"><a href="buildup.html#s12">1·2차시</a><a href="buildup.html#s34">3·4차시</a></div>
+
+  <!-- 1. 빌드업 학습지 -->
+  <article class="card c1">
+    <svg class="art" viewBox="0 0 240 190" aria-hidden="true">
+      <g transform="rotate(-8 140 100)" filter="url(#fSh)">
+        <rect x="70" y="40" width="130" height="140" rx="10" fill="#e8ecf9"/>
+        <rect x="62" y="32" width="130" height="140" rx="10" fill="url(#gPaper)" stroke="#dfe4f4"/>
+        <g stroke-linecap="round">
+          <rect x="78" y="64" width="16" height="16" rx="4" fill="none" stroke="#3a5fe0" stroke-width="2.6"/><path d="M81 72 l4 4 l8 -9" fill="none" stroke="#3a5fe0" stroke-width="2.8"/>
+          <line x1="102" y1="72" x2="170" y2="72" stroke="#c9d3f0" stroke-width="5"/>
+          <rect x="78" y="94" width="16" height="16" rx="4" fill="none" stroke="#3a5fe0" stroke-width="2.6"/><path d="M81 102 l4 4 l8 -9" fill="none" stroke="#3a5fe0" stroke-width="2.8"/>
+          <line x1="102" y1="102" x2="160" y2="102" stroke="#c9d3f0" stroke-width="5"/>
+          <rect x="78" y="124" width="16" height="16" rx="4" fill="none" stroke="#3a5fe0" stroke-width="2.6"/><path d="M81 132 l4 4 l8 -9" fill="none" stroke="#3a5fe0" stroke-width="2.8"/>
+          <line x1="102" y1="132" x2="166" y2="132" stroke="#c9d3f0" stroke-width="5"/>
+          <line x1="102" y1="150" x2="146" y2="150" stroke="#dde3f5" stroke-width="5"/>
+        </g>
+        <text x="150" y="58" font-family="Poppins,Outfit,Arial" font-style="italic" font-weight="800" font-size="26" fill="#ef5f7f">A<tspan font-size="20" dy="-8">+</tspan></text>
+      </g>
+      <!-- 펜 -->
+      <g transform="translate(178,62) rotate(32)" filter="url(#fSh)">
+        <rect x="-8" y="0" width="16" height="96" rx="7" fill="url(#gPenBlue)"/>
+        <rect x="-8" y="70" width="16" height="10" fill="#c9d6ff" opacity=".9"/>
+        <path d="M-8 96 L8 96 L2 116 L-2 116 Z" fill="#dfe6ff"/><path d="M-2 112 L2 112 L0 120 Z" fill="#1f2a55"/>
+        <rect x="6" y="6" width="4" height="40" rx="2" fill="#1f3aa6"/>
+        <rect x="-4" y="4" width="3" height="60" rx="1.5" fill="#fff" opacity=".45"/>
+      </g>
+      <g color="#f3b23a"><use href="#spark" x="18" y="40" width="26" height="26"/><use href="#spark" x="44" y="22" width="14" height="14"/></g>
+    </svg>
+    <div class="tile"><svg viewBox="0 0 44 44"><rect x="9" y="6" width="24" height="30" rx="5" fill="#3a63e8"/><rect x="14" y="13" width="14" height="3" rx="1.5" fill="#fff"/><rect x="14" y="19" width="10" height="3" rx="1.5" fill="#cbd8ff"/><rect x="14" y="25" width="12" height="3" rx="1.5" fill="#cbd8ff"/><circle cx="32" cy="32" r="8" fill="#34c27a" stroke="#fff" stroke-width="2"/><path d="M28.5 32 l2.4 2.4 l4.6 -4.8" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h2>빌드업 학습지<svg class="swoosh" viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true"><path d="M2 11 C60 3 140 3 198 9" fill="none" stroke="url(#gSwB)" stroke-width="5" stroke-linecap="round"/></svg></h2>
+    <div class="tag">1·2차시 · 3·4차시 · 100점</div>
+    <p class="desc">요약문 낱말 채우기에서 시작해 원문 문장 만들기, 차시 한 줄 요약까지 단계별로 올라가요.</p>
+    <ul class="pills">
+      <li><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>자동 채점</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>부분 점수</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M2 4h7a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2zM22 4h-7a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"/></svg>해석 보기</li>
+    </ul>
+    <a class="open" href="buildup.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M2 4h7a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2zM22 4h-7a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"/></svg>학습지 열기 →</a>
+    <nav class="jump" aria-label="빌드업 학습지 바로가기">
+      <a href="buildup.html#s12"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>1·2차시</a>
+      <a href="buildup.html#s34"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/></svg>3·4차시</a>
+    </nav>
   </article>
 
-  <article class="card">
-    <div class="ic" style="background:#ecebff"><svg viewBox="0 0 32 32"><circle cx="14" cy="17" r="10" fill="url(#gO)"/><path d="M9 13q4-3 7 0q-1 4-5 3z" fill="#6cc070"/><path d="M15 21q3-1 4 2q-2 2-4 0z" fill="#6cc070"/><line x1="10" y1="4" x2="18" y2="30" stroke="#5b46d6" stroke-width="2" stroke-linecap="round"/><circle cx="27" cy="8" r="3.5" fill="url(#gM)"/></svg></div>
-    <h2>사고 실험실</h2><div class="tag">실험 5가지 · 직접 조작</div>
-    <p>떨어뜨리고, 키우고, 자전축을 끌어 기울여 봐요. 예측 → 실험 → 기록 → 영어 문장으로 설명해요.</p>
-    <ul class="feat"><li>시뮬레이션</li><li>실험 기록표</li><li>서술형</li></ul>
-    <a class="open" href="lab.html" style="background:#5b46d6">실험실 열기 →</a>
-    <div class="jump"><a href="lab.html#A">낙하</a><a href="lab.html#B">거인</a><a href="lab.html#C">달·자전축</a><a href="lab.html#D">산소</a><a href="lab.html#E">파란 달</a></div>
+  <!-- 2. 사고 실험실 -->
+  <article class="card c2">
+    <svg class="art" viewBox="0 0 240 190" aria-hidden="true">
+      <ellipse cx="112" cy="166" rx="74" ry="14" fill="#d7ccff" opacity=".9"/>
+      <ellipse cx="112" cy="160" rx="74" ry="14" fill="url(#gGlass)" stroke="#ffffff" stroke-width="1.5"/>
+      <!-- 궤도 -->
+      <path d="M30 104 C40 70 190 56 214 84" fill="none" stroke="#b79cff" stroke-width="2.4" stroke-linecap="round" opacity=".8"/>
+      <!-- 플라스크 -->
+      <g filter="url(#fSh)">
+        <path d="M98 20 L126 20 L126 62 L168 136 Q174 156 154 156 L70 156 Q50 156 56 136 L98 62 Z" fill="url(#gGlass)" stroke="#ffffff" stroke-width="2"/>
+        <path d="M78 104 L146 104 L164 138 Q168 152 152 152 L72 152 Q56 152 60 138 Z" fill="url(#gLiquid)" opacity=".92"/>
+        <ellipse cx="112" cy="104" rx="34" ry="5" fill="#d9c4ff" opacity=".9"/>
+        <circle cx="96" cy="128" r="5" fill="#fff" opacity=".65"/><circle cx="120" cy="120" r="3.5" fill="#fff" opacity=".7"/><circle cx="132" cy="136" r="4" fill="#fff" opacity=".55"/><circle cx="108" cy="140" r="2.5" fill="#fff" opacity=".7"/>
+        <rect x="94" y="12" width="36" height="12" rx="5" fill="#ffffff"/>
+        <path d="M104 70 L74 126" stroke="#ffffff" stroke-width="5" stroke-linecap="round" opacity=".7"/>
+      </g>
+      <path d="M214 84 C220 96 196 112 150 120" fill="none" stroke="#b79cff" stroke-width="2.4" stroke-linecap="round" opacity=".55"/>
+      <!-- 시험관 -->
+      <g transform="translate(176,92)" filter="url(#fSh)">
+        <rect x="-6" y="40" width="70" height="12" rx="4" fill="#5b4fb8"/>
+        <rect x="-2" y="30" width="62" height="6" rx="3" fill="#7466d6"/>
+        <g>
+          <rect x="4" y="0" width="12" height="46" rx="6" fill="url(#gGlass)" stroke="#fff"/><rect x="5" y="24" width="10" height="21" rx="5" fill="#a77bff"/>
+          <rect x="24" y="-6" width="12" height="52" rx="6" fill="url(#gGlass)" stroke="#fff"/><rect x="25" y="20" width="10" height="25" rx="5" fill="#6f8dff"/>
+          <rect x="44" y="2" width="12" height="44" rx="6" fill="url(#gGlass)" stroke="#fff"/><rect x="45" y="22" width="10" height="23" rx="5" fill="#c590ff"/>
+        </g>
+      </g>
+      <g color="#7b4ff0"><use href="#spark" x="40" y="22" width="24" height="24"/></g>
+      <g color="#ffffff"><use href="#spark" x="196" y="40" width="16" height="16"/></g>
+    </svg>
+    <div class="tile"><svg viewBox="0 0 44 44" fill="none" stroke="#6a3fe0" stroke-width="2.6"><ellipse cx="22" cy="22" rx="17" ry="7"/><ellipse cx="22" cy="22" rx="17" ry="7" transform="rotate(60 22 22)"/><ellipse cx="22" cy="22" rx="17" ry="7" transform="rotate(-60 22 22)"/><circle cx="22" cy="22" r="3.4" fill="#6a3fe0" stroke="none"/></svg></div>
+    <h2>사고 실험실<svg class="swoosh" viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true"><path d="M2 11 C60 3 140 3 198 9" fill="none" stroke="url(#gSwP)" stroke-width="5" stroke-linecap="round"/></svg></h2>
+    <div class="tag">실험 5가지 · 직접 조작</div>
+    <p class="desc">떨어뜨리고, 키우고, 자전축을 끌어 기울여 봐요. 예측 → 실험 → 기록 → 영어 문장으로 설명해요.</p>
+    <ul class="pills">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 2 21 7v10l-9 5-9-5V7z"/><path d="M3 7l9 5 9-5M12 12v10"/></svg>시뮬레이션</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="18" rx="2.5"/><rect x="9" y="2" width="6" height="4" rx="1.5"/><line x1="9" y1="11" x2="15" y2="11"/><line x1="9" y1="15" x2="15" y2="15"/></svg>실험 기록표</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><line x1="13" y1="7" x2="17" y2="11"/></svg>서술형</li>
+    </ul>
+    <a class="open" href="lab.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6L4.5 19a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 9V3"/><line x1="7" y1="15" x2="17" y2="15"/></svg>실험실 열기 →</a>
+    <nav class="jump" aria-label="사고 실험실 바로가기">
+      <a href="lab.html#A"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="4" x2="12" y2="20"/><path d="M6 14l6 6 6-6"/></svg>낙하</a>
+      <a href="lab.html#B"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>거인</a>
+      <a href="lab.html#C"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>달·자전축</a>
+      <a href="lab.html#D"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 8h11a3 3 0 1 0-3-3"/><path d="M3 12h16a3 3 0 1 1-3 3"/><path d="M3 16h7"/></svg>산소</a>
+      <a href="lab.html#E"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="6"/><ellipse cx="12" cy="12" rx="11" ry="4" transform="rotate(-20 12 12)"/></svg>파란 달</a>
+    </nav>
   </article>
 
-  <article class="card">
-    <div class="ic" style="background:#e6f7f0"><svg viewBox="0 0 32 32"><rect x="4" y="22" width="8" height="6" rx="2" fill="#5ee0a0"/><rect x="12" y="15" width="8" height="13" rx="2" fill="#2fbf80"/><rect x="20" y="8" width="8" height="20" rx="2" fill="#1f9d61"/><path d="M6 17l7-6 5 3 8-8" stroke="#1b3358" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <h2>한 걸음 학습지</h2><div class="tag">1~4차시 · 차근차근</div>
-    <p>긴 지문은 덩어리로 끊어 읽고, 영어 문장은 사다리처럼 한 칸씩 써요. 복합 문제는 근거부터 찾아요.</p>
-    <ul class="feat"><li>끊어 읽기</li><li>쓰기 사다리</li><li>복합 문제 쪼개기</li></ul>
-    <a class="open" href="step.html" style="background:#1f9d61">학습지 열기 →</a>
-    <div class="jump"><a href="step.html#1">1차시</a><a href="step.html#2">2차시</a><a href="step.html#3">3차시</a><a href="step.html#4">4차시</a></div>
+  <!-- 3. 한 걸음 학습지 -->
+  <article class="card c3">
+    <svg class="art" viewBox="0 0 240 190" aria-hidden="true">
+      <!-- 막대그래프 -->
+      <g transform="translate(162,96)">
+        <path d="M0 50 L22 50 L22 90 L0 90 Z" fill="url(#gBarG)"/><path d="M22 50 L30 44 L30 84 L22 90 Z" fill="url(#gBarGS)"/><path d="M0 50 L8 44 L30 44 L22 50 Z" fill="#a6f0c4"/>
+        <path d="M30 26 L52 26 L52 90 L30 90 Z" fill="url(#gBarG)"/><path d="M52 26 L60 20 L60 84 L52 90 Z" fill="url(#gBarGS)"/><path d="M30 26 L38 20 L60 20 L52 26 Z" fill="#a6f0c4"/>
+      </g>
+      <!-- 수첩 -->
+      <g transform="rotate(8 120 100)" filter="url(#fSh)">
+        <rect x="58" y="24" width="130" height="150" rx="12" fill="url(#gPaper)" stroke="#dfe7e2"/>
+        <g fill="none" stroke="#3c4a5c" stroke-width="3" stroke-linecap="round">
+          <path d="M80 30 v-12 a6 6 0 0 1 12 0 v12"/><path d="M102 30 v-12 a6 6 0 0 1 12 0 v12"/><path d="M124 30 v-12 a6 6 0 0 1 12 0 v12"/><path d="M146 30 v-12 a6 6 0 0 1 12 0 v12"/><path d="M168 30 v-12 a6 6 0 0 1 12 0 v12"/>
+        </g>
+        <g stroke-linecap="round">
+          <rect x="76" y="56" width="16" height="16" rx="4" fill="#e6f7ee" stroke="#2fa863" stroke-width="2.4"/><path d="M79 64 l4 4 l8 -9" fill="none" stroke="#1f9d55" stroke-width="2.8"/>
+          <line x1="100" y1="64" x2="168" y2="64" stroke="#cfe3d8" stroke-width="5"/>
+          <rect x="76" y="88" width="16" height="16" rx="4" fill="#e6f7ee" stroke="#2fa863" stroke-width="2.4"/><path d="M79 96 l4 4 l8 -9" fill="none" stroke="#1f9d55" stroke-width="2.8"/>
+          <line x1="100" y1="96" x2="160" y2="96" stroke="#cfe3d8" stroke-width="5"/>
+          <rect x="76" y="120" width="16" height="16" rx="4" fill="#e6f7ee" stroke="#2fa863" stroke-width="2.4"/><path d="M79 128 l4 4 l8 -9" fill="none" stroke="#1f9d55" stroke-width="2.8"/>
+          <line x1="100" y1="128" x2="164" y2="128" stroke="#cfe3d8" stroke-width="5"/>
+        </g>
+      </g>
+      <!-- 연필 -->
+      <g transform="translate(196,64) rotate(36)" filter="url(#fSh)">
+        <rect x="-8" y="0" width="16" height="92" rx="3" fill="url(#gPencilGreen)"/>
+        <rect x="-8" y="-12" width="16" height="12" rx="4" fill="#f59ab2"/><rect x="-8" y="-2" width="16" height="6" fill="#cfd6df"/>
+        <path d="M-8 92 L8 92 L0 114 Z" fill="#f4d3a6"/><path d="M-2.6 107 L2.6 107 L0 114 Z" fill="#3c4a5c"/>
+        <rect x="-3" y="4" width="3" height="80" rx="1.5" fill="#fff" opacity=".4"/>
+      </g>
+      <g stroke="#3fc27a" stroke-width="3.4" stroke-linecap="round"><line x1="40" y1="34" x2="54" y2="44"/><line x1="34" y1="58" x2="50" y2="60"/><line x1="54" y1="18" x2="62" y2="32"/></g>
+    </svg>
+    <div class="tile"><svg viewBox="0 0 44 44"><rect x="7" y="26" width="7" height="11" rx="2" fill="#5fd896"/><rect x="18" y="19" width="7" height="18" rx="2" fill="#2fbf6e"/><rect x="29" y="12" width="7" height="25" rx="2" fill="#1f9d55"/><path d="M8 20 L17 12 L23 16 L35 6" fill="none" stroke="#1d2340" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M30 6 h5 v5" fill="none" stroke="#1d2340" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <h2>한 걸음 학습지<svg class="swoosh" viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true"><path d="M2 11 C60 3 140 3 198 9" fill="none" stroke="url(#gSwG)" stroke-width="5" stroke-linecap="round"/></svg></h2>
+    <div class="tag">1~4차시 · 차근차근</div>
+    <p class="desc">긴 지문은 덩어리로 끊어 읽고, 영어 문장은 사다리처럼 한 칸씩 써요. 복합 문제는 근거부터 찾아요.</p>
+    <ul class="pills">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M2 4h7a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2zM22 4h-7a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"/></svg>끊어 읽기</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="8" y1="2" x2="5" y2="22"/><line x1="19" y1="2" x2="16" y2="22"/><line x1="7" y1="7" x2="18" y2="7"/><line x1="6.3" y1="12" x2="17.3" y2="12"/><line x1="5.6" y1="17" x2="16.6" y2="17"/></svg>쓰기 사다리</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M9 3h5v3a2 2 0 1 0 4 0V3h3v6h-3a2 2 0 1 0 0 4h3v8h-6v-3a2 2 0 1 0-4 0v3H3v-6h3a2 2 0 1 0 0-4H3V3z"/></svg>복합 문제 쪼개기</li>
+    </ul>
+    <a class="open" href="step.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M2 4h7a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2zM22 4h-7a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"/></svg>학습지 열기 →</a>
+    <nav class="jump" aria-label="한 걸음 학습지 바로가기">
+      <a href="step.html#1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg>1차시</a>
+      <a href="step.html#2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg>2차시</a>
+      <a href="step.html#3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg>3차시</a>
+      <a href="step.html#4"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg>4차시</a>
+    </nav>
   </article>
 </main>
 
-<footer class="wrap">영어 문장은 교과서 지문 설계도 원문을 그대로 썼어요. 풀이 내용은 각자의 기기 브라우저에만 저장돼요.</footer>
+<footer>영어 문장은 교과서 지문 설계도 원문을 그대로 썼어요. 풀이 내용은 각자의 기기 브라우저에만 저장돼요.</footer>
 </body>
 </html>
