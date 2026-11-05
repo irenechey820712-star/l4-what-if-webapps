@@ -1,6 +1,6 @@
-# Netlify 설정: 빌드 없이 public 폴더를 그대로 배포한다.
+# Netlify 설정: 빌드 없이 docs 폴더를 그대로 배포한다.
 [build]
-  publish = "public"
+  publish = "docs"
 
 [[headers]]
   for = "/*.html"

@@ -1,7 +1,8 @@
-"""Lesson 4 What-If Science 웹앱을 public/ 폴더로 모은다.
+"""Lesson 4 What-If Science 웹앱을 docs/ 폴더로 모은다.
 
 원본 HTML은 이 폴더의 상위 폴더(학습지 연구하기)에 있다.
-원본을 고친 뒤 이 스크립트를 다시 돌리면 public/ 이 새로 만들어진다.
+원본을 고친 뒤 이 스크립트를 다시 돌리면 docs/ 가 새로 만들어진다.
+GitHub Pages(main 브랜치 /docs)와 Netlify(publish = "docs")가 같은 폴더를 배포한다.
 
     python build_site.py
 """
@@ -9,7 +10,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 SRC = HERE.parent
-OUT = HERE / "public"
+OUT = HERE / "docs"
 
 PAGES = {
     "buildup.html": "Lesson4_웹앱학습지_빌드업_1-4차시.html",
