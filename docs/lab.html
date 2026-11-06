@@ -1422,7 +1422,7 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
   function startSt(){ $("E-st").className = "verdict info"; $("E-st").textContent = "2026년 1월 3일 보름달에서 출발해요. ‘다음 보름달 ▶’을 눌러 시간을 흘려 보내요."; }
   function go(dur){
     if(idx >= list.length - 1){ ffTo = -1; busy(false); return; }
-    anim = {from:list[idx].t, to:list[idx + 1].t, k:0, dur, lin:dur < 1}; busy(true);
+    anim = {from:list[idx].t, to:list[idx + 1].t, k:0, dur, lin:ffTo > idx}; busy(true);
   }
   function arrive(){
     step(); drawCal();
@@ -1431,7 +1431,7 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
     else { st.className = "verdict info"; st.textContent = `${f.y}년 ${f.m + 1}월 ${f.d}일 보름달 · 이 달의 첫 번째 보름달이에요.`; }
   }
   /* 한 바퀴(보름달→다음 보름달)에 걸리는 시간(초) */
-  const SPD_ONE = 6, SPD_FF = .6;
+  const SPD_ONE = 6, SPD_FF = 1;
   $("E-next").onclick = () => { if(anim) return; ffTo = -1; go(SPD_ONE); };
   $("E-year").onclick = () => {
     if(anim) return;
