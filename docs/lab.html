@@ -126,6 +126,14 @@
   .cmp{display:none;margin-top:8px;padding:10px 14px;border-radius:14px;background:#eef4ff;font-size:14.5px}
   .cmp.show{display:block}
   .note{font-size:12.5px;color:var(--mute);margin-top:10px}
+  .realsci{margin-top:12px;border:1.5px solid var(--line);border-radius:14px;background:var(--soft);padding:12px 14px;font-size:14px;line-height:1.6;color:var(--ink)}
+  .realsci h5{margin:0 0 4px;font-size:15.5px;font-weight:900;color:var(--navy)}
+  .realsci ul{margin:0;padding:0;list-style:none}
+  .realsci li{margin:7px 0;padding-left:24px;position:relative}
+  .realsci li .mk{position:absolute;left:0;top:0;font-weight:900}
+  .realsci .cite{font-size:12px;color:var(--mute);white-space:nowrap}
+  .realsci a{color:var(--blue)}
+  .realsci .concl{margin-top:8px;padding:8px 10px;border-radius:10px;background:#fff;font-weight:800}
   .dayclock{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center}
   .cal{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:8px}
   .cal .m{background:var(--soft);border-radius:14px;padding:8px 8px 6px;min-height:72px;font-size:13px;border:2px solid transparent;transition:all .25s}
@@ -408,7 +416,7 @@
 <!-- ======================= D 산소 ======================= -->
 <section class="lab" id="lab-D">
   <div class="labhead"><div class="ic" data-icon="D"></div><div><h2>산소가 두 배라면</h2><p class="lq"><span class="src">3차시 ①~⑰</span>대기 중 산소가 21%에서 42%가 되면 곤충과 사람은 어떻게 될까?</p></div></div>
-  <div class="howto"><div><b>곤충 ①</b>산소 21%에서 곤충 몸을 키워요. 가운데가 빨개지면 산소가 못 간 거예요.</div><div><b>곤충 ②</b>산소를 42%로 올리고 다시 키워 봐요. 더 큰 몸도 파랗게 차나요?</div><div><b>사람 ③</b>아래 100 m 달리기에서 산소 21%와 42% 선수를 비교해요.</div></div>
+  <div class="howto"><div><b>곤충 ①</b>산소 21%에서 곤충 몸을 키워요. 가운데가 빨개지면 산소가 못 간 거예요.</div><div><b>곤충 ②</b>산소를 42%로 올리고 다시 키워 봐요. 더 큰 몸도 파랗게 차나요?</div><div><b>사람 ③</b>아래 100 m 달리기로 교과서 예측을 본 뒤, 실제 연구와 비교해요.</div></div>
   <div class="step pred"><div class="sh"><span class="no">1</span><b>예측하기</b><span class="st"></span></div><div class="sb" data-pred="D"></div></div>
   <div class="step locked"><div class="sh"><span class="no">2</span><b>실험하기</b><span class="st"></span></div><div class="sb">
     <div class="sub3" style="margin-top:0"><span class="tag">실험 A</span>곤충 키우기 <span class="src">⑦~⑬</span></div>
@@ -442,12 +450,21 @@
       </div>
     </div>
     <div class="sub3"><span class="tag">실험 B</span>사람: 100 m 달리기 <span class="src">⑭~⑰</span></div>
-    <p style="margin:-2px 0 10px;font-size:14.5px;color:var(--sub)">이번에는 곤충이 아니라 <b>사람</b>이에요. 산소가 두 배가 되면 운동선수는 지금보다 얼마나 빨리 달릴까요?</p>
+    <p style="margin:-2px 0 10px;font-size:14.5px;color:var(--sub)">이번에는 곤충이 아니라 <b>사람</b>이에요. 교과서(⑮~⑰)는 산소가 두 배가 되면 운동선수가 더 빨리 달려 <b>새 세계 기록</b>을 세울 거라고 예측해요. 교과서 예측대로 달려 보고, 실제 연구와 비교해 봐요.</p>
     <div class="ctrl"><button class="btn go" id="D-run">출발!</button><span id="D-clock" style="font-family:var(--num);font-weight:800;font-size:20px;color:var(--navy)">0.00 s</span></div>
     <svg class="view" id="D-track" viewBox="0 0 900 190" role="img" aria-label="사람 100미터 달리기"></svg>
     <div class="verdict info" id="D-rv">‘출발!’을 눌러 산소 21%와 42% 선수를 비교해요.</div>
+    <div class="realsci" id="D-real" style="display:none">
+      <h5>🔬 실제 과학 확인 · 교과서 예측은 얼마나 맞을까?</h5>
+      <ul>
+        <li><span class="mk" style="color:#176b45">✔</span><b>맞는 부분:</b> 산소를 더 많이 마시면 운동 능력이 좋아진다는 실험 결과가 있어요. 연구 51편을 모아 분석했더니 산소 30% 이상에서 효과가 나타났고, 특히 오래 버티는 운동(지구력)에서 효과가 컸어요. <span class="cite">(<a href="https://pubmed.ncbi.nlm.nih.gov/28975517/" target="_blank" rel="noopener">Mallette 외, 2018</a>)</span></li>
+        <li><span class="mk" style="color:#a5321f">✘</span><b>100 m는 달라요:</b> 10초 안팎의 전력 질주는 근육에 저장해 둔 에너지를 주로 써요. 산소로 만드는 에너지는 9~25%뿐이에요(남녀·측정 방법에 따라 다름). <span class="cite">(<a href="https://pubmed.ncbi.nlm.nih.gov/15518295/" target="_blank" rel="noopener">Duffield 외, 2004</a>)</span> 100% 산소를 마시고 전력 질주를 반복한 실험에서도 한 번에 내는 최고 힘은 그대로였어요. <span class="cite">(<a href="https://pubmed.ncbi.nlm.nih.gov/31337587/" target="_blank" rel="noopener">Porter 외, 2019</a>)</span></li>
+        <li><span class="mk" style="color:#a5321f">✘</span><b>피 속 산소는 조금만 늘어요:</b> 지금도 피 속 헤모글로빈은 산소로 97~98% 차 있어요. 그래서 공기 중 산소가 두 배가 되어도 피가 나르는 산소는 어림잡아 5% 정도만 늘어요.</li>
+      </ul>
+      <div class="concl">결론: 마라톤 같은 오래 달리기는 기록이 좋아질 수 있어요. 하지만 100 m에서 0.38초를 줄인 9.20초는 근거가 부족한 가상 값이에요. 교과서의 예측도 실제 연구로 확인해야 해요.</div>
+    </div>
     <ul class="missions" id="D-miss"></ul>
-    <p class="note">21% 선수 기록은 현재 100 m 세계 기록(9.58초)이에요. 42% 선수 기록, 산소가 닿는 깊이, 최대 크기는 교과서 설명을 보여 주는 가상 모형값이에요.</p>
+    <p class="note">21% 선수 기록은 현재 100 m 세계 기록(9.58초)이에요. 42% 선수 기록(9.20초)은 교과서 예측을 보여 주는 가상 값이고, 산소가 닿는 깊이와 최대 크기도 교과서 설명을 보여 주는 가상 모형값이에요.</p>
   </div></div>
   <div class="step locked"><div class="sh"><span class="no">3</span><b>기록하기</b><span class="st">‘결과 기록하기’를 눌러요</span></div><div class="sb" data-rec="D"></div></div>
   <div class="step locked"><div class="sh"><span class="no">4</span><b>설명하기</b><span class="st"></span></div><div class="sb" data-exp="D"></div></div>
@@ -1157,7 +1174,7 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
   const res = LANES.map((ln, i) => {
     const top = i * 97;
     txt(T, 14, top + 34, ln.o2, {"font-size":14, "font-weight":900, fill:"#fff"});
-    txt(T, 14, top + 52, "선수 (사람)", {"font-size":11.5, "font-weight":700, fill:"#ffe9d6"});
+    txt(T, 14, top + 52, i ? "교과서 예측 (가상)" : "현재 세계 기록", {"font-size":11.5, "font-weight":700, fill:"#ffe9d6"});
     return txt(T, 14, top + 80, "", {"font-size":17, "font-weight":800, fill: i ? "#ffe066" : "#ffffff", "font-family":"Outfit"});
   });
   const runners = LANES.map(() => el("g", {}, T));
@@ -1211,12 +1228,14 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
       if(race.t >= 9.58 && !res[0].textContent) res[0].textContent = "9.58 s";
       if(race.t >= 9.9){
         race = null; $("D-run").disabled = false;
-        $("D-rv").className = "verdict good";
-        $("D-rv").textContent = "산소 42% 선수가 먼저 들어왔어요! 산소가 많으면 근육이 에너지를 더 잘 써서 사람이 더 빨리 달리고, 새 세계 기록도 기대할 수 있어요 (⑮⑯⑰).";
-        addRec("D", ["21% vs 42%", "사람 100 m", "-", "9.58초 vs 9.20초 (모형)"]); mission("D","m3");
+        $("D-rv").className = "verdict warn";
+        $("D-rv").textContent = "교과서 예측(⑮~⑰)대로라면 산소 42% 선수가 먼저 들어와 새 세계 기록을 세워요. 정말 그럴까요? 아래 ‘실제 과학 확인’에서 연구 결과와 비교해 봐요.";
+        $("D-real").style.display = "";
+        addRec("D", ["21% vs 42%", "사람 100 m", "-", "9.58초 vs 9.20초 (교과서 예측·가상)"]); mission("D","m3");
       }
     }
   };
+  if(L("D").miss.m3) $("D-real").style.display = "";
   upd();
 })();
 
