@@ -229,9 +229,9 @@
         <rect x="170" y="38" width="22" height="10" rx="3" fill="#3d4757"/><rect x="290" y="38" width="22" height="10" rx="3" fill="#3d4757"/>
         <g id="A-ghost"></g>
         <g id="A-objs"></g>
-        <g transform="translate(300,64)">
-          <rect x="0" y="0" width="104" height="34" rx="10" fill="#0f1e36" opacity=".88"/>
-          <text id="A-clock" x="52" y="23" font-family="Outfit" font-size="18" font-weight="700" fill="#7dffb2" text-anchor="middle">0.00 s</text>
+        <g transform="translate(321,58)">
+          <rect x="0" y="0" width="94" height="34" rx="10" fill="#0f1e36" opacity=".88"/>
+          <text id="A-clock" x="47" y="23" font-family="Outfit" font-size="18" font-weight="700" fill="#7dffb2" text-anchor="middle">0.00 s</text>
         </g>
         <text id="A-ff" x="210" y="18" font-size="12.5" font-weight="700" fill="#b05a00" text-anchor="middle"></text>
       </svg>
@@ -705,6 +705,9 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
 ================================================================= */
 (function(){
   const g = 9.8, H = 20, TOP = 48, GROUND = 430;
+  /* 출발선(물체 아래 끝, 0 m)과 눈금 비율(px/m). 모든 물체와 자를 같은 비율로 그려야
+     진공에서 같은 시간에 같은 거리만큼 내려가는 것이 화면에서도 똑같이 보인다. */
+  const R0 = 102, SC = (GROUND - R0) / H;
   const OBJ = {
     big:{nm:"쇠공 5 kg", r:16, vt:140}, small:{nm:"쇠공 1 kg", r:10, vt:105},
     tennis:{nm:"테니스공", r:10, vt:22}, feather:{nm:"깃털", r:0, vt:0.6}
@@ -715,13 +718,15 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
   Object.entries(OBJ).forEach(([k,o]) => { selL.add(new Option(o.nm, k)); selR.add(new Option(o.nm, k)); });
   selL.value = "big"; selR.value = "small";
   const ru = $("A-ruler");
-  el("rect", {x:34, y:TOP, width:30, height:GROUND-TOP, rx:4, fill:"#fffdf5", stroke:"#d8c9a3"}, ru);
+  el("rect", {x:34, y:R0, width:30, height:GROUND-R0, rx:4, fill:"#fffdf5", stroke:"#d8c9a3"}, ru);
   for(let m = 0; m <= 20; m++){
-    const y = TOP + m / H * (GROUND - TOP);
+    const y = R0 + m * SC;
     el("line", {x1:52 - (m % 5 ? 0 : 8), y1:y, x2:64, y2:y, stroke:"#a08550", "stroke-width": m % 5 ? 1 : 1.6}, ru);
     if(m % 5 === 0) txt(ru, 38, y + 4, m, {"font-size":10, "font-family":"Outfit", "font-weight":700, fill:"#7a6232"});
   }
-  txt(ru, 49, TOP - 6, "m", {"font-size":10, "font-family":"Outfit", fill:"#7a6232", "text-anchor":"middle"});
+  txt(ru, 49, R0 - 6, "m", {"font-size":10, "font-family":"Outfit", fill:"#7a6232", "text-anchor":"middle"});
+  el("line", {x1:66, y1:R0, x2:400, y2:R0, stroke:"#a08550", "stroke-width":1, "stroke-dasharray":"4 4", opacity:.55}, ru);
+  txt(ru, 68, R0 - 4, "출발선", {"font-size":9.5, "font-weight":700, fill:"#a08550"});
   const ap = $("A-airp"), parts = [];
   for(let i = 0; i < 26; i++) parts.push({x:110 + Math.random()*290, y:60 + Math.random()*360, s:.4 + Math.random()*.8});
   function drawObj(g0, k, x, cy, op, rot){
@@ -738,10 +743,14 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
     if(op > .9) c.setAttribute("filter", "url(#fSoft)");
     if(k === "tennis") el("path", {d:`M${x-o.r*.85} ${cy-o.r*.3} Q${x} ${cy+o.r*.6} ${x+o.r*.85} ${cy-o.r*.3}`, stroke:"#fff", "stroke-width":1.6, fill:"none", opacity:op}, g0);
   }
-  function posY(k, y){ const o = OBJ[k]; return k === "feather" ? TOP + 30 + y / H * (GROUND - TOP - 58) : TOP + o.r + 2 + y / H * (GROUND - TOP - 2 * o.r - 2); }
-  function draw(states){
+  /* y = 떨어진 거리(m). 물체의 아래 끝이 출발선에서 땅까지 같은 비율로 내려간다. */
+  const BOT = k => k === "feather" ? 28 : OBJ[k].r, TOPOF = k => k === "feather" ? 26 : OBJ[k].r;
+  function posY(k, y){ return R0 + y * SC - BOT(k); }
+  function draw(states, hang){
     const g0 = $("A-objs"); g0.innerHTML = "";
     states.forEach((st, i) => {
+      const top = posY(st.k, st.y) - TOPOF(st.k);
+      if(hang && top - TOP > 2) el("line", {x1:XS[i], y1:TOP, x2:XS[i], y2:top, stroke:"#5b6577", "stroke-width":1.3}, g0);
       const sw = st.k === "feather" && air && !st.done ? Math.sin(st.t * 2.6) : 0;
       drawObj(g0, st.k, XS[i] + sw * 16, posY(st.k, st.y), 1, sw * 18);
       if(st.done) el("ellipse", {cx:XS[i], cy:GROUND + 2, rx:22, ry:4, fill:"#3d6b33", opacity:.35}, g0);
@@ -750,7 +759,7 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
   function labels(){ $("A-ln").textContent = OBJ[selL.value].nm; $("A-rn").textContent = OBJ[selR.value].nm; }
   function reset(){
     run = null; $("A-ghost").innerHTML = "";
-    draw([{k:selL.value, y:0, t:0}, {k:selR.value, y:0, t:0}]);
+    draw([{k:selL.value, y:0, t:0}, {k:selR.value, y:0, t:0}], true);
     $("A-tl").textContent = "-"; $("A-tr").textContent = "-"; $("A-ff").textContent = ""; $("A-clock").textContent = "0.00 s";
     $("A-res").className = "verdict info"; $("A-res").textContent = "물체를 고르고 ‘동시에 놓기’를 눌러요."; labels();
   }
@@ -768,10 +777,13 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
   };
   function stepObj(o, dt){
     const vt = OBJ[o.k].vt;
-    for(let s = 0; s < dt; s += 0.002){
+    for(let s = 0; s < dt - 1e-12; s += 0.002){
       const h = Math.min(0.002, dt - s), a = air ? g * (1 - (o.v * o.v) / (vt * vt)) : g;
-      o.v += a * h; o.y += o.v * h; o.t += h;
-      if(o.y >= H){ o.y = H; o.done = true; o.land = o.t; return; }
+      const y0 = o.y, v0 = o.v;
+      o.v += a * h; o.y += (v0 + o.v) / 2 * h;
+      /* 땅에 닿은 순간을 0.002초 칸 안에서 보간해 1/1000초까지 정확히 잰다 */
+      if(o.y >= H){ o.land = o.t + h * (H - y0) / (o.y - y0); o.t = o.land; o.y = H; o.done = true; return; }
+      o.t += h;
     }
   }
   TICK.A = dt => {
@@ -780,22 +792,28 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
     if(!run) return;
     const rate = run.t > 2.6 ? 14 : 1;
     $("A-ff").textContent = rate > 1 ? "⏩ 빨리 감기 ×14 · 아직 떨어지는 중" : "";
-    const sdt = dt * rate; run.t += sdt;
-    run.objs.forEach(o => { if(!o.done) stepObj(o, sdt); });
-    while(run.t >= run.next){
-      run.objs.forEach((o,i) => { if(!o.done) drawObj($("A-ghost"), o.k, XS[i], posY(o.k, o.y), .22, 0); });
-      run.next += run.next < 3 ? 0.1 : 2;
+    /* 잔상은 정확히 0.1초(3초 뒤부터는 2초)마다 찍는다: 그 시각까지만 계산하고 찍은 뒤 이어 간다 */
+    let rem = dt * rate;
+    while(rem > 1e-9){
+      const seg = Math.min(rem, run.next - run.t);
+      if(seg > 0){ run.objs.forEach(o => { if(!o.done) stepObj(o, seg); }); run.t += seg; rem -= seg; }
+      if(run.next - run.t < 1e-9){
+        run.objs.forEach((o,i) => { if(!o.done) drawObj($("A-ghost"), o.k, XS[i], posY(o.k, o.y), .22, 0); });
+        run.next += run.next < 3 ? 0.1 : 2;
+      }
     }
     draw(run.objs);
     $("A-clock").textContent = Math.min(run.t, 99).toFixed(2) + " s";
-    const f = o => o.done ? o.land.toFixed(2) + "초" : "떨어지는 중…";
+    const f = o => o.done ? o.land.toFixed(3) + "초" : "떨어지는 중…";
     $("A-tl").textContent = f(run.objs[0]); $("A-tr").textContent = f(run.objs[1]);
     if(run.objs.every(o => o.done)){
       const [a, b] = run.objs, d = Math.abs(a.land - b.land), r = $("A-res");
-      if(d < 0.05){ r.className = "verdict good"; r.textContent = "거의 동시에 떨어졌어요! 잔상 간격도 똑같아요."; }
-      else { r.className = "verdict warn"; r.textContent = `${OBJ[a.land < b.land ? a.k : b.k].nm}이(가) ${d.toFixed(2)}초 먼저 떨어졌어요. 공기 저항 때문이에요.`; }
+      const fast = OBJ[a.land < b.land ? a.k : b.k].nm;
+      if(d < 0.0005){ r.className = "verdict good"; r.textContent = air ? "동시에 떨어졌어요! 잔상 간격도 똑같아요." : "정확히 동시에 떨어졌어요! 공기가 없으면 무게와 상관없이 똑같이 떨어져요. 잔상 간격도 똑같아요."; }
+      else if(d < 0.05){ r.className = "verdict good"; r.textContent = `거의 동시에 떨어졌어요! 자세히 보면 ${fast}이(가) ${d.toFixed(3)}초 먼저예요. 공기 저항이 있어도 무거운 쇠공에는 아주 작게 작용해서 차이가 거의 없어요.`; }
+      else { r.className = "verdict warn"; r.textContent = `${fast}이(가) ${d.toFixed(2)}초 먼저 떨어졌어요. 공기 저항 때문이에요.`; }
       $("A-ff").textContent = ""; $("A-clock").textContent = Math.max(a.land, b.land).toFixed(2) + " s";
-      addRec("A", [OBJ[a.k].nm, OBJ[b.k].nm, air ? "있음" : "없음", a.land.toFixed(2)+"초", b.land.toFixed(2)+"초"]);
+      addRec("A", [OBJ[a.k].nm, OBJ[b.k].nm, air ? "있음" : "없음", a.land.toFixed(3)+"초", b.land.toFixed(3)+"초"]);
       const ks = [a.k, b.k], balls = ks.filter(k => k === "big" || k === "small");
       if(!air && ks.includes("big") && ks.includes("small")) mission("A","m1");
       if(air && ks.includes("feather") && balls.length) mission("A","m2");
