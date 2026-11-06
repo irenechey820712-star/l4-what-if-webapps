@@ -142,6 +142,7 @@
   .cal .m .fm svg{width:18px;height:18px}
   .cal .m.blue{background:#e6eeff;border-color:#3f6fe0}
   .cal .m.blue b::after{content:" · 파란 달!";color:#2c57c9}
+  .cal .m.now{box-shadow:inset 0 0 0 2px #f0a020}
   .final{background:#fff;border-radius:24px;padding:22px 26px;margin-bottom:34px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
   .final h2{margin:0 0 8px;color:var(--navy);font-weight:900}
   #notebook{display:none}
@@ -486,16 +487,26 @@
       <button class="btn sub" id="E-reset">처음으로</button>
       <span id="E-now" style="font-family:var(--num);font-weight:800;color:var(--navy);font-size:17px"></span>
     </div>
-    <div class="cal" id="E-cal"></div>
-    <div class="panel" style="margin-top:12px">
-      <div class="kv"><span>찾은 파란 달</span><b id="E-cnt">0번</b></div>
-      <div class="kv"><span>파란 달 사이 간격(평균)</span><b id="E-gap">-</b></div>
+    <div class="stage">
+      <svg class="view" id="E-sky" viewBox="0 0 440 392" role="img" aria-label="달이 지구 둘레를 돌며 모양이 바뀌는 밤하늘"><g id="E-skyS"></g><g id="E-skyD"></g><g id="E-fx"></g></svg>
+      <div class="panel">
+        <h4>지금 날짜 (한국 시각)</h4>
+        <div class="big" id="E-date"></div>
+        <div class="kv"><span>보름달 뒤</span><b id="E-age">-</b></div>
+        <div class="kv"><span>다음 보름달까지</span><b id="E-left">-</b></div>
+        <div class="kv"><span>찾은 파란 달</span><b id="E-cnt">0번</b></div>
+        <div class="kv"><span>파란 달 사이 간격(평균)</span><b id="E-gap">-</b></div>
+        <div class="verdict info" id="E-st"></div>
+        <div class="realsci"><h5>💡 파란 달은 정말 파랄까?</h5>아니에요. 파란 달은 한 달에 두 번째로 뜬 보름달을 부르는 이름일 뿐이에요. 다만 아주 드물게 공기 속 연기나 먼지가 붉은빛을 흩어 버리면 달이 정말 파랗게 보이기도 해요. <span class="cite">(<a href="https://science.nasa.gov/solar-system/moon/super-blue-moons-your-questions-answered/" target="_blank" rel="noopener">NASA</a>)</span></div>
+      </div>
     </div>
+    <div class="cal" id="E-cal"></div>
     <div class="sub3"><span class="tag">What if?</span>달 모양이 한 바퀴 도는 날수가 다르다면</div>
     <div class="ctrl"><label>달의 주기 <b id="E-pv">29.5일</b></label><input type="range" id="E-p" min="25" max="32" step="0.5" value="29.5"><button class="btn sub" id="E-sim">10년 동안 세어 보기</button></div>
+    <svg class="view" id="E-wsvg" viewBox="0 0 640 326" style="background:var(--soft)" role="img" aria-label="달의 주기와 달의 길이 비교, 10년 동안 파란 달이 뜬 달"><g id="E-wstat"></g><g id="E-wbars"></g><g id="E-wgrid"></g></svg>
     <div class="verdict info" id="E-simr">주기를 바꾸고 ‘10년 동안 세어 보기’를 눌러요.</div>
     <ul class="missions" id="E-miss"></ul>
-    <p class="note">첫 보름달(2026년 1월 3일, 한국 시각)에서 29.53일씩 더한 모형 계산이라 실제 날짜와 하루쯤 다를 수 있어요.</p>
+    <p class="note">첫 보름달(2026년 1월 3일, 한국 시각)에서 29.53일씩 더한 모형 계산이라 실제 날짜와 하루쯤 다를 수 있어요. 위에서 본 그림의 크기와 거리는 실제 비율이 아니에요.</p>
   </div></div>
   <div class="step locked"><div class="sh"><span class="no">3</span><b>기록하기</b><span class="st">파란 달을 찾으면 자동 기록</span></div><div class="sb" data-rec="E"></div></div>
   <div class="step locked"><div class="sh"><span class="no">4</span><b>설명하기</b><span class="st"></span></div><div class="sb" data-exp="E"></div></div>
@@ -1241,10 +1252,11 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
 
 /* =================================================================
    E 파란 달 찾기 · 첫 보름달 2026-01-03 19:03(KST)에서 주기씩 더하기
+   밤하늘 장면: 위에서 본 지구와 달(햇빛은 왼쪽에서) + 지구에서 본 달 모양 + 이번 달 달력 띠
 ================================================================= */
 (function(){
-  const START = Date.UTC(2026, 0, 3, 10, 3), DAY = 86400000, KST = 9 * 3600000;
-  let idx = 0, list = [];
+  const START = Date.UTC(2026, 0, 3, 10, 3), DAY = 86400000, KST = 9 * 3600000, P = 29.530589;
+  let idx = 0, list = [], tNow = START, anim = null, ffTo = -1, burst = null, wanim = null;
   function moonIcon(parent, x, y, r, kind){
     if(kind === "blue"){
       el("circle", {cx:x, cy:y, r:r + 3, fill:"#6c98ff", opacity:.35, filter:"url(#fGlow)"}, parent);
@@ -1252,14 +1264,17 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
       el("circle", {cx:x, cy:y, r, fill:"url(#gMoon)", opacity:.4}, parent);
     } else el("circle", {cx:x, cy:y, r, fill:"url(#gMoon)"}, parent);
   }
-  function phase(parent, x, y, r, p){
-    el("circle", {cx:x, cy:y, r, fill:"#2a3550"}, parent);
-    if(p < .02 || p > .98) return;
+  /* p: 0 = 삭, 0.5 = 보름. 북반구(한국)에서 차오를 때는 오른쪽이 밝다 */
+  function litPath(x, y, r, p){
+    if(p < .02 || p > .98) return null;
     const k = Math.cos(2 * Math.PI * p), rx = Math.abs(k) * r;
-    const d = p < .5
+    return p < .5
       ? `M${x} ${y-r} A${r} ${r} 0 0 1 ${x} ${y+r} A${rx} ${r} 0 0 ${k > 0 ? 0 : 1} ${x} ${y-r}Z`
       : `M${x} ${y-r} A${r} ${r} 0 0 0 ${x} ${y+r} A${rx} ${r} 0 0 ${k > 0 ? 1 : 0} ${x} ${y-r}Z`;
-    el("path", {d, fill:"#f1f3f6"}, parent);
+  }
+  function phase(parent, x, y, r, p){
+    el("circle", {cx:x, cy:y, r, fill:"#2a3550"}, parent);
+    const d = litPath(x, y, r, p); if(d) el("path", {d, fill:"#f1f3f6"}, parent);
   }
   (function(){
     const W = $("E-why"), x0 = 96, w = 520, day = w / 31;
@@ -1279,6 +1294,8 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
     return out;
   }
   const blueOf = arr => arr.filter((f,i) => i > 0 && arr[i-1].y === f.y && arr[i-1].m === f.m);
+  const isBlue = i => i > 0 && list[i-1].y === list[i].y && list[i-1].m === list[i].m;
+  const kst = t => { const d = new Date(t + KST); return {y:d.getUTCFullYear(), m:d.getUTCMonth(), d:d.getUTCDate(), fr:(d.getUTCHours() * 60 + d.getUTCMinutes()) / 1440}; };
   const moonSvg = kind => `<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="${kind === "blue" ? "#7da2ff" : "url(#gMoon)"}"/>${kind === "blue" ? '<circle cx="10" cy="10" r="8" fill="url(#gMoon)" opacity=".4"/>' : ""}</svg>`;
   function drawCal(){
     const shown = list.slice(0, idx + 1), cur = shown[shown.length - 1], yr = cur.y;
@@ -1286,7 +1303,7 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
     let h = "";
     for(let m = 0; m < 12; m++){
       const fs = shown.filter(f => f.y === yr && f.m === m);
-      h += `<div class="m ${fs.length >= 2 ? "blue" : ""}"><b>${m+1}월</b>${fs.map((f,i) => `<div class="fm">${moonSvg(i === 1 ? "blue" : "full")}${f.d}일</div>`).join("")}</div>`;
+      h += `<div class="m ${fs.length >= 2 ? "blue" : ""} ${m === cur.m ? "now" : ""}"><b>${m+1}월</b>${fs.map((f,i) => `<div class="fm">${moonSvg(i === 1 ? "blue" : "full")}${f.d}일</div>`).join("")}</div>`;
     }
     $("E-cal").innerHTML = h;
     const blues = blueOf(shown);
@@ -1305,19 +1322,204 @@ function loop(t){ const dt = Math.min(0.05, (t - lastT) / 1000); lastT = t; if(T
       if(blueOf(list.slice(0, idx + 1)).length >= 2) mission("E","m1");
     }
   }
-  $("E-next").onclick = () => { step(); drawCal(); };
-  $("E-year").onclick = () => { const y = list[idx].y; while(idx < list.length - 1 && list[idx].y === y) step(); drawCal(); };
-  $("E-reset").onclick = () => { list = make(29.530589, 12); idx = 0; drawCal(); };
-  $("E-p").oninput = () => { $("E-pv").textContent = $("E-p").value + "일"; };
+
+  /* ---------- 밤하늘 장면 (크기·거리는 실제 비율이 아님) ---------- */
+  const OX = 134, OY = 136, OR = 80, BX = 330, BY = 124, BR = 58, RX0 = 14, RW = 412;
+  (function(){
+    const g = $("E-skyS");
+    el("rect", {width:440, height:392, fill:"url(#gSpace)"}, g);
+    stars(el("g", {}, g), 70, 440, 256, 7);
+    el("rect", {y:258, width:440, height:134, fill:"#050b18", opacity:.55}, g);
+    el("circle", {cx:-18, cy:OY, r:76, fill:"url(#gSunGlow)"}, g);
+    el("circle", {cx:-22, cy:OY, r:30, fill:"url(#gSun)"}, g);
+    txt(g, 8, 64, "햇빛", {"font-size":11, "font-weight":800, fill:"#ffd54a"});
+    [80, 108, 136, 164, 192].forEach(y => {
+      el("line", {x1:12, y1:y, x2:34, y2:y, stroke:"#ffd54a", "stroke-width":2, opacity:.8}, g);
+      el("path", {d:`M34 ${y-4} L41 ${y} L34 ${y+4}Z`, fill:"#ffd54a", opacity:.8}, g);
+    });
+    el("circle", {cx:OX, cy:OY, r:OR, fill:"none", stroke:"#ffffff", "stroke-opacity":.28, "stroke-dasharray":"3 5"}, g);
+    el("circle", {cx:OX, cy:OY, r:15, fill:"url(#gOcean)"}, g);
+    el("path", {d:`M${OX} ${OY-15} A15 15 0 0 1 ${OX} ${OY+15}Z`, fill:"#020610", opacity:.5}, g);
+    txt(g, OX, OY + 30, "지구", {"font-size":10.5, "font-weight":700, fill:"#cfe0ff", "text-anchor":"middle"});
+    const lab = {"font-size":10, fill:"#9fb3d9", "text-anchor":"middle"};
+    txt(g, OX + OR - 34, OY + 4, "보름달", lab);
+    txt(g, OX, OY - OR + 24, "하현달", lab);
+    txt(g, OX - OR + 16, OY + 4, "삭", lab);
+    txt(g, OX, OY + OR - 16, "상현달", lab);
+    txt(g, OX, 24, "위에서 본 지구와 달", {"font-size":11.5, "font-weight":800, fill:"#cfe0ff", "text-anchor":"middle"});
+    txt(g, OX, 248, "달 모양 한 바퀴 ≈ 29.5일", {"font-size":10.5, fill:"#9fb3d9", "text-anchor":"middle"});
+    txt(g, BX, 24, "지구에서 본 달", {"font-size":11.5, "font-weight":800, fill:"#cfe0ff", "text-anchor":"middle"});
+  })();
+  function phaseName(f){
+    if(f < .03 || f > .97) return "보름달";
+    if(f < .22) return "기우는 달";
+    if(f < .28) return "하현달";
+    if(f < .47) return "그믐달";
+    if(f < .53) return "삭 (달이 안 보여요)";
+    if(f < .72) return "초승달";
+    if(f < .78) return "상현달";
+    return "차오르는 달";
+  }
+  function drawSky(){
+    const g = $("E-skyD"); g.innerHTML = "";
+    const age0 = ((tNow - START) / DAY) % P, f0 = age0 / P, f = f0 > .9995 ? 0 : f0, age = f === 0 ? 0 : age0;
+    const full = f < .015 || f > .985, blue = !anim && full && isBlue(idx);
+    /* 위에서 본 달: 해가 왼쪽이라 달의 왼쪽 반이 늘 밝다. 보름달이 오른쪽(해 반대편), ↺ 방향으로 돈다 */
+    const th = 2 * Math.PI * f, mx = OX + OR * Math.cos(th), my = OY - OR * Math.sin(th);
+    el("line", {x1:OX + 17 * Math.cos(th), y1:OY - 17 * Math.sin(th), x2:mx, y2:my, stroke:"#cfe0ff", "stroke-opacity":.3, "stroke-dasharray":"2 4"}, g);
+    if(full) el("circle", {cx:mx, cy:my, r:15, fill: blue ? "#6c98ff" : "#fff3c4", opacity:.5, filter:"url(#fGlow)"}, g);
+    el("circle", {cx:mx, cy:my, r:9, fill:"#3a4560"}, g);
+    el("path", {d:`M${mx} ${my-9} A9 9 0 0 0 ${mx} ${my+9}Z`, fill: blue ? "#a9c1ff" : "#eef1f6"}, g);
+    /* 지구에서 본 달 */
+    if(full) el("circle", {cx:BX, cy:BY, r:BR + 14, fill: blue ? "#6c98ff" : "#fff6d8", opacity: blue ? .6 : .32, filter:"url(#fGlow)"}, g);
+    el("circle", {cx:BX, cy:BY, r:BR, fill:"#18223c", stroke:"#33456e", "stroke-width":1}, g);
+    const d = litPath(BX, BY, BR, (.5 + f) % 1);
+    if(d){
+      const cp = el("clipPath", {id:"E-litc"}, g); el("path", {d}, cp);
+      const L = el("g", {"clip-path":"url(#E-litc)"}, g);
+      el("circle", {cx:BX, cy:BY, r:BR, fill:"url(#gMoon)"}, L);
+      [[-18,-14,9],[14,8,12],[20,-22,6],[-8,22,7],[-26,10,5]].forEach(([dx,dy,r]) => el("circle", {cx:BX + dx, cy:BY + dy, r, fill:"#9aa0aa", opacity:.35}, L));
+      if(blue) el("circle", {cx:BX, cy:BY, r:BR, fill:"#6f97ff", opacity:.5}, L);
+    }
+    txt(g, BX, 210, blue ? "파란 달!" : phaseName(f), {"font-size":15, "font-weight":900, fill: blue ? "#a9c1ff" : "#ffffff", "text-anchor":"middle"});
+    txt(g, BX, 230, blue ? "한 달에 두 번째로 뜬 보름달" : `보름달 뒤 ${age.toFixed(1)}일`, {"font-size":11, fill:"#9fb3d9", "text-anchor":"middle"});
+    /* 이번 달 달력 띠 */
+    const k = kst(tNow), len = new Date(Date.UTC(k.y, k.m + 1, 0)).getUTCDate(), cw = RW / 31;
+    txt(g, RX0, 282, `${k.y}년 ${k.m + 1}월`, {"font-size":13, "font-weight":900, fill:"#ffffff"});
+    txt(g, RX0 + RW, 282, `이 달은 ${len}일까지`, {"font-size":11, fill:"#9fb3d9", "text-anchor":"end"});
+    for(let d2 = 1; d2 <= len; d2++) el("rect", {x:RX0 + (d2 - 1) * cw + .7, y:292, width:cw - 1.4, height:28, rx:3, fill: d2 === k.d ? "#f0a020" : "#ffffff", opacity: d2 === k.d ? .5 : .1}, g);
+    [1, 5, 10, 15, 20, 25, len].forEach(d2 => txt(g, RX0 + (d2 - .5) * cw, 346, d2, {"font-size":9.5, "font-family":"Outfit", fill:"#9fb3d9", "text-anchor":"middle"}));
+    const fm = list.filter((x, i) => i <= idx && x.y === k.y && x.m === k.m);
+    fm.forEach((x, i) => {
+      const cx = RX0 + (x.d - .5) * cw;
+      if(i === 1) el("circle", {cx, cy:306, r:9, fill:"#6c98ff", opacity:.6, filter:"url(#fGlow)"}, g);
+      el("circle", {cx, cy:306, r:5.8, fill: i === 1 ? "#7da2ff" : "url(#gMoon)"}, g);
+    });
+    const px = RX0 + (k.d - 1 + k.fr) * cw;
+    el("path", {d:`M${px} 323 L${px - 4.5} 331 L${px + 4.5} 331Z`, fill:"#ffbf47"}, g);
+    const msg = fm.length >= 2 ? "이번 달 보름달 2번 → 두 번째가 파란 달!" : fm.length === 1 ? "이번 달 보름달 1번" : "이번 달 보름달: 아직 없어요";
+    txt(g, 220, 376, msg, {"font-size":12.5, "font-weight":800, fill: fm.length >= 2 ? "#a9c1ff" : "#cfe0ff", "text-anchor":"middle"});
+    $("E-date").innerHTML = `${k.m + 1}월 ${k.d}일<small>${k.y}년</small>`;
+    $("E-age").textContent = age.toFixed(1) + "일";
+    $("E-left").textContent = (P - age).toFixed(1) + "일";
+  }
+  function drawFx(){
+    const g = $("E-fx"); g.innerHTML = "";
+    if(!burst) return;
+    const k = burst.t / 1.4;
+    if(k >= 1){ burst = null; return; }
+    for(let i = 0; i < 14; i++){
+      const a = i / 14 * 2 * Math.PI + .2, rr = BR + 8 + k * 46, s = 3.2 * (1 - k) + .8, x = BX + Math.cos(a) * rr, y = BY + Math.sin(a) * rr;
+      el("path", {d:`M${x} ${y-s*2} L${x+s*.6} ${y-s*.6} L${x+s*2} ${y} L${x+s*.6} ${y+s*.6} L${x} ${y+s*2} L${x-s*.6} ${y+s*.6} L${x-s*2} ${y} L${x-s*.6} ${y-s*.6}Z`, fill: i % 2 ? "#cfe0ff" : "#7da2ff", opacity:1 - k}, g);
+    }
+  }
+  function busy(b){ $("E-next").disabled = b; $("E-year").disabled = b; }
+  function startSt(){ $("E-st").className = "verdict info"; $("E-st").textContent = "2026년 1월 3일 보름달에서 출발해요. ‘다음 보름달 ▶’을 눌러 시간을 흘려 보내요."; }
+  function go(dur){
+    if(idx >= list.length - 1){ ffTo = -1; busy(false); return; }
+    anim = {from:list[idx].t, to:list[idx + 1].t, k:0, dur, lin:dur < 1}; busy(true);
+  }
+  function arrive(){
+    step(); drawCal();
+    const f = list[idx], p = list[idx - 1], st = $("E-st");
+    if(isBlue(idx)){ st.className = "verdict good"; st.textContent = `🎉 파란 달! ${f.m + 1}월에 보름달이 두 번 떴어요 (${p.d}일·${f.d}일).`; burst = {t:0}; }
+    else { st.className = "verdict info"; st.textContent = `${f.y}년 ${f.m + 1}월 ${f.d}일 보름달 · 이 달의 첫 번째 보름달이에요.`; }
+  }
+  $("E-next").onclick = () => { if(anim) return; ffTo = -1; go(2.2); };
+  $("E-year").onclick = () => {
+    if(anim) return;
+    const y = list[idx].y; let j = idx;
+    while(j < list.length - 1 && list[j].y === y) j++;
+    ffTo = j; go(.32);
+  };
+  $("E-reset").onclick = () => {
+    anim = null; ffTo = -1; burst = null; $("E-fx").innerHTML = "";
+    list = make(P, 12); idx = 0; tNow = START; busy(false); drawCal(); drawSky(); startSt();
+  };
+
+  /* ---------- What if: 주기 막대와 10년 달력판 ---------- */
+  const WX0 = 112, WK = 15;
+  (function(){
+    const g = $("E-wstat");
+    [28, 30, 31].forEach(L => el("line", {x1:WX0 + L * WK, y1:4, x2:WX0 + L * WK, y2:100, stroke:"#c9d4e6", "stroke-dasharray":"3 3"}, g));
+    for(let m = 0; m < 12; m++) txt(g, WX0 + m * 40 + 18, 144, (m + 1) + "월", {"font-size":10, fill:"#8a94a6", "text-anchor":"middle"});
+    for(let i = 0; i < 10; i++) txt(g, 104, 161 + i * 17, 2026 + i, {"font-size":10.5, "font-family":"Outfit", "font-weight":700, fill:"#5a6577", "text-anchor":"end"});
+  })();
+  function drawBars(v){
+    const g = $("E-wbars"); g.innerHTML = "";
+    [["2월", 28, 8], ["30일인 달", 30, 30], ["31일인 달", 31, 52]].forEach(([nm, L, y]) => {
+      txt(g, 104, y + 11, nm, {"font-size":11.5, "font-weight":700, fill:"#5a6577", "text-anchor":"end"});
+      el("rect", {x:WX0, y, width:L * WK, height:14, rx:4, fill:"#e3e8f0"}, g);
+      txt(g, WX0 + L * WK - 6, y + 11, L + "일", {"font-size":10, "font-family":"Outfit", "font-weight":700, fill:"#8a94a6", "text-anchor":"end"});
+      const ok = v < L;
+      txt(g, 636, y + 11, ok ? "두 번 ✔" : "두 번 ✘", {"font-size":10.5, "font-weight":800, fill: ok ? "#2c57c9" : "#a5321f", "text-anchor":"end"});
+    });
+    const col = v < 31 ? "#3a6fe0" : "#d9534f", w = v * WK;
+    txt(g, 104, 92, "달의 주기", {"font-size":11.5, "font-weight":800, fill:col, "text-anchor":"end"});
+    el("rect", {x:WX0, y:80, width:w, height:16, rx:8, fill: v < 31 ? "#e3ebff" : "#fde6e3", stroke:col, "stroke-width":1.4}, g);
+    txt(g, WX0 + w / 2, 92, v + "일", {"font-size":11, "font-family":"Outfit", "font-weight":800, fill:col, "text-anchor":"middle"});
+    moonIcon(g, WX0, 88, 7, "full"); moonIcon(g, WX0 + w, 88, 7, "full");
+    const cap = v < 28 ? `${v}일 < 28일 → 2월까지 모든 달에 두 번 들어갈 수 있어요`
+      : v < 29 ? `${v}일 < 30·31일 → 30·31일인 달(윤년 2월도)에 두 번 가능`
+      : v < 30 ? `${v}일 < 30·31일 → 30·31일인 달에 두 번 가능, 2월은 불가능`
+      : v < 31 ? `${v}일 < 31일 → 31일인 달에만 두 번 가능`
+      : `${v}일 ≥ 31일 → 어느 달에도 두 번 들어갈 수 없어요`;
+    txt(g, WX0, 124, cap, {"font-size":12, "font-weight":800, fill:col});
+  }
+  function drawGrid(rows, set, counts){
+    const g = $("E-wgrid"); g.innerHTML = "";
+    for(let i = 0; i < 10; i++){
+      for(let m = 0; m < 12; m++){
+        const on = i < rows && set.has(`${2026 + i}-${m}`);
+        el("rect", {x:WX0 + m * 40, y:150 + i * 17, width:36, height:14, rx:3, fill: i < rows ? (on ? "#7da2ff" : "#e3e8f0") : "#f1f4f9"}, g);
+        if(on) el("circle", {cx:WX0 + m * 40 + 18, cy:157 + i * 17, r:4, fill:"#ffffff"}, g);
+      }
+      if(i < rows){ const c = counts[i]; txt(g, 600, 161 + i * 17, c ? c + "번" : "-", {"font-size":10.5, "font-weight":800, fill: c ? "#2c57c9" : "#8a94a6"}); }
+    }
+    if(rows === 0){
+      el("rect", {x:196, y:220, width:312, height:30, rx:15, fill:"#ffffff", stroke:"#c9d4e6"}, g);
+      txt(g, 352, 240, "‘10년 동안 세어 보기’를 누르면 칠해져요", {"font-size":12, "font-weight":700, fill:"#5a6577", "text-anchor":"middle"});
+    }
+  }
+  function simIdle(){ $("E-simr").className = "verdict info"; $("E-simr").textContent = "주기를 바꾸고 ‘10년 동안 세어 보기’를 눌러요."; }
+  $("E-p").oninput = () => {
+    const v = +$("E-p").value; $("E-pv").textContent = v + "일";
+    wanim = null; $("E-sim").disabled = false; drawBars(v); drawGrid(0, new Set(), []); simIdle();
+  };
   $("E-sim").onclick = () => {
-    const v = +$("E-p").value, p = v === 29.5 ? 29.530589 : v, n = blueOf(make(p, 10)).length, r = $("E-simr");
+    const v = +$("E-p").value, blues = blueOf(make(v === 29.5 ? P : v, 10));
+    wanim = {t:0, rows:-1, v, n:blues.length, set:new Set(blues.map(b => `${b.y}-${b.m}`)), counts:Array.from({length:10}, (_, i) => blues.filter(b => b.y === 2026 + i).length)};
+    $("E-sim").disabled = true; $("E-simr").className = "verdict info"; $("E-simr").textContent = "10년 동안 세는 중…";
+  };
+  function tickWhatIf(dt){
+    wanim.t += dt;
+    const rows = Math.min(10, Math.floor(wanim.t / .12) + 1);
+    if(rows !== wanim.rows){ wanim.rows = rows; drawGrid(rows, wanim.set, wanim.counts); }
+    if(rows < 10 || wanim.t < 1.4) return;
+    const {v, n} = wanim, r = $("E-simr"); wanim = null; $("E-sim").disabled = false;
     r.className = "verdict " + (n === 0 ? "bad" : v < 29 ? "warn" : "good");
-    r.textContent = `주기 ${v}일 → 10년 동안 파란 달 ${n}번` + (n === 0 ? " · 주기가 31일보다 길면 한 달 안에 두 번 들어갈 수 없어요." : v < 29 ? " · 주기가 짧을수록 파란 달이 자주 생겨요." : "");
+    r.textContent = `주기 ${v}일 → 10년 동안 파란 달 ${n}번` + (n === 0 ? (v >= 31 ? " · 주기가 31일 이상이면 어느 달에도 보름달이 두 번 들어갈 수 없어요." : " · 31일인 달에 두 번 들어가려면 첫 보름달이 1일 아주 이른 때 떠야 해서 10년 동안 한 번도 없었어요.") : v < 29 ? " · 주기가 짧을수록 파란 달이 자주 생겨요." : v === 29.5 ? " · 교과서 말처럼 약 2.5년에 한 번꼴이에요 (⑨)." : "");
     addRec("E", ["What if", `주기 ${v}일, 10년`, `파란 달 ${n}번`]);
     if(v === 25) mission("E","m2");
     if(v === 32) mission("E","m3");
+  }
+
+  TICK.E = dt => {
+    if(anim){
+      anim.k = Math.min(1, anim.k + dt / anim.dur);
+      const k = anim.k, e = anim.lin ? k : (k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2);
+      tNow = anim.from + (anim.to - anim.from) * e;
+      if(k >= 1){
+        tNow = anim.to; anim = null; arrive();
+        if(ffTo > idx) go(.32); else { ffTo = -1; busy(false); }
+      }
+      drawSky();
+    }
+    if(burst){ burst.t += dt; drawFx(); }
+    if(wanim) tickWhatIf(dt);
   };
-  list = make(29.530589, 12); drawCal();
+  list = make(P, 12); drawCal(); drawSky(); startSt();
+  drawBars(29.5); drawGrid(0, new Set(), []);
 })();
 
 /* =================================================================
